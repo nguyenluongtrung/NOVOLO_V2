@@ -6,6 +6,7 @@ import { NotFound } from './pages/NotFound';
 import { Layout } from './Layout';
 import { AboutMe } from './pages/AboutMe';
 import { ShoppingPage } from './pages/ShoppingPage';
+import { SingleProduct } from './pages/SingleProduct';
 
 function App() {
 	return (
@@ -18,6 +19,7 @@ function App() {
 						<Route path="/register" element={<RegisterPage />} />
 						<Route path="/about-me" element={<AboutMe />} />
 						<Route path="/shop" element={<ShoppingPage />} />
+						<Route path="/single-product/:id" element={<SingleProduct />} />
 						<Route path="*" element={<NotFound />} />
 					</Route>
 				</Routes>

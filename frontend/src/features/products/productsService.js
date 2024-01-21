@@ -13,14 +13,14 @@ const getAllProducts = async () => {
 const getProductById = async (id) => {
 	const response = await axios.get(API_URL + id);
 
-	return response.data;
+	return response.data.data.product;
 };
 
 // Create product
 const createProduct = async (productData, token) => {
 	const config = {
 		headers: {
-			Authentication: `Bearer ${token}`,
+			Authorization: `Bearer ${token}`,
 		},
 	};
 
@@ -33,7 +33,7 @@ const createProduct = async (productData, token) => {
 const deleteProduct = async (id, token) => {
 	const config = {
 		headers: {
-			Authentication: `Bearer ${token}`,
+			Authorization: `Bearer ${token}`,
 		},
 	};
 
@@ -46,7 +46,7 @@ const deleteProduct = async (id, token) => {
 const updateProduct = async (id, productData, token) => {
 	const config = {
 		headers: {
-			Authentication: `Bearer ${token}`,
+			Authorization: `Bearer ${token}`,
 		},
 	};
 

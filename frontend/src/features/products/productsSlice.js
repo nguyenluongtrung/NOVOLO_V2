@@ -114,7 +114,9 @@ export const productSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(getAllProducts.pending, (state) => (state.isLoading = true))
+			.addCase(getAllProducts.pending, (state) => {
+				state.isLoading = true;
+			})
 			.addCase(getAllProducts.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
@@ -124,8 +126,11 @@ export const productSlice = createSlice({
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;
+				state.products = [];
 			})
-			.addCase(getProductById.pending, (state) => (state.isLoading = true))
+			.addCase(getProductById.pending, (state) => {
+				state.isLoading = true;
+			})
 			.addCase(getProductById.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
@@ -135,8 +140,11 @@ export const productSlice = createSlice({
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;
+				state.products = [];
 			})
-			.addCase(createProduct.pending, (state) => (state.isLoading = true))
+			.addCase(createProduct.pending, (state) => {
+				state.isLoading = true;
+			})
 			.addCase(createProduct.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
@@ -147,7 +155,9 @@ export const productSlice = createSlice({
 				state.isError = true;
 				state.message = action.payload;
 			})
-			.addCase(deleteProduct.pending, (state) => (state.isLoading = true))
+			.addCase(deleteProduct.pending, (state) => {
+				state.isLoading = true;
+			})
 			.addCase(deleteProduct.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
@@ -160,7 +170,9 @@ export const productSlice = createSlice({
 				state.isError = true;
 				state.message = action.payload;
 			})
-			.addCase(updateProduct.pending, (state) => (state.isLoading = true))
+			.addCase(updateProduct.pending, (state) => {
+				state.isLoading = true;
+			})
 			.addCase(updateProduct.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
