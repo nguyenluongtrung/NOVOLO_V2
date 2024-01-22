@@ -29,4 +29,14 @@ export const rules = {
 			message: 'Phone number is not valid',
 		},
 	},
+	password: {
+		required: {
+			value: true,
+			message: 'Password is required',
+		},
+		minLength: {
+			value: 8,
+			message: 'Password must contain at least 8 characters',
+		},
+	},
 };

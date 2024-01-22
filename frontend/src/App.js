@@ -7,6 +7,7 @@ import { Layout } from './Layout';
 import { AboutMe } from './pages/AboutMe';
 import { ShoppingPage } from './pages/ShoppingPage';
 import { SingleProduct } from './pages/SingleProduct';
+import { AdminProduct } from './pages/AdminPage';
 
 function App() {
 	return (
@@ -20,6 +21,7 @@ function App() {
 						<Route path="/about-me" element={<AboutMe />} />
 						<Route path="/shop" element={<ShoppingPage />} />
 						<Route path="/single-product/:id" element={<SingleProduct />} />
+						<Route path="/admin-product" element={<AdminProduct />} />
 						<Route path="*" element={<NotFound />} />
 					</Route>
 				</Routes>

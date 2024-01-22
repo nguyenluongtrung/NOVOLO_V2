@@ -7,8 +7,20 @@ import './../../assets/css/animate.css';
 import './../../assets/css/meanmenu.min.css';
 import './../../assets/css/responsive.css';
 import { ProductList } from './components';
+import {useForm} from 'react-hook-form'
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProducts } from '../../features/products/productsSlice';
 
 export const ShoppingPage = () => {
+	const dispatch = useDispatch();
+	const {register, handleSubmit} = useForm();
+	const { products, isError, isLoading, isSuccess, message } = useSelector(
+		(state) => state.products
+	);
+
+	const onSubmit = (data) => {
+		console.log(data)
+	}
 	return (
 		<div>
 			<div className="search-area">
@@ -21,11 +33,10 @@ export const ShoppingPage = () => {
 							<div className="search-bar">
 								<div className="search-bar-tablecell">
 									<h3>Search For:</h3>
-									<form action="search-name" method="get">
+									<form>
 										<input
 											type="text"
 											placeholder="Search by name..."
-											name="name"
 										/>
 										<button type="submit">
 											Search <i className="fas fa-search"></i>
@@ -55,13 +66,13 @@ export const ShoppingPage = () => {
 				<div className="row">
 					<div className="col-sm-3 mt-5 mb-150">
 						<div className="shop__sidebar__search w-100">
-							<form action="search-name" method="get">
+							<form onSubmit={handleSubmit(onSubmit)}>
 								<input
 									style={{width: '86%'}}
 									className="rounded p-2 border-1"
 									type="text"
 									placeholder="Search..."
-									name="name"
+									{...register('name')}
 								/>
 								<button
 									style={{width: '12%'}}

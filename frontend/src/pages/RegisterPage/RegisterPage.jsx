@@ -3,33 +3,18 @@ import './../../assets/css/style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useEffect, useState } from 'react';
-import { reset, register } from '../../features/auth/authSlice';
+import { useEffect } from 'react';
+import { reset, registerUser } from '../../features/auth/authSlice';
 import { Spinner } from '../../components';
+import { useForm } from 'react-hook-form';
+import { rules } from '../../utils/rules';
 
 
 export const RegisterPage = () => {
-	const [formData, setFormData] = useState({
-		name: '',
-		address: '',
-		phone: '',
-		email: '',
-		dob: '',
-		gender: '',
-		password: '',
-	});
-
-	const {name, address, phone, email, dob, gender, password} = formData;
-
-	const onChange = (e) => {
-		setFormData((prevState) => ({
-			...prevState,
-			[e.target.name]: e.target.value
-		}))
-	}
-
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
+	const {register, handleSubmit, formState: {errors}} = useForm();
 
 	const {user, isLoading, isSuccess, isError, message} = useSelector((state) => state.auth) 
 
@@ -45,11 +30,13 @@ export const RegisterPage = () => {
 		dispatch(reset());
 	}, [user, isError, isSuccess, message, navigate, dispatch])
 
-	const onSubmit = (e) => {
-		e.preventDefault();
+	const onSubmit = (data) => {
+		dispatch(registerUser(data));
 
-		dispatch(register(formData));
-		dispatch(reset());
+		if(isSuccess){
+			toast.success('Register successfully!')
+			navigate('/home')
+		}
 	};
 
 	if(isLoading){
@@ -74,16 +61,13 @@ export const RegisterPage = () => {
 					<div class="row justify-content-center">
 						<div class="col-md-6 col-lg-4">
 							<div class="login-wrap p-0">
-								<form class="signin-form" onSubmit={onSubmit}>
+								<form class="signin-form" onSubmit={handleSubmit(onSubmit)}>
 									<div class="form-group">
 										<input
 											type="text"
 											class="form-control"
 											placeholder="Your Name"
-											name="name"
-											value={name}
-											required
-											onChange={onChange}
+											{...register('name', rules.name)}
 										/>
 									</div>
 									<div class="form-group">
@@ -91,9 +75,7 @@ export const RegisterPage = () => {
 											type="text"
 											class="form-control"
 											placeholder="Address"
-											name="address"
-											value={address}
-											onChange={onChange}
+											{...register('address')}
 										/>
 									</div>
 									<div class="form-group">
@@ -101,9 +83,7 @@ export const RegisterPage = () => {
 											type="text"
 											class="form-control"
 											placeholder="Phone number"
-											name="phone"
-											value={phone}
-											onChange={onChange}
+											{...register('phone', rules.phone)}
 										/>
 										<div id="error-phone" class="text-warning"></div>
 									</div>
@@ -112,10 +92,7 @@ export const RegisterPage = () => {
 											type="email"
 											class="form-control"
 											placeholder="Email"
-											name="email"
-											required
-											value={email}
-											onChange={onChange}
+											{...register('email', rules.email)}
 										/>
 										<div id="error-email" class="text-warning"></div>
 									</div>
@@ -123,14 +100,11 @@ export const RegisterPage = () => {
 										<input
 											type="date"
 											class="form-control"
-											placeholder="Date of birth"
-											name="dob"
-											value={dob}
-											onChange={onChange}
+											{...register('dob')}
 										/>
 									</div>
 									<div class="form-group">
-										<select required class="form-control" name="gender">
+										<select {...register('gender')} class="form-control">
 											<option value="male">Male</option>
 											<option value="female">Female</option>
 											<option value="other">Other</option>
@@ -138,14 +112,10 @@ export const RegisterPage = () => {
 									</div>
 									<div class="form-group">
 										<input
-											required
 											id="password-field"
 											type="password"
 											class="form-control"
-											placeholder="Password"
-											name="password"
-											onChange={onChange}
-											value={password}
+											{...register('password', rules.password)}
 										/>
 										<span
 											toggle="#password-field"

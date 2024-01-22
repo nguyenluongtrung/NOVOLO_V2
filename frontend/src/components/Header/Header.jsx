@@ -26,7 +26,7 @@ export const Header = () => {
 					style={{
 						backgroundColor: 'rgba(0,0,0,0.5)',
 						padding: '0 100px',
-						marginTop: '-25px',
+						marginTop: '-50px',
 					}}
 				>
 					<div className="row">
@@ -39,8 +39,9 @@ export const Header = () => {
 											style={{
 												padding: 0,
 												marginTop: '-20px',
-												marginLeft: '-80px',
-												paddingTop: '30px',
+												marginLeft: '-10px',
+												paddingTop: '20px',
+												width: '80%',
 											}}
 										/>
 									</a>
@@ -49,26 +50,26 @@ export const Header = () => {
 								<nav className="main-menu" style={{ paddingTop: '30px' }}>
 									<ul>
 										<li className="current-list-item">
-											<a href="home-control">Home</a>
+											<Link to={'/home'}>Home</Link>
 										</li>
 										<li>
-											<a href="">About</a>
+											<a href="#">About</a>
 										</li>
 										<li>
-											<a href="">Contact</a>
+											<a href="#">Contact</a>
 										</li>
 										<li>
-											<a href="shopping">Menu</a>
+											<Link to={'/shop'}>Menu</Link>
 										</li>
-										{user?.data?.user?.role === 'admin' && (
+										{user?.role === 'admin' && (
 											<li>
-												<a className="" href="admin-page">
+												<Link to={'/admin-product'}>
 													Admin Page
-												</a>
+												</Link>
 											</li>
 										)}
 
-										{user?.data?.user?.role === 'staff' && (
+										{user?.role === 'staff' && (
 											<li>
 												<a className="" href="staff-page">
 													Staff Page
