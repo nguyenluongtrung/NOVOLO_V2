@@ -4,6 +4,7 @@ const {
 	register,
 	login,
 	updateUserInformation,
+	addProductToWishList,
 } = require('../controllers/userController');
 const { protect } = require('./../middleware/userMiddleware');
 const router = express.Router();
@@ -14,5 +15,6 @@ router
 	.route('/information')
 	.get(protect, getUserInformation)
 	.patch(protect, updateUserInformation);
+router.route('/wishList/:productId').post(protect, addProductToWishList);
 
 module.exports = router;

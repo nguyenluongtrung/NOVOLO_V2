@@ -12,7 +12,7 @@ const productSchema = mongoose.Schema(
 		},
 		categoryID: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Category',
+			ref: 'categories',
 			required: [true, 'Product categoryID is mandatory'],
 		},
 		calories: {

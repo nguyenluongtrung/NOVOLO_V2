@@ -41,6 +41,15 @@ const userSchema = mongoose.Schema(
 			type: Number,
 			default: 0,
 		},
+		wishList: {
+			productIds: [
+				{
+					type: mongoose.Schema.Types.ObjectId,
+					ref: 'Product',
+				},
+			],
+			comboIds: Array,
+		},
 		password: {
 			type: String,
 			required: [true, 'User password is mandatory'],

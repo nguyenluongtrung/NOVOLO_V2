@@ -75,9 +75,31 @@ const updateUserInformation = asyncHandler(async (req, res) => {
 	});
 });
 
+const addProductToWishList = asyncHandler(async (req, res) => {
+	if (
+		!req.user.wishList.productIds.find(
+			(productId) => productId == req.params.productId
+		)
+	) {
+		req.user.wishList.productIds.push(req.params.productId);
+		await req.user.save();
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				wishList: req.user.wishList,
+			},
+		});
+	} else {
+		res.status(400);
+		throw new Error('ProductId existed!');
+	}
+});
+
 module.exports = {
 	login,
 	register,
 	getUserInformation,
 	updateUserInformation,
+	addProductToWishList,
 };

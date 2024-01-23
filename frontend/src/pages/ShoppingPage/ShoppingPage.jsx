@@ -226,6 +226,7 @@ export const ShoppingPage = () => {
 													<a
 														className="text-white"
 														href="search-category?id=${3}"
+
 													>
 														Burger
 													</a>
