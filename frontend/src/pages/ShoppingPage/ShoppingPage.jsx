@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './ShoppingPage.css';
 import './../../assets/css/main.css';
 // import './../../assets/css/owl.carousel.css';
@@ -7,20 +7,48 @@ import './../../assets/css/animate.css';
 import './../../assets/css/meanmenu.min.css';
 import './../../assets/css/responsive.css';
 import { ProductList } from './components';
-import {useForm} from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../../features/products/productsSlice';
+import { Spinner } from './../../components';
+import { toast } from 'react-toastify';
 
 export const ShoppingPage = () => {
+	const [searchName, setSearchName] = useState('');
 	const dispatch = useDispatch();
-	const {register, handleSubmit} = useForm();
 	const { products, isError, isLoading, isSuccess, message } = useSelector(
 		(state) => state.products
 	);
 
 	const onSubmit = (data) => {
-		console.log(data)
+		let searchData = '';
+		let i = 0;
+		Object.keys(data).forEach((key) => {
+			if (data[key] !== '') {
+				searchData += key + '=' + data[key];
+				++i;
+				if (i < Object.keys(data).length) {
+					searchData += '&';
+				}
+			}
+		});
+		searchData = searchData.replace(
+			/calories_(\w+)__=(\d+)/g,
+			'calories[$1]=$2'
+		);
+		dispatch(getAllProducts(searchData));
+	};
+
+	useEffect(() => {
+		if (isError) {
+			toast.error(message);
+		}
+		dispatch(getAllProducts(''));
+	}, [dispatch, isError, message]);
+
+	if (isLoading) {
+		return <Spinner />;
 	}
+
 	return (
 		<div>
 			<div className="search-area">
@@ -34,10 +62,7 @@ export const ShoppingPage = () => {
 								<div className="search-bar-tablecell">
 									<h3>Search For:</h3>
 									<form>
-										<input
-											type="text"
-											placeholder="Search by name..."
-										/>
+										<input type="text" placeholder="Search by name..." />
 										<button type="submit">
 											Search <i className="fas fa-search"></i>
 										</button>
@@ -66,22 +91,13 @@ export const ShoppingPage = () => {
 				<div className="row">
 					<div className="col-sm-3 mt-5 mb-150">
 						<div className="shop__sidebar__search w-100">
-							<form onSubmit={handleSubmit(onSubmit)}>
-								<input
-									style={{width: '86%'}}
-									className="rounded p-2 border-1"
-									type="text"
-									placeholder="Search..."
-									{...register('name')}
-								/>
-								<button
-									style={{width: '12%'}}
-									className="p-2 rounded border-1"
-									type="submit"
-								>
-									<span className="fas fa-search" style={{fontSize: '120%'}}></span>
-								</button>
-							</form>
+							<input
+								style={{ width: '86%' }}
+								className="rounded p-2 border-1"
+								type="text"
+								placeholder="Search..."
+								onChange={(event) => setSearchName(event.target.value)}
+							/>
 						</div>
 						<hr />
 						<div className="search-by-price ">
@@ -115,27 +131,43 @@ export const ShoppingPage = () => {
 
 							<ul className="calories-ul">
 								<li className="mb-2">
-									<a href="search-by-calories?from=${0}&to=${100}">
+									<a
+										onClick={() =>
+											onSubmit({ calories_gte__: '0', calories_lte__: '100' })
+										}
+									>
 										0 - 100 (calories)
 									</a>
 								</li>
 								<li className="mb-2">
-									<a href="search-by-calories?from=${100}&to=${200}">
+									<a
+										onClick={() =>
+											onSubmit({ calories_gte__: '100', calories_lte__: '200' })
+										}
+									>
 										100 - 200 (calories)
 									</a>
 								</li>
 								<li className="mb-2">
-									<a href="search-by-calories?from=${200}&to=${300}">
+									<a
+										onClick={() =>
+											onSubmit({ calories_gte__: '200', calories_lte__: '300' })
+										}
+									>
 										200 - 300 (calories)
 									</a>
 								</li>
 								<li className="mb-2">
-									<a href="search-by-calories?from=${300}&to=${400}">
+									<a
+										onClick={() =>
+											onSubmit({ calories_gte__: '300', calories_lte__: '400' })
+										}
+									>
 										300 - 400 (calories)
 									</a>
 								</li>
 								<li className="mb-2">
-									<a href="search-by-calories?from=${400}&to=${-1}">
+									<a onClick={() => onSubmit({ calories_gte__: '400' })}>
 										400+ (calories)
 									</a>
 								</li>
@@ -155,7 +187,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${-1}">
+													<a
+														className="text-white"
+														href="search-category?id=${-1}"
+													>
 														All
 													</a>
 												</li>
@@ -164,7 +199,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${1}">
+													<a
+														className="text-white"
+														href="search-category?id=${1}"
+													>
 														Chicken
 													</a>
 												</li>
@@ -173,7 +211,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${2}">
+													<a
+														className="text-white"
+														href="search-category?id=${2}"
+													>
 														Sandwich
 													</a>
 												</li>
@@ -182,7 +223,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${3}">
+													<a
+														className="text-white"
+														href="search-category?id=${3}"
+													>
 														Burger
 													</a>
 												</li>
@@ -191,7 +235,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${4}">
+													<a
+														className="text-white"
+														href="search-category?id=${4}"
+													>
 														Beverage
 													</a>
 												</li>
@@ -200,7 +247,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${5}">
+													<a
+														className="text-white"
+														href="search-category?id=${5}"
+													>
 														Spaghetti
 													</a>
 												</li>
@@ -209,7 +259,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${6}">
+													<a
+														className="text-white"
+														href="search-category?id=${6}"
+													>
 														Salad
 													</a>
 												</li>
@@ -218,7 +271,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${7}">
+													<a
+														className="text-white"
+														href="search-category?id=${7}"
+													>
 														Taco
 													</a>
 												</li>
@@ -227,7 +283,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${8}">
+													<a
+														className="text-white"
+														href="search-category?id=${8}"
+													>
 														Fresh Fries
 													</a>
 												</li>
@@ -236,7 +295,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${9}">
+													<a
+														className="text-white"
+														href="search-category?id=${9}"
+													>
 														Dessert
 													</a>
 												</li>
@@ -245,7 +307,10 @@ export const ShoppingPage = () => {
 													// onMouseOut="this.style.backgroundColor = '#f28123'"
 													className="border-0 bg-orange"
 												>
-													<a className="text-white" href="search-category?id=${10}">
+													<a
+														className="text-white"
+														href="search-category?id=${10}"
+													>
 														Slide Dish
 													</a>
 												</li>
@@ -263,7 +328,7 @@ export const ShoppingPage = () => {
 									</div>
 								</div>
 
-                                <ProductList />
+								<ProductList products={products} searchName={searchName}/>
 								{/* <div className="row product-lists">
                                 <c:if test="${ms != null}">
                                     <p className="w-100 text-center text-secondary">${ms}</p>

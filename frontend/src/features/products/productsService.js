@@ -3,8 +3,13 @@ import axios from 'axios';
 const API_URL = '/novolo/api/products/';
 
 // Get all products
-const getAllProducts = async () => {
-	const response = await axios.get(API_URL);
+const getAllProducts = async (searchData) => {
+	let response;
+	if (searchData !== '') {
+		response = await axios.get(API_URL + `?${searchData}`);
+	} else {
+		response = await axios.get(API_URL);
+	}
 
 	return response.data.data.products;
 };
