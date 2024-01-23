@@ -11,7 +11,8 @@ const productSchema = mongoose.Schema(
 			required: [true, 'Product image is mandatory'],
 		},
 		categoryID: {
-			type: Number,
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Category',
 			required: [true, 'Product categoryID is mandatory'],
 		},
 		calories: {

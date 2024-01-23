@@ -15,6 +15,7 @@ app.use(express.json());
 
 app.use('/novolo/api/products', require('./routes/productRoutes'));
 app.use('/novolo/api/users', require('./routes/userRoutes'));
+app.use('/novolo/api/categories', require('./routes/categoryRoutes'));
 
 app.use(errorHandler);
 
