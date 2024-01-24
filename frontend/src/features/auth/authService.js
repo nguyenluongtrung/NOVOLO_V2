@@ -54,12 +54,47 @@ const updateUserInformation = async (userData, token) => {
 	return response.data.data.updatedUser;
 };
 
+// Add product to wishlist
+const addProductToWishList = async (productId, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	console.log('token from authService: ' + token);
+
+	const response = await axios.post(
+		API_URL + 'wishList/' + productId,
+		null,
+		config
+	);
+	return response.data.data.user;
+};
+
+// Delete product from wishlist
+const deleteProductFromWishList = async (productId, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.delete(
+		API_URL + 'wishList/' + productId,
+		config
+	);
+	return response.data.data.user;
+};
+
 const authService = {
 	login,
 	logout,
 	register,
 	getUserInformation,
 	updateUserInformation,
+	addProductToWishList,
+	deleteProductFromWishList,
 };
 
 export default authService;

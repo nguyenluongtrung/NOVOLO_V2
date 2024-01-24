@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import productsService from './productsService';
 
+const user = JSON.parse(localStorage.getItem('user'));
+console.log(user);
+
 const initialState = {
 	products: [],
 	isError: false,
@@ -50,7 +53,7 @@ export const createProduct = createAsyncThunk(
 	'products/create',
 	async (productData, thunkAPI) => {
 		try {
-			const token = thunkAPI.getState().auth.user.data.token;
+			const token = user.data.token;
 			return await productsService.createProduct(productData, token);
 		} catch (error) {
 			const message =
@@ -69,7 +72,7 @@ export const updateProduct = createAsyncThunk(
 	'products/update',
 	async (productData, thunkAPI) => {
 		try {
-			const token = thunkAPI.getState().auth.user.data.token;
+			const token = user.data.token;
 			return await productsService.updateProduct(
 				productData.id,
 				productData,
@@ -92,8 +95,27 @@ export const deleteProduct = createAsyncThunk(
 	'products/delete',
 	async (id, thunkAPI) => {
 		try {
-			const token = thunkAPI.getState().auth.user.data.token;
+			const token = user.data.token;
 			return await productsService.deleteProduct(id, token);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+// Get products from wishlist
+export const getProductsFromWishList = createAsyncThunk(
+	'products/getProductsFromWishList',
+	async (_, thunkAPI) => {
+		try {
+			const token = user.data.token;
+			return await productsService.getProductsFromWishList(token);
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -179,6 +201,19 @@ export const productSlice = createSlice({
 				state.products[action.payload._id] = action.payload;
 			})
 			.addCase(updateProduct.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(getProductsFromWishList.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getProductsFromWishList.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.products = action.payload;
+			})
+			.addCase(getProductsFromWishList.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

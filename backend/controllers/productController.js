@@ -81,10 +81,30 @@ const deleteProduct = asyncHandler(async (req, res) => {
 	});
 });
 
+const getProductsFromWishList = asyncHandler(async (req, res) => {
+	let productList = [];
+
+	await Promise.all(
+		req.user.wishList.productIds.map(async (productId) => {
+			const product = await Product.findById(productId);
+			productList.push(product);
+		})
+	);
+
+	res.status(200).json({
+		status: 'success',
+		length: productList.length,
+		data: {
+			productList,
+		},
+	});
+});
+
 module.exports = {
 	getAllProducts,
 	getProductById,
 	createProduct,
 	updateProduct,
 	deleteProduct,
+	getProductsFromWishList,
 };

@@ -5,6 +5,7 @@ const {
 	login,
 	updateUserInformation,
 	addProductToWishList,
+	deleteProductFromWishList,
 } = require('../controllers/userController');
 const { protect } = require('./../middleware/userMiddleware');
 const router = express.Router();
@@ -15,6 +16,9 @@ router
 	.route('/information')
 	.get(protect, getUserInformation)
 	.patch(protect, updateUserInformation);
-router.route('/wishList/:productId').post(protect, addProductToWishList);
+router
+	.route('/wishList/:productId')
+	.post(protect, addProductToWishList)
+	.delete(protect, deleteProductFromWishList);
 
 module.exports = router;

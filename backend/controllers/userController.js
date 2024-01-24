@@ -87,12 +87,32 @@ const addProductToWishList = asyncHandler(async (req, res) => {
 		res.status(200).json({
 			status: 'success',
 			data: {
-				wishList: req.user.wishList,
+				user: req.user,
 			},
 		});
 	} else {
 		res.status(400);
 		throw new Error('ProductId existed!');
+	}
+});
+
+const deleteProductFromWishList = asyncHandler(async (req, res) => {
+	if (req.user.wishList.productIds.includes(req.params.productId)) {
+		req.user.wishList.productIds = req.user.wishList.productIds.filter(
+			(productId) => productId != req.params.productId
+		);
+
+		await req.user.save();
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				user: req.user,
+			},
+		});
+	} else {
+		res.status(400);
+		throw new Error('ProductId not found!');
 	}
 });
 
@@ -102,4 +122,5 @@ module.exports = {
 	getUserInformation,
 	updateUserInformation,
 	addProductToWishList,
+	deleteProductFromWishList,
 };

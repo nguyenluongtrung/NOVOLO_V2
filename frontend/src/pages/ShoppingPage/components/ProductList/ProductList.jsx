@@ -1,14 +1,33 @@
 import './ProductList.css';
 import { Link } from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux'
+import {FaHeart} from 'react-icons/fa'
+import { addProductToWishList } from '../../../../features/auth/authSlice';
+import {toast} from 'react-toastify'
 
 export const ProductList = ({ products, searchName }) => {
+	const dispatch = useDispatch();
+
+	const {isSuccess, isError, message} = useSelector((state) => state.auth)
+
+	const addProductToWishlist = (productId) => {
+		dispatch(addProductToWishList(productId))
+		if(isError){
+			toast.error(message)
+		} else if(isSuccess){
+			toast.success('Add product to wishlist successfully!')
+		}
+	}
+
 	return (
 		<div className="container">
 			<div className="row">
 				{products
 					.filter((val) => {
 						if (searchName == '') return val;
-						else if(val.name.toLowerCase().includes(searchName.toLowerCase())){
+						else if (
+							val.name.toLowerCase().includes(searchName.toLowerCase())
+						) {
 							return val;
 						}
 					})
@@ -55,15 +74,13 @@ export const ProductList = ({ products, searchName }) => {
 										</a>
 									)}
 
-									{/* {(!product.isSurprise  )&& (
-									<a href="add-to-wishlist?productID=${c.productID}">
-										<button className="btn btn-danger px-5 py-3">
-											<i
-												className="fas fa-heart"
-											></i>
-										</button>
-									</a>
-								)} */}
+									{!product.isSurprise && (
+										<a onClick={() => addProductToWishlist(product._id)}>
+											<button className="btn btn-danger px-4 py-2 mx-4">
+												<FaHeart />
+											</button>
+										</a>
+									)}
 								</div>
 							</div>
 						);

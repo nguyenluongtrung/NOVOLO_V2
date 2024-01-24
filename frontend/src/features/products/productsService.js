@@ -60,12 +60,26 @@ const updateProduct = async (id, productData, token) => {
 	return response.data;
 };
 
+// Get product from wishlist
+const getProductsFromWishList = async (token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.get(API_URL + 'wishList', config);
+
+	return response.data.data.productList;
+};
+
 const productsService = {
 	getAllProducts,
 	getProductById,
 	createProduct,
 	deleteProduct,
 	updateProduct,
+	getProductsFromWishList,
 };
 
 export default productsService;
