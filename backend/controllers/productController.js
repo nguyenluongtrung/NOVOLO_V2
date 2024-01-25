@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 
 const Product = require('./../models/productModel');
+const Price = require('./../models/priceModel');
 const ApiFeatures = require('../utils/apiFeatures');
 
 const getAllProducts = asyncHandler(async (req, res) => {
@@ -29,12 +30,41 @@ const getProductById = asyncHandler(async (req, res) => {
 });
 
 const createProduct = asyncHandler(async (req, res) => {
-	const product = await Product.create(req.body);
+	const { price: priceValue } = req.body;
+	const {
+		name,
+		image,
+		categoryID,
+		calories,
+		isSurprise,
+		accumulatedPoint,
+		exchangedPoint,
+		startDate,
+		endDate,
+	} = req.body;
+
+	const product = await Product.create({
+		name,
+		image,
+		categoryID,
+		calories,
+		isSurprise,
+		accumulatedPoint,
+		exchangedPoint,
+		startDate,
+		endDate,
+	});
+
+	const price = await Price.create({
+		productId: product._id,
+		price: priceValue,
+	});
 
 	res.status(200).json({
 		status: 'success',
 		data: {
 			product,
+			price,
 		},
 	});
 });
@@ -47,20 +77,70 @@ const updateProduct = asyncHandler(async (req, res) => {
 		throw new Error('Product not found!');
 	}
 
+	const { price: priceValue } = req.body;
+	const {
+		name,
+		image,
+		categoryID,
+		calories,
+		isSurprise,
+		accumulatedPoint,
+		exchangedPoint,
+		productStatus,
+		startDate,
+		endDate,
+	} = req.body;
+
 	const updatedProduct = await Product.findByIdAndUpdate(
 		req.params.id,
-		req.body,
+		{
+			name,
+			image,
+			categoryID,
+			calories,
+			isSurprise,
+			accumulatedPoint,
+			exchangedPoint,
+			productStatus,
+			startDate,
+			endDate,
+		},
 		{
 			new: true,
 		}
 	);
 
-	res.status(200).json({
-		status: 'success',
-		data: {
-			updatedProduct,
-		},
+	// find the newest price
+	const price = await Price.findOne({
+		productId: req.params.id,
+		endDate: null,
 	});
+
+	if (priceValue != price.price) {
+		const updatedPrice = await Price.findByIdAndUpdate(price._id, {
+			endDate: Date.now(),
+		});
+		const newPrice = await Price.create({
+			productId: req.params.id,
+			price: priceValue,
+			startDate: Date.now(),
+		});
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				updatedProduct,
+				newPrice,
+			},
+		});
+	} else {
+		res.status(200).json({
+			status: 'success',
+			data: {
+				updatedProduct,
+			},
+		});
+	}
 });
 
 const deleteProduct = asyncHandler(async (req, res) => {
@@ -72,6 +152,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 	}
 
 	await Product.findByIdAndDelete(req.params.id);
+	await Price.deleteMany({ productId: req.params.id });
 
 	res.status(200).json({
 		status: 'success',

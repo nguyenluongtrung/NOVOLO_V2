@@ -1,28 +1,46 @@
-import './SingleProduct.css'
-import { useParams } from 'react-router-dom'
-import { useSelector, useDispatch} from 'react-redux'
+import './SingleProduct.css';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
 import { getProductById } from '../../features/products/productsSlice';
 import { Spinner } from '../../components';
+import { getCategoryById } from '../../features/categories/categoriesSlice';
 
 export const SingleProduct = () => {
-    const { id } = useParams();
+	const { id } = useParams();
 
-    const dispatch = useDispatch();
-    const { products: product, isError, isLoading, isSuccess, message} = useSelector((state) => state.products)
+	const dispatch = useDispatch();
+	const {
+		products: product,
+		isError,
+		isLoading,
+		isSuccess,
+		message,
+	} = useSelector((state) => state.products);
+	const { categories: category } = useSelector((state) => state.categories);
 
-    useEffect(() => {
-        if(isError) {
-            toast.error(message)
-        }
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				await dispatch(getProductById(id));
+			} catch (error) {
+				console.error('Error loading product data:', error);
+			}
+		};
 
-        dispatch(getProductById(id))
-    }, [dispatch, isError])
+		loadData();
+	}, [dispatch, id]);
 
-    if(isLoading){
-        return <Spinner />
-    }
+	useEffect(() => {
+		if (product && product.categoryID) {
+			dispatch(getCategoryById(product.categoryID));
+		}
+	}, [dispatch, product]);
+
+	if (isLoading) {
+		return <Spinner />;
+	}
 
 	return (
 		<div>
@@ -80,7 +98,7 @@ export const SingleProduct = () => {
 								<p className="single-product-pricing"></p>
 								<div className="single-product-form">
 									<p>Calories: {product?.calories}</p>
-									<p>Categories: {product?.categoryID}</p>
+									<p>Categories: {category?.name}</p>
 									<p>
 										<strong>Rating: {product?.rating} /5.0</strong>
 									</p>

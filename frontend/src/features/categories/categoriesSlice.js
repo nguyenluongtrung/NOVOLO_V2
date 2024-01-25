@@ -9,12 +9,30 @@ const initialState = {
 	message: '',
 };
 
-// Get All Categories
+// Get all categories
 export const getAllCategories = createAsyncThunk(
 	'categories/getAll',
 	async (_, thunkAPI) => {
 		try {
 			return await categoriesService.getAllCategories();
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+// Get category by Id
+export const getCategoryById = createAsyncThunk(
+	'categories/getCategoryById',
+	async (categoryId, thunkAPI) => {
+		try {
+			return await categoriesService.getCategoryById(categoryId);
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -44,6 +62,20 @@ export const categorySlice = createSlice({
 				state.categories = action.payload;
 			})
 			.addCase(getAllCategories.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				state.categories = [];
+			})
+			.addCase(getCategoryById.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getCategoryById.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.categories = action.payload;
+			})
+			.addCase(getCategoryById.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

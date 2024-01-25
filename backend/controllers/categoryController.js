@@ -12,6 +12,18 @@ const getAllCategories = asyncHandler(async (req, res) => {
 	});
 });
 
+const getCategoryById = asyncHandler(async (req, res) => {
+	const category = await Category.findById(req.params.categoryId);
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			category,
+		},
+	});
+});
+
 module.exports = {
 	getAllCategories,
+	getCategoryById,
 };
