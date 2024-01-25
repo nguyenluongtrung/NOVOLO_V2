@@ -159,8 +159,7 @@ export const SingleProduct = () => {
 							</div>
 						</div>
 					</div>
-				</div>
-
+		
 				<div className="row row-content">
 					<div className="col-12">
 						<h3 className="mx-auto text-black mt-5 mb-5 text-center">
@@ -243,6 +242,7 @@ export const SingleProduct = () => {
                     </div>
                 </div> */}
 				</div>
+			</div>
 			</div>
 
 			<div className="more-products mb-150">
