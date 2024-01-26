@@ -5,6 +5,7 @@ import {toast} from 'react-toastify';
 import {useDispatch, useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from '../../components';
+import './LoginPage.css';
 
 export const LoginPage = () => {
     const [loginValue, setLoginValue] = useState({
@@ -63,7 +64,7 @@ export const LoginPage = () => {
 										<input
 											type="text"
 											name="email"
-											class="form-control"
+											class="rounded-pill form-control"
 											placeholder="Email"
 											value={email}
                                             onChange={onChange}
@@ -74,7 +75,7 @@ export const LoginPage = () => {
 											id="password-field"
 											type="password"
 											name="password"
-											class="form-control"
+											class="rounded-pill form-control"
 											placeholder="Password"
 											value={password}
                                             onChange={onChange}
@@ -87,7 +88,7 @@ export const LoginPage = () => {
 									<div class="form-group">
 										<button
 											type="submit"
-											class="form-control btn btn-primary submit px-3"
+											class="rounded-pill form-control btn btn-primary submit px-3"
 										>
 											Sign In
 										</button>
