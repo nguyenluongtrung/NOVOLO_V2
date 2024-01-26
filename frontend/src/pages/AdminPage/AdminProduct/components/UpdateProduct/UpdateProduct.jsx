@@ -8,7 +8,7 @@ import { FaTimes } from 'react-icons/fa';
 import { useEffect } from 'react';
 import { getAllCategories } from '../../../../../features/categories/categoriesSlice';
 
-export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId }) => {
+export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId, handleGetAllProducts }) => {
 	const dispatch = useDispatch();
 
 	const {
@@ -31,6 +31,11 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId }) => {
 		formState: { errors },
 	} = useForm();
 
+	const handleCloseBtn = () => {
+		setIsOpenUpdateForm(false);
+		handleGetAllProducts();
+	}
+
 	const onSubmit = (data) => {
 		const updateData = {
 			...data,
@@ -42,7 +47,8 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId }) => {
 		if (productError) {
 			toast.error(productMessage);
 		}
-		dispatch(updateProduct(chosenProductId, updateData));
+		dispatch(updateProduct({chosenProductId, updateData}));
+		
 		if (productSuccess) {
 			toast.success('Update product successfully!');
 		}
@@ -73,7 +79,7 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId }) => {
 					<p style={{ fontWeight: 'bold', textAlign: 'center' }}>
 						UPDATE PRODUCT
 					</p>
-					<div onClick={() => setIsOpenUpdateForm(false)} className="close-btn">
+					<div onClick={handleCloseBtn} className="close-btn">
 						<FaTimes />
 					</div>
 					<div className="column">
@@ -169,7 +175,7 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId }) => {
 							/>
 						</div>
 					</div>
-					<div>
+					{/* <div>
 						<label>
 							Product status <span className="text-danger">*</span>
 						</label>
@@ -181,7 +187,7 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId }) => {
 							{...register('productStatus')}
 						/>{' '}
 						False
-					</div>
+					</div> */}
 					{/* <c:if test="${surpriseProduct != null}">
 								<div className="column">
 									<div className="input-box">

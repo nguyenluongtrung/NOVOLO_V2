@@ -70,7 +70,7 @@ export const createProduct = createAsyncThunk(
 // Update product
 export const updateProduct = createAsyncThunk(
 	'products/update',
-	async (chosenProductId, updateData, thunkAPI) => {
+	async ({ chosenProductId, updateData }, thunkAPI) => {
 		try {
 			const token = user.data.token;
 			return await productsService.updateProduct(

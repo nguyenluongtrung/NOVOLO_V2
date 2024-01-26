@@ -38,6 +38,10 @@ export const AdminProduct = () => {
 		setChosenProductId(productId);
 	}
 
+	const handleGetAllProducts = () => {
+		dispatch(getAllProducts(''));
+	}
+
 	useEffect(() => {
 		if (isError) {
 			toast.error(message);
@@ -57,7 +61,7 @@ export const AdminProduct = () => {
 	return (
 		<div className="d-flex" id="wrapper">
 			{isOpenAddForm && <AddProduct setIsOpenAddForm={setIsOpenAddForm} />}
-			{isOpenUpdateForm && <UpdateProduct setIsOpenUpdateForm={setIsOpenUpdateForm} chosenProductId={chosenProductId}/>}
+			{isOpenUpdateForm && <UpdateProduct setIsOpenUpdateForm={setIsOpenUpdateForm} chosenProductId={chosenProductId} handleGetAllProducts={handleGetAllProducts}/>}
 
 			<AdminSidebar />
 
