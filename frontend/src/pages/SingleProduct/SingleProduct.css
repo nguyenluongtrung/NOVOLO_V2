@@ -1,4 +1,6 @@
-
+.fix-ui{
+    background-color: white;
+}
 .rating{
     width: 400px;
     background: white;

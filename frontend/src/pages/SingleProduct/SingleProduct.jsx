@@ -84,7 +84,7 @@ export const SingleProduct = () => {
 				</div>
 			</div>
 
-			<div className="single-product mt-150 mb-150">
+			<div className="single-product pt-150 pb-150 fix-ui">
 				<div className="container">
 					<div className="row">
 						<div className="col-md-5">
