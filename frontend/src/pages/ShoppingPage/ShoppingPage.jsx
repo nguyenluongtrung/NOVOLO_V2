@@ -1,313 +1,233 @@
-import React, { useEffect, useState } from 'react';
-import './ShoppingPage.css';
-import './../../assets/css/main.css';
+import React, { useEffect, useState } from "react";
+import "./ShoppingPage.css";
+import "./../../assets/css/main.css";
 // import './../../assets/css/owl.carousel.css';
-import './../../assets/css/magnific-popup.css';
-import './../../assets/css/animate.css';
-import './../../assets/css/meanmenu.min.css';
-import './../../assets/css/responsive.css';
-import { ProductList } from './components';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllProducts } from '../../features/products/productsSlice';
-import { Spinner } from './../../components';
-import { toast } from 'react-toastify';
+import "./../../assets/css/magnific-popup.css";
+import "./../../assets/css/animate.css";
+import "./../../assets/css/meanmenu.min.css";
+import "./../../assets/css/responsive.css";
+import { ProductList } from "./components";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProducts } from "../../features/products/productsSlice";
+import { getAllCategories } from "../../features/categories/categoriesSlice";
+import { Spinner } from "./../../components";
+import { toast } from "react-toastify";
 
 export const ShoppingPage = () => {
-	const [searchName, setSearchName] = useState('');
-	const dispatch = useDispatch();
-	const { products, isError, isLoading, isSuccess, message } = useSelector(
-		(state) => state.products
-	);
+  const [searchName, setSearchName] = useState("");
+  const [getProductByCategory, setGetProductByCategory] = useState("");
+  const dispatch = useDispatch();
+  const {
+    products,
+    isError: productErr,
+    isLoading: productLoad,
+    isSuccess: productSucc,
+    message: productMess,
+  } = useSelector((state) => state.products);
 
-	const onSubmit = (data) => {
-		let searchData = '';
-		let i = 0;
-		Object.keys(data).forEach((key) => {
-			if (data[key] !== '') {
-				searchData += key + '=' + data[key];
-				++i;
-				if (i < Object.keys(data).length) {
-					searchData += '&';
-				}
-			}
-		});
-		searchData = searchData.replace(
-			/calories_(\w+)__=(\d+)/g,
-			'calories[$1]=$2'
-		);
-		dispatch(getAllProducts(searchData));
-	};
+  const {
+    categories,
+    isError: categoriesErr,
+    isLoading: categoriesLoad,
+    isSuccess: categoriesSucc,
+    message: categoriesMess,
+  } = useSelector((state) => state.categories);
 
-	useEffect(() => {
-		if (isError) {
-			toast.error(message);
-		}
-		dispatch(getAllProducts(''));
-	}, [dispatch, isError, message]);
+  const onSubmit = (data) => {
+    let searchData = "";
+    let i = 0;
+    Object.keys(data).forEach((key) => {
+      if (data[key] !== "") {
+        searchData += key + "=" + data[key];
+        ++i;
+        if (i < Object.keys(data).length) {
+          searchData += "&";
+        }
+      }
+    });
+    searchData = searchData.replace(
+      /calories_(\w+)__=(\d+)/g,
+      "calories[$1]=$2"
+    );
+    dispatch(getAllProducts(searchData));
+  };
 
-	if (isLoading) {
-		return <Spinner />;
-	}
+  useEffect(() => {
+    if (productErr) {
+      toast.error(productMess);
+    }
 
-	return (
-		<div>
-			<div className="breadcrumb-section breadcrumb-bg">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-8 offset-lg-2 text-center">
-							<div className="breadcrumb-text">
-								<p>Fresh and Organic</p>
-								<h1>Shop</h1>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+    Promise.all([
+      dispatch(getAllProducts("")),
+      dispatch(getAllCategories()),
+    ]).catch((error) => {
+      console.error("Error during dispatch:", error);
+    });
+  }, [dispatch, productErr, productMess]);
 
-			<div className="container-fluid fix-ui">
-				<div className="row">
-					<div className="col-sm-3 mt-5 mb-150">
-						<div className="shop__sidebar__search w-100">
-							<input
-								style={{ width: '100%' }}
-								className="rounded p-2 border-1"
-								type="text"
-								placeholder="Search..."
-								onChange={(event) => setSearchName(event.target.value)}
-							/>
-						</div>
-						<hr />
-						<div className="search-by-price">
-							<p className="bg-orange p-3 text-white font-weight-bold">
-								The amount of price you want:
-							</p>
+  if (productLoad || categoriesLoad) {
+    return <Spinner />;
+  }
 
-							<ul className="price-ul">
-								<li className="mb-2">
-									<a href="search-price?from=${1}&to=${10}">1 - 10$</a>
-								</li>
-								<li className="mb-2">
-									<a href="search-price?from=${11}&to=${20}">11 - 20$</a>
-								</li>
-								<li className="mb-2">
-									<a href="search-price?from=${21}&to=${30}">21 - 30$</a>
-								</li>
-								<li className="mb-2">
-									<a href="search-price?from=${31}&to=${40}">31 - 40$</a>
-								</li>
-								<li className="mb-2">
-									<a href="search-price?from=${41}&to=${-1}">41+$</a>
-								</li>
-							</ul>
-						</div>
-						<hr />
-						<div className="search-by-categories ">
-							<p className="bg-orange p-3 text-white font-weight-bold">
-								The amount of calories you want to take in
-							</p>
+  return (
+    <div>
+      <div className="search-area">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <span className="close-btn">
+                <i className="fas fa-window-close"></i>
+              </span>
+              <div className="search-bar">
+                <div className="search-bar-tablecell">
+                  <h3>Search For:</h3>
+                  <form>
+                    <input type="text" placeholder="Search by name..." />
+                    <button type="submit">
+                      Search <i className="fas fa-search"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-							<ul className="calories-ul">
-								<li className="mb-2">
-									<a
-										onClick={() =>
-											onSubmit({ calories_gte__: '0', calories_lte__: '100' })
-										}
-									>
-										0 - 100 (calories)
-									</a>
-								</li>
-								<li className="mb-2">
-									<a
-										onClick={() =>
-											onSubmit({ calories_gte__: '100', calories_lte__: '200' })
-										}
-									>
-										100 - 200 (calories)
-									</a>
-								</li>
-								<li className="mb-2">
-									<a
-										onClick={() =>
-											onSubmit({ calories_gte__: '200', calories_lte__: '300' })
-										}
-									>
-										200 - 300 (calories)
-									</a>
-								</li>
-								<li className="mb-2">
-									<a
-										onClick={() =>
-											onSubmit({ calories_gte__: '300', calories_lte__: '400' })
-										}
-									>
-										300 - 400 (calories)
-									</a>
-								</li>
-								<li className="mb-2">
-									<a onClick={() => onSubmit({ calories_gte__: '400' })}>
-										400+ (calories)
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
+      <div className="breadcrumb-section breadcrumb-bg">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-8 offset-lg-2 text-center">
+              <div className="breadcrumb-text">
+                <p>Fresh and Organic</p>
+                <h1>Shop</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-					<div className="col-sm-9">
-						<div className="product-section mt-5  mb-150">
-							<div className="container">
-								<div className="row">
-									<div className="col-md-12">
-										<div className="product-filters">
-											<ul>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${-1}"
-													>
-														All
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${1}"
-													>
-														Chicken
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${2}"
-													>
-														Sandwich
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${3}"
+      <div className="container-fluid fix-ui">
+        <div className="row">
+          <div className="col-sm-3 mt-5 mb-150">
+            <div className="shop__sidebar__search w-100">
+              <input
+                style={{ width: "100%" }}
+                className="rounded p-2 border-1"
+                type="text"
+                placeholder="Search..."
+                onChange={(event) => setSearchName(event.target.value)}
+              />
+            </div>
+            <hr />
+            <div className="search-by-price ">
+              <p className="bg-orange p-3 text-white font-weight-bold">
+                The amount of price you want:
+              </p>
 
-													>
-														Burger
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${4}"
-													>
-														Beverage
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${5}"
-													>
-														Spaghetti
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${6}"
-													>
-														Salad
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${7}"
-													>
-														Taco
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${8}"
-													>
-														Fresh Fries
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${9}"
-													>
-														Dessert
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a
-														className="text-white"
-														href="search-category?id=${10}"
-													>
-														Slide Dish
-													</a>
-												</li>
-												<li
-													// onMouseOver="this.style.backgroundColor = '#000'"
-													// onMouseOut="this.style.backgroundColor = '#f28123'"
-													className="border-0 bg-orange"
-												>
-													<a className="text-white" href="view-all-combo">
-														Combo
-													</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
+              <ul className="price-ul">
+                <li className="mb-2">
+                  <a href="search-price?from=${1}&to=${10}">1 - 10$</a>
+                </li>
+                <li className="mb-2">
+                  <a href="search-price?from=${11}&to=${20}">11 - 20$</a>
+                </li>
+                <li className="mb-2">
+                  <a href="search-price?from=${21}&to=${30}">21 - 30$</a>
+                </li>
+                <li className="mb-2">
+                  <a href="search-price?from=${31}&to=${40}">31 - 40$</a>
+                </li>
+                <li className="mb-2">
+                  <a href="search-price?from=${41}&to=${-1}">41+$</a>
+                </li>
+              </ul>
+            </div>
+            <hr />
+            <div className="search-by-categories ">
+              <p className="bg-orange p-3 text-white font-weight-bold">
+                The amount of calories you want to take in
+              </p>
 
-								<ProductList products={products} searchName={searchName}/>
-								{/* <div className="row product-lists">
+              <ul className="calories-ul">
+                <li className="mb-2">
+                  <a
+                    onClick={() =>
+                      onSubmit({ calories_gte__: "0", calories_lte__: "100" })
+                    }
+                  >
+                    0 - 100 (calories)
+                  </a>
+                </li>
+                <li className="mb-2">
+                  <a
+                    onClick={() =>
+                      onSubmit({ calories_gte__: "100", calories_lte__: "200" })
+                    }
+                  >
+                    100 - 200 (calories)
+                  </a>
+                </li>
+                <li className="mb-2">
+                  <a
+                    onClick={() =>
+                      onSubmit({ calories_gte__: "200", calories_lte__: "300" })
+                    }
+                  >
+                    200 - 300 (calories)
+                  </a>
+                </li>
+                <li className="mb-2">
+                  <a
+                    onClick={() =>
+                      onSubmit({ calories_gte__: "300", calories_lte__: "400" })
+                    }
+                  >
+                    300 - 400 (calories)
+                  </a>
+                </li>
+                <li className="mb-2">
+                  <a onClick={() => onSubmit({ calories_gte__: "400" })}>
+                    400+ (calories)
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="col-sm-9">
+            <div className="product-section mt-5  mb-150">
+              <div className="container">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="product-filters">
+                      <ul>
+                        {categories.map((category, index) => {
+                          return (
+                            <li
+                              key={index}
+                              // onMouseOver="this.style.backgroundColor = '#000'"
+                              // onMouseOut="this.style.backgroundColor = '#f28123'"
+                              className="border-0 bg-orange"
+                            >
+                              <a
+							  className="text-white"
+                                onClick={() =>
+                                  onSubmit({ categoryID: category._id })
+                                }
+                              >
+                                {category.name}
+                              </a>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                {console.log(getProductByCategory)}
+                <ProductList products={products} searchName={searchName} />
+                {/* <div className="row product-lists">
                                 <c:if test="${ms != null}">
                                     <p className="w-100 text-center text-secondary">${ms}</p>
                                 </c:if>
@@ -360,7 +280,7 @@ export const ShoppingPage = () => {
                                     </c:if>
                                 </c:if> */}
 
-								{/* <c:if test="${price == null && s_name == null && calo == null && category == null}">
+                {/* <c:if test="${price == null && s_name == null && calo == null && category == null}">
                                 <div className="row">
                                     <div className="col-lg-12 text-center">
                                         <div className="pagination-wrap">
@@ -374,7 +294,7 @@ export const ShoppingPage = () => {
                                 </div>
                             </c:if> */}
 
-								{/* <c:if test="${price != null && s_name == null && calo == null && category == null}">
+                {/* <c:if test="${price != null && s_name == null && calo == null && category == null}">
                                 <div className="row">
                                     <div className="col-lg-12 text-center">
                                         <div className="pagination-wrap">
@@ -388,7 +308,7 @@ export const ShoppingPage = () => {
                                 </div>
                             </c:if> */}
 
-								{/* <c:if test="${price == null && s_name != null && calo == null && category == null}">
+                {/* <c:if test="${price == null && s_name != null && calo == null && category == null}">
                                 <div className="row">
                                     <div className="col-lg-12 text-center">
                                         <div className="pagination-wrap">
@@ -402,7 +322,7 @@ export const ShoppingPage = () => {
                                 </div>
                             </c:if> */}
 
-								{/* <c:if test="${price == null && s_name == null && calo != null && category == null}">
+                {/* <c:if test="${price == null && s_name == null && calo != null && category == null}">
                                 <div className="row">
                                     <div className="col-lg-12 text-center">
                                         <div className="pagination-wrap">
@@ -416,7 +336,7 @@ export const ShoppingPage = () => {
                                 </div>
                             </c:if> */}
 
-								{/* <c:if test="${price == null && s_name == null && calo == null && category != null}">
+                {/* <c:if test="${price == null && s_name == null && calo == null && category != null}">
                                 <div className="row">
                                     <div className="col-lg-12 text-center">
                                         <div className="pagination-wrap">
@@ -429,11 +349,11 @@ export const ShoppingPage = () => {
                                     </div>
                                 </div>
                             </c:if> */}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
