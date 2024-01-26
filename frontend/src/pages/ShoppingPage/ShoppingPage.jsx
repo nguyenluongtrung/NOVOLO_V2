@@ -64,12 +64,12 @@ export const ShoppingPage = () => {
 				</div>
 			</div>
 
-			<div className="container-fluid">
+			<div className="container-fluid fix-ui">
 				<div className="row">
 					<div className="col-sm-3 mt-5 mb-150">
 						<div className="shop__sidebar__search w-100">
 							<input
-								style={{ width: '86%' }}
+								style={{ width: '100%' }}
 								className="rounded p-2 border-1"
 								type="text"
 								placeholder="Search..."
@@ -77,7 +77,7 @@ export const ShoppingPage = () => {
 							/>
 						</div>
 						<hr />
-						<div className="search-by-price ">
+						<div className="search-by-price">
 							<p className="bg-orange p-3 text-white font-weight-bold">
 								The amount of price you want:
 							</p>

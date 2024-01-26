@@ -1,3 +1,7 @@
+.fix-ui{
+    background-color: white;
+}
+
 .bg-orange{
     background-color: #f28123;
 }
@@ -8,7 +12,7 @@
 }
 
 .calories-ul li a{
-    color: grey;
+    color: grey ;
     font-size: 100%;
 }
 
