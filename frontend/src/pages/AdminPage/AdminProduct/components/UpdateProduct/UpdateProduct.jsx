@@ -73,7 +73,7 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId, handleGetA
 
 	return (
 		<div>
-			<div className="overlay"></div>
+			<div className="overlay-update"></div>
 			<div className="content">
 				<form className="updateProductForm" onSubmit={handleSubmit(onSubmit)}>
 					<p style={{ fontWeight: 'bold', textAlign: 'center' }}>
@@ -175,7 +175,7 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId, handleGetA
 							/>
 						</div>
 					</div>
-					{/* <div>
+					<div>
 						<label>
 							Product status <span className="text-danger">*</span>
 						</label>
@@ -187,7 +187,7 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId, handleGetA
 							{...register('productStatus')}
 						/>{' '}
 						False
-					</div> */}
+					</div>
 					{/* <c:if test="${surpriseProduct != null}">
 								<div className="column">
 									<div className="input-box">

@@ -54,7 +54,7 @@ export const AddProduct = ({ setIsOpenAddForm }) => {
 
 	return (
 		<div>
-			<div className="overlay"></div>
+			<div className="overlay-add"></div>
 			<div className="content">
 				<form className="addProductForm" onSubmit={handleSubmit(onSubmit)}>
 					<p style={{ fontWeight: 'bold', textAlign: 'center' }}>

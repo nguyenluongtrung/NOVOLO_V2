@@ -86,7 +86,7 @@ export const AdminProduct = () => {
 							<span>
 								<i className="fa-sharp fa-solid fa-plus"></i>
 							</span>
-							&nbsp; Add a new product
+							&nbsp; Add new product
 						</button>
 
 						<div className="row">
