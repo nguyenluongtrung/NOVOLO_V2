@@ -1,22 +1,23 @@
 import './Header.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 import { logout, reset } from '../../features/auth/authSlice';
+import { FaHeart } from 'react-icons/fa';
 import './../../assets/css/main.css';
 import './../../assets/css/responsive.css';
 import './../../assets/css/scss/common/_header.scss';
 
 export const Header = () => {
-	const {user} = useSelector((state) => state.auth);
+	const { user } = useSelector((state) => state.auth);
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const onLogout = () => {
 		dispatch(logout());
-		dispatch(reset())
+		dispatch(reset());
 		navigate('/home');
-	}
+	};
 
 	return (
 		<div>
@@ -63,9 +64,7 @@ export const Header = () => {
 										</li>
 										{user?.role === 'admin' && (
 											<li>
-												<Link to={'/admin-product'}>
-													Admin Page
-												</Link>
+												<Link to={'/admin-product'}>Admin Page</Link>
 											</li>
 										)}
 
@@ -92,20 +91,16 @@ export const Header = () => {
 
 											{user ? (
 												<>
-													<a className="wishlist" href="get-list-wishlist">
-														<i className="fas fa-heart"></i>
-													</a>
+													<Link to={'/wishList'} className="wishlist">
+														<FaHeart />
+													</Link>
 													<Link to={'/about-me'}>My Account</Link>
 													<button onClick={onLogout}>Log out</button>
 												</>
 											) : (
 												<>
-													<Link to={'/login'}>
-														Login
-													</Link>
-													<Link to={'/register'}>
-														Sign up
-													</Link>
+													<Link to={'/login'}>Login</Link>
+													<Link to={'/register'}>Sign up</Link>
 												</>
 											)}
 										</li>

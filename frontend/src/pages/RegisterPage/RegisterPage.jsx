@@ -9,7 +9,6 @@ import { Spinner } from '../../components';
 import { useForm } from 'react-hook-form';
 import { rules } from '../../utils/rules';
 
-
 export const RegisterPage = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();

@@ -31,7 +31,7 @@ const createProduct = async (productData, token) => {
 
 	const response = await axios.post(API_URL, productData, config);
 
-	return response.data;
+	return response.data.data.product;
 };
 
 // Delete product
@@ -48,14 +48,18 @@ const deleteProduct = async (id, token) => {
 };
 
 // Update product
-const updateProduct = async (id, productData, token) => {
+const updateProduct = async (chosenProductId, updateData, token) => {
 	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
 	};
 
-	const response = await axios.patch(API_URL + id, productData, config);
+	const response = await axios.patch(
+		API_URL + chosenProductId,
+		updateData,
+		config
+	);
 
 	return response.data;
 };

@@ -79,7 +79,7 @@ export const WishList = () => {
 														<td className="product-name">{product.name}</td>
 														<td className="product-price">0$</td>
 														<td className="product-detail">
-															<Link to={''}>See Detail</Link>
+															<Link to={`/single-product/${product._id}`}>See Detail</Link>
 														</td>
 														<td className="product-delete">
 															<button onClick={() => handleDeleteProductFromWishlist(product._id)} className="btn btn-danger px-5 py-3">

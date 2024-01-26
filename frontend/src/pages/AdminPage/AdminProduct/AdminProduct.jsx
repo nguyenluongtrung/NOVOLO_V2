@@ -1,22 +1,53 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './AdminProduct.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getAllProducts } from './../../../features/products/productsSlice';
+import {
+	getAllProducts,
+	deleteProduct,
+} from './../../../features/products/productsSlice';
 import { Spinner } from '../../../components';
-import {FaTrash, FaPenSquare} from 'react-icons/fa'
+import { FaTrash, FaPenSquare } from 'react-icons/fa';
+import { getCategoryById } from '../../../features/categories/categoriesSlice';
+import { AddProduct } from './components/AddProduct/AddProduct';
+import { UpdateProduct } from './components/UpdateProduct/UpdateProduct';
+import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
 
 export const AdminProduct = () => {
 	const dispatch = useDispatch();
+	const [ isOpenAddForm, setIsOpenAddForm ] = useState(false);
+	const [ isOpenUpdateForm, setIsOpenUpdateForm ] = useState(false);
+	const [ chosenProductId, setChosenProductId] = useState('')
 	const { products, isError, isSuccess, isLoading, message } = useSelector(
 		(state) => state.products
 	);
+
+	const handleDeleteProduct = async (productId) => {
+		try {
+			await dispatch(deleteProduct(productId));
+			if (isSuccess) {
+				dispatch(getAllProducts(''));
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const handleEditProduct = (productId) => {
+		setIsOpenUpdateForm(true);
+		setChosenProductId(productId);
+	}
 
 	useEffect(() => {
 		if (isError) {
 			toast.error(message);
 		}
-		dispatch(getAllProducts());
+		dispatch(getAllProducts(''));
+		// if(isSuccess){
+		// 	products.map((product) => {
+		// 		return product.categoryID
+		// 	})
+		// }
 	}, [dispatch, isError, message]);
 
 	if (isLoading) {
@@ -25,49 +56,10 @@ export const AdminProduct = () => {
 
 	return (
 		<div className="d-flex" id="wrapper">
-			<div className="bg-white" id="sidebar-wrapper">
-				<div className="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom">
-					<i className="fas fa-user-secret me-2"></i>MANAGER PAGE
-				</div>
-				<div className="list-group list-group-flush my-3">
-					<a
-						href="admin-page"
-						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-					>
-						<i className="fas fa-tachometer-alt me-2"></i>Dashboard
-					</a>
-					<a
-						href="product-admin"
-						className="list-group-item list-group-item-action bg-transparent second-text active fw-bold"
-					>
-						<i className="fas fa-tachometer-alt me-2"></i>Products
-					</a>
-					<a
-						href="orders-admin"
-						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-					>
-						<i className="fas fa-gift me-2"></i>Orders
-					</a>
-					<a
-						href="feedback-admin"
-						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-					>
-						<i className="fas fa-comment-dots me-2"></i>Feedbacks
-					</a>
-					<a
-						href="sale-admin"
-						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-					>
-						<i className="fas fa-comment-dots me-2"></i>Sales
-					</a>
-					<a
-						href="home-control"
-						className="list-group-item list-group-item-action bg-transparent text-danger fw-bold"
-					>
-						<i className="fas fa-power-off me-2"></i>Home page
-					</a>
-				</div>
-			</div>
+			{isOpenAddForm && <AddProduct setIsOpenAddForm={setIsOpenAddForm} />}
+			{isOpenUpdateForm && <UpdateProduct setIsOpenUpdateForm={setIsOpenUpdateForm} chosenProductId={chosenProductId}/>}
+
+			<AdminSidebar />
 
 			<div id="page-content-wrapper">
 				<nav className="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
@@ -78,117 +70,101 @@ export const AdminProduct = () => {
 						></i>
 						<h2 className="fs-2 m-0">Product Management</h2>
 					</div>
-
-					<button
-						className="navbar-toggler"
-						type="button"
-						data-bs-toggle="collapse"
-						data-bs-target="#navbarSupportedContent"
-						aria-controls="navbarSupportedContent"
-						aria-expanded="false"
-						aria-label="Toggle navigation"
-					>
-						<span className="navbar-toggler-icon"></span>
-					</button>
 				</nav>
 
 				<div className="container-fluid px-4">
-					<div className="row my-5">
-						<div className="row mb-3">
-							<h3 className="fs-4 mb-3 d-inline col-sm-10">List of products </h3>
-							<button className="btn btn-success px-3 py-1 col-sm-2">
-								<a
-									className="view-modal text-decoration-none text-white"
-									href="add-product"
-								>
-									<span>
-										<i className="fa-sharp fa-solid fa-plus"></i>
-									</span>
-									&nbsp; Add a new product
-								</a>
-							</button>
-						</div>
+					<div className="row">
+						<h3 className="fs-4 mb-3 col-sm-8">List of products </h3>
+						<button
+							className="view-modal text-decoration-none text-white btn btn-success px-3 py-1 col-sm-2 mb-4"
+							onClick={() => setIsOpenAddForm(true)}
+						>
+							<span>
+								<i className="fa-sharp fa-solid fa-plus"></i>
+							</span>
+							&nbsp; Add a new product
+						</button>
 
-						<div className="col">
-							<table className="table bg-white rounded shadow-sm  table-hover">
-								<thead>
-									<tr>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Name
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Image
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Category ID
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Calories
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Is Surprise
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Rating
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Accumulated Point
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Exchanged Point
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Price
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Status
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
-											Action
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									{products.map((product) => {
-										return (
-											<tr>
-												<td>{product.name}</td>
-												<td>
-													<image
-														src={product.image}
-														style={{width: '40px', height: '40px'}}
-													/>
-												</td>
-												<td>{product.categoryID}</td>
-												<td>{product.calories}</td>
-												<td>{product.isSurprise ? 'true' : 'false'}</td>
-												<td>{product.rating}</td>
-												<td>{product.accumulatedPoint}</td>
-												<td>{product.exchangedPoint}</td>
-												<td>{product.price}</td>
-												<td>{product.productStatus ? 'true' : 'false'}</td>
-												<td>
-													<a
-														href="update-product?id=${c.productID}"
-														className="edit"
-													>
-														{/* <i className="view-modal fa-sharp fa-regular fa-pen-to-square  text-dark"></i> */}
-														<FaPenSquare />
-													</a>{' '}
-													&nbsp;&nbsp;&nbsp;
-													<a
-														href="delete-product?id=${c.productID}"
-														className="delete"
-													>
-														{/* <i className="fa-sharp fa-solid fa-trash  text-dark"></i> */}
-                                                        <FaTrash />
-													</a>
-												</td>
-											</tr>
-										);
-									})}
-								</tbody>
-							</table>
+						<div className="row">
+							<div className="col">
+								<table className="table bg-white rounded shadow-sm  table-hover">
+									<thead>
+										<tr>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Name
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Image
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Category ID
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Calories
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Is Surprise
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Rating
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Accumulated Point
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Exchanged Point
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Price
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Status
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Action
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										{products.map((product) => {
+											return (
+												<tr>
+													<td>{product.name}</td>
+													<td>
+														<image
+															src={product.image}
+															style={{ width: '40px', height: '40px' }}
+														/>
+													</td>
+													<td>{product.categoryID}</td>
+													<td>{product.calories}</td>
+													<td>{product.isSurprise ? 'true' : 'false'}</td>
+													<td>{product.rating}</td>
+													<td>{product.accumulatedPoint}</td>
+													<td>{product.exchangedPoint}</td>
+													<td>{product.price}</td>
+													<td>{product.productStatus ? 'true' : 'false'}</td>
+													<td>
+														<a
+															className="edit"
+															onClick={() => handleEditProduct(product._id)}
+														>
+															<FaPenSquare />
+														</a>{' '}
+														&nbsp;&nbsp;&nbsp;
+														<button
+															onClick={() => handleDeleteProduct(product._id)}
+															className="delete"
+														>
+															<FaTrash />
+														</button>
+													</td>
+												</tr>
+											);
+										})}
+									</tbody>
+								</table>
+							</div>
 						</div>
 
 						<div className="row">

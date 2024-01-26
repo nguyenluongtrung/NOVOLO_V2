@@ -77,6 +77,8 @@ const updateProduct = asyncHandler(async (req, res) => {
 		throw new Error('Product not found!');
 	}
 
+	console.log(req.body);
+
 	const { price: priceValue } = req.body;
 	const {
 		name,
@@ -116,7 +118,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 		endDate: null,
 	});
 
-	if (priceValue != price.price) {
+	if (Number(priceValue) != price.price) {
 		const updatedPrice = await Price.findByIdAndUpdate(price._id, {
 			endDate: Date.now(),
 		});
