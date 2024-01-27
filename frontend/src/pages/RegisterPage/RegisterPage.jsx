@@ -8,6 +8,7 @@ import { reset, registerUser } from '../../features/auth/authSlice';
 import { Spinner } from '../../components';
 import { useForm } from 'react-hook-form';
 import { rules } from '../../utils/rules';
+import './RegisterPage.css';
 
 export const RegisterPage = () => {
 	const dispatch = useDispatch();
@@ -44,14 +45,11 @@ export const RegisterPage = () => {
 
 	return (
 		<div
-			class="img js-fullheight"
-			style={{
-				backgroundImage:
-					'url(style-sign-up/images/z4373505915681_735607b4dfbe3d3d80f627e7495e773d.jpg)',
-			}}
+		class="img js-fullheight"
+		style={{ backgroundImage: 'url(/img/product/bglogin.jpg)' }}
 		>
 			<section class="ftco-section">
-				<div class="container">
+				<div class="container pt-4">
 					<div class="row justify-content-center">
 						<div class="col-md-6 text-center mb-5">
 							<h2 class="heading-section">SIGN UP</h2>
@@ -64,7 +62,7 @@ export const RegisterPage = () => {
 									<div class="form-group">
 										<input
 											type="text"
-											class="form-control"
+											class="form-control rounded-pill"
 											placeholder="Your Name"
 											{...register('name', rules.name)}
 										/>
@@ -72,7 +70,7 @@ export const RegisterPage = () => {
 									<div class="form-group">
 										<input
 											type="text"
-											class="form-control"
+											class="form-control rounded-pill"
 											placeholder="Address"
 											{...register('address')}
 										/>
@@ -80,7 +78,7 @@ export const RegisterPage = () => {
 									<div class="form-group">
 										<input
 											type="text"
-											class="form-control"
+											class="form-control rounded-pill"
 											placeholder="Phone number"
 											{...register('phone', rules.phone)}
 										/>
@@ -89,7 +87,7 @@ export const RegisterPage = () => {
 									<div class="form-group">
 										<input
 											type="email"
-											class="form-control"
+											class="form-control rounded-pill"
 											placeholder="Email"
 											{...register('email', rules.email)}
 										/>
@@ -98,12 +96,12 @@ export const RegisterPage = () => {
 									<div class="form-group">
 										<input
 											type="date"
-											class="form-control"
+											class="form-control rounded-pill"
 											{...register('dob')}
 										/>
 									</div>
 									<div class="form-group">
-										<select {...register('gender')} class="form-control">
+										<select {...register('gender')} class="form-control rounded-pill">
 											<option value="male">Male</option>
 											<option value="female">Female</option>
 											<option value="other">Other</option>
@@ -113,7 +111,8 @@ export const RegisterPage = () => {
 										<input
 											id="password-field"
 											type="password"
-											class="form-control"
+											class="form-control rounded-pill"
+											placeholder=' Your Password'
 											{...register('password', rules.password)}
 										/>
 										<span
@@ -121,16 +120,16 @@ export const RegisterPage = () => {
 											class="fa fa-fw fa-eye field-icon toggle-password"
 										></span>
 									</div>
-									<div class="form-group">
-										<button
+									<div class="form-group " >
+										<button style={{fontWeight:"bold"}}
 											type="submit"
-											class="form-control btn btn-primary submit px-3"
+											class="form-control rounded-pill btn btn-primary submit px-3"
 										>
 											Sign Up
 										</button>
 									</div>
 									<div class="form-group d-md-flex">
-										<div class="w-50">
+										<div class="w-50" style={{fontWeight:"bold"}} >
 											<Link to={'/login'}>Log in</Link>
 										</div>
 										<div class="w-50 text-md-right">
