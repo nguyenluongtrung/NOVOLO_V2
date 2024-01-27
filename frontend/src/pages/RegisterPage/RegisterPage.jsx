@@ -46,7 +46,7 @@ export const RegisterPage = () => {
 	return (
 		<div
 		class="img js-fullheight"
-		style={{ backgroundImage: 'url(/img/product/bglogin.jpg)' }}
+		style={{backgroundImage: 'url(/img/product/bglogin.jpg)' }}
 		>
 			<section class="ftco-section">
 				<div class="container pt-4">
