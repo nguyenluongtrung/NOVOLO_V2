@@ -49,7 +49,7 @@ export const RegisterPage = () => {
 		style={{backgroundImage: 'url(/img/product/bglogin.jpg)' }}
 		>
 			<section class="ftco-section">
-				<div class="container pt-4">
+				<div class="sign-up-container pt-4">
 					<div class="row justify-content-center">
 						<div class="col-md-6 text-center mb-5">
 							<h2 class="heading-section">SIGN UP</h2>
