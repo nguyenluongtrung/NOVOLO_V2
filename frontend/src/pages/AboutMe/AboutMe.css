@@ -108,3 +108,20 @@ body {
 	background-color: #04aa6d;
 	color: white;
 }
+
+.card-imformation{
+	margin-bottom:  2.5rem !important;
+}
+
+.btn-update{
+	background-color: rgb(0,123,255) !important;
+	color: white !important;
+}
+
+.btn-update:hover{
+	background-color: rgb(10, 78, 150) !important;
+}
+
+.form-control{
+	color: black !important;
+}
