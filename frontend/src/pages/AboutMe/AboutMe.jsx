@@ -10,6 +10,10 @@ import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { rules } from '../../utils/rules';
 import { Spinner } from '../../components';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+
+
 
 export const AboutMe = () => {
 	const dispatch = useDispatch();
@@ -43,11 +47,11 @@ export const AboutMe = () => {
 	}
 
 	return (
-		<div className="container">
+		<div className="container" >
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="row gutters">
 					<div className="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-						<div className="card rounded-circle">
+						<div className="card mt-4 rounded-circle">
 							<div className="card-body">
 								<div className="account-settings">
 									<div className="user-profile">
@@ -73,7 +77,7 @@ export const AboutMe = () => {
 									<li>
 										<a href="#">
 											<span>
-												<i className="fa-solid fa-person"></i>
+											<i class="fa-solid fa-person"></i>
 											</span>{' '}
 											&nbsp; My Information
 										</a>
@@ -108,10 +112,10 @@ export const AboutMe = () => {
 					</div>
 
 					<div
-						className="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12"
+						className=" card-imformation col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12"
 						id="my-info"
 					>
-						<div className="card h-100">
+						<div className="card  mt-4 h-100">
 							<div className="card-body">
 								<div className="row gutters">
 									<div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -172,8 +176,8 @@ export const AboutMe = () => {
 									<div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
 										<div className="form-group">
 											<label htmlFor="Gender">Gender</label>
-											<div>
-												<select {...register('gender')}>
+											<div >
+												<select className="form-control"{...register('gender')}>
 													<option selected={user?.gender === 'male' ? true : false} value={'male'}>MALE</option>
 													<option selected={user?.gender === 'female' ? true : false} value={'female'}>FEMALE</option>
 													<option selected={user?.gender === 'other' ? true : false} value={'other'}>OTHER</option>
@@ -201,8 +205,7 @@ export const AboutMe = () => {
 											<button
 												type="submit"
 												id="submit"
-												className="btn btn-primary"
-											>
+												className="btn btn-update ">
 												Update
 											</button>
 										</div>
