@@ -4,19 +4,37 @@ import {useDispatch, useSelector} from 'react-redux'
 import {FaHeart} from 'react-icons/fa'
 import { addProductToWishList } from '../../../../features/auth/authSlice';
 import {toast} from 'react-toastify'
+import { Spinner } from '../../../../components';
+import { useEffect } from 'react';
+import { getAllNewestPrices } from '../../../../features/prices/pricesSlice';
 
 export const ProductList = ({ products, searchName }) => {
 	const dispatch = useDispatch();
 
-	const {isSuccess, isError, message} = useSelector((state) => state.auth)
+	const {isSuccess: authSuccess, isError: authError, isLoading: authLoading, message: authMessage} = useSelector((state) => state.auth)
+
+	const { prices, isError: priceError, isLoading: priceLoading, message: priceMessage } = useSelector(
+		(state) => state.prices
+	);
 
 	const addProductToWishlist = (productId) => {
 		dispatch(addProductToWishList(productId))
-		if(isError){
-			toast.error(message)
-		} else if(isSuccess){
+		if(authError){
+			toast.error(authMessage)
+		} else if(authSuccess){
 			toast.success('Add product to wishlist successfully!')
 		}
+	}
+
+	useEffect(() => {
+		if(priceError) {
+			toast.error(priceMessage);
+		}
+		dispatch(getAllNewestPrices())
+	}, [dispatch, priceMessage, priceError]);
+
+	if(priceLoading || authLoading){
+		return <Spinner />
 	}
 
 	return (
@@ -55,7 +73,7 @@ export const ProductList = ({ products, searchName }) => {
 									<p
 										style={{ color: product.isSurprise ? 'grey' : '' }}
 										className="product-price"
-									></p>
+									>{prices[prices.findIndex((price) => price.productId === product._id)].price} $</p>
 									<p
 										className={
 											product.isSurprise ? 'text-white' : 'text-secondary'

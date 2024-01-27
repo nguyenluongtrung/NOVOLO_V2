@@ -8,24 +8,32 @@ import {
 } from './../../../features/products/productsSlice';
 import { Spinner } from '../../../components';
 import { FaTrash, FaPenSquare } from 'react-icons/fa';
-import { getCategoryById } from '../../../features/categories/categoriesSlice';
+import { getAllCategories, getCategoryById } from '../../../features/categories/categoriesSlice';
 import { AddProduct } from './components/AddProduct/AddProduct';
 import { UpdateProduct } from './components/UpdateProduct/UpdateProduct';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
+import { getAllNewestPrices } from '../../../features/prices/pricesSlice';
 
 export const AdminProduct = () => {
 	const dispatch = useDispatch();
 	const [ isOpenAddForm, setIsOpenAddForm ] = useState(false);
 	const [ isOpenUpdateForm, setIsOpenUpdateForm ] = useState(false);
 	const [ chosenProductId, setChosenProductId] = useState('')
-	const { products, isError, isSuccess, isLoading, message } = useSelector(
+	const { products, isError: productError, isSuccess: productSuccess, isLoading: productLoading, message: productMessage } = useSelector(
 		(state) => state.products
+	);
+	const { categories, isError: categoryError, isLoading: categoryLoading, message: categoryMessage } = useSelector(
+		(state) => state.categories
+	);
+
+	const { prices, isError: priceError, isLoading: priceLoading, message: priceMessage } = useSelector(
+		(state) => state.prices
 	);
 
 	const handleDeleteProduct = async (productId) => {
 		try {
 			await dispatch(deleteProduct(productId));
-			if (isSuccess) {
+			if (productSuccess) {
 				dispatch(getAllProducts(''));
 			}
 		} catch (error) {
@@ -43,18 +51,25 @@ export const AdminProduct = () => {
 	}
 
 	useEffect(() => {
-		if (isError) {
-			toast.error(message);
+		if (productError) {
+			toast.error(productMessage);
 		}
-		dispatch(getAllProducts(''));
-		// if(isSuccess){
-		// 	products.map((product) => {
-		// 		return product.categoryID
-		// 	})
-		// }
-	}, [dispatch, isError, message]);
+		if(categoryError) {
+			toast.error(categoryMessage);
+		}
+		if(priceError) {
+			toast.error(priceMessage);
+		}
+		Promise.all([
+			dispatch(getAllProducts("")),
+			dispatch(getAllCategories()),
+			dispatch(getAllNewestPrices())
+		  ]).catch((error) => {
+			console.error("Error during dispatch:", error);
+		  });
+	}, [dispatch, productError, productMessage]);
 
-	if (isLoading) {
+	if (productLoading || categoryLoading || priceLoading) {
 		return <Spinner />;
 	}
 
@@ -101,7 +116,7 @@ export const AdminProduct = () => {
 												Image
 											</th>
 											<th scope="col" style={{ fontSize: '90%' }}>
-												Category ID
+												Category Name
 											</th>
 											<th scope="col" style={{ fontSize: '90%' }}>
 												Calories
@@ -135,18 +150,18 @@ export const AdminProduct = () => {
 												<tr>
 													<td>{product.name}</td>
 													<td>
-														<image
+														<img
 															src={product.image}
 															style={{ width: '40px', height: '40px' }}
 														/>
 													</td>
-													<td>{product.categoryID}</td>
+													<td>{categories[categories.findIndex((category) => category._id === product.categoryID)].name}</td>
 													<td>{product.calories}</td>
 													<td>{product.isSurprise ? 'true' : 'false'}</td>
 													<td>{product.rating}</td>
 													<td>{product.accumulatedPoint}</td>
 													<td>{product.exchangedPoint}</td>
-													<td>{product.price}</td>
+													<td>{prices[prices.findIndex((price) => price.productId === product._id)].price} $</td>
 													<td>{product.productStatus ? 'true' : 'false'}</td>
 													<td>
 														<a
