@@ -10,10 +10,7 @@ import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { rules } from '../../utils/rules';
 import { Spinner } from '../../components';
-import '@fortawesome/fontawesome-free/css/all.min.css';
-
-
-
+import { FaPersonBooth, FaBox, FaBell, FaCoins } from 'react-icons/fa'
 
 export const AboutMe = () => {
 	const dispatch = useDispatch();
@@ -77,7 +74,7 @@ export const AboutMe = () => {
 									<li>
 										<a href="#">
 											<span>
-											<i class="fa-solid fa-person"></i>
+											<FaPersonBooth />
 											</span>{' '}
 											&nbsp; My Information
 										</a>
@@ -85,7 +82,7 @@ export const AboutMe = () => {
 									<li>
 										<a href="#">
 											<span>
-												<i className="fa-solid fa-box"></i>
+												<FaBox />
 											</span>{' '}
 											&nbsp; My Order
 										</a>
@@ -93,7 +90,7 @@ export const AboutMe = () => {
 									<li>
 										<a href="#">
 											<span>
-												<i className="fa-solid fa-bell"></i>
+												<FaBell />
 											</span>{' '}
 											&nbsp; My Feedbacks
 										</a>
@@ -101,7 +98,7 @@ export const AboutMe = () => {
 									<li>
 										<a href="#">
 											<span>
-												<i className="fa-solid fa-coins"></i>
+												<FaCoins />
 											</span>{' '}
 											&nbsp; My Accumulated Points
 										</a>
