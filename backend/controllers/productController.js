@@ -9,13 +9,28 @@ const getAllProducts = asyncHandler(async (req, res) => {
 
 	const products = await features.query;
 
-	res.status(200).json({
-		status: 'success',
-		length: products.length,
-		data: {
-			products,
-		},
-	});
+	if (req.query.price) {
+		let results = [];
+		for (let p of products) {
+			const product = await Product.findById(p.productId);
+			results.push(product);
+		}
+		res.status(200).json({
+			status: 'success',
+			length: results.length,
+			data: {
+				products: results,
+			},
+		});
+	} else {
+		res.status(200).json({
+			status: 'success',
+			length: products.length,
+			data: {
+				products,
+			},
+		});
+	}
 });
 
 const getProductById = asyncHandler(async (req, res) => {

@@ -1,3 +1,5 @@
+const Price = require('./../models/priceModel');
+
 class ApiFeatures {
 	constructor(query, queryStr) {
 		this.query = query;
@@ -17,7 +19,12 @@ class ApiFeatures {
 			delete queryObj[el];
 		});
 
-		this.query = this.query.find(queryObj);
+		if (queryObj.price) {
+			this.query = Price.find({ ...queryObj, endDate: null });
+		} else {
+			this.query = this.query.find(queryObj);
+		}
+
 		return this;
 	}
 }
