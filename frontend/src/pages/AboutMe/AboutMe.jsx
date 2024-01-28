@@ -24,8 +24,8 @@ export const AboutMe = () => {
 		formState: { errors },
 	} = useForm();
 
-	const onSubmit = (data) => {
-		dispatch(updateUserInformation(data));
+	const onSubmit = async (data) => {
+		await dispatch(updateUserInformation(data));
 		if (isSuccess) {
 			toast.success('Update information successfully');
 		}

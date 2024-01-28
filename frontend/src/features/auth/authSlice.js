@@ -55,7 +55,8 @@ export const getUserInformation = createAsyncThunk(
 	'auth/getUserInformation',
 	async (_, thunkAPI) => {
 		try {
-			const token = user.data.token;
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
 			return await authService.getUserInformation(token);
 		} catch (error) {
 			const message =
@@ -75,7 +76,8 @@ export const updateUserInformation = createAsyncThunk(
 	'auth/updateUserInformation',
 	async (userData, thunkAPI) => {
 		try {
-			const token = user.data.token;
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
 			return await authService.updateUserInformation(userData, token);
 		} catch (error) {
 			const message =
@@ -95,8 +97,8 @@ export const addProductToWishList = createAsyncThunk(
 	'auth/addProductToWishList',
 	async (productId, thunkAPI) => {
 		try {
-			const token = user.data.token;
-			console.log('token day: ' + token);
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
 			return await authService.addProductToWishList(productId, token);
 		} catch (error) {
 			const message =
@@ -116,7 +118,8 @@ export const deleteProductFromWishList = createAsyncThunk(
 	'auth/deleteProductFromWishList',
 	async (productId, thunkAPI) => {
 		try {
-			const token = user.data.token;
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
 			return await authService.deleteProductFromWishList(productId, token);
 		} catch (error) {
 			const message =

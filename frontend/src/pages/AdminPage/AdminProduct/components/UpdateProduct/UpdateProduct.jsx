@@ -36,21 +36,21 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId, handleGetA
 		handleGetAllProducts();
 	}
 
-	const onSubmit = (data) => {
+	const onSubmit = async (data) => {
 		const updateData = {
 			...data,
 			isSurprise: false,
 			startDate: null,
 			endDate: null,
 		};
-		console.log(updateData)
 		if (productError) {
 			toast.error(productMessage);
 		}
-		dispatch(updateProduct({chosenProductId, updateData}));
+		await dispatch(updateProduct({chosenProductId, updateData}));
 		
 		if (productSuccess) {
 			toast.success('Update product successfully!');
+			handleCloseBtn();
 		}
 	};
 
@@ -58,13 +58,9 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId, handleGetA
 		if (categoryError) {
 			toast.error(categoryMessage);
 		}
-		dispatch(getAllCategories());
-		// Promise.all([
-		// 	dispatch(getProductById(chosenProductId)),
-		// 	dispatch(getAllCategories()),
-		// ]).catch((error) => {
-		// 	console.error('Error during dispatch:', error);
-		// });
+		if(!categories){
+			dispatch(getAllCategories());
+		}
 	}, [dispatch, categoryError, categoryMessage]);
 
 	if (productLoading || categoryLoading) {

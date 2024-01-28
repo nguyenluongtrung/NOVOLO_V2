@@ -8,7 +8,7 @@ import { FaTimes } from 'react-icons/fa';
 import { useEffect } from 'react';
 import { getAllCategories } from '../../../../../features/categories/categoriesSlice';
 
-export const AddProduct = ({ setIsOpenAddForm }) => {
+export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 	const dispatch = useDispatch();
 
 	const {
@@ -17,6 +17,7 @@ export const AddProduct = ({ setIsOpenAddForm }) => {
 		isError: productError,
 		message: productMessage,
 	} = useSelector((state) => state.products);
+
 	const {
 		categories,
 		isError: categoryError,
@@ -30,14 +31,20 @@ export const AddProduct = ({ setIsOpenAddForm }) => {
 		formState: { errors },
 	} = useForm();
 
-	const onSubmit = (data) => {
+	const handleCloseBtn = () => {
+		setIsOpenAddForm(false);
+		handleGetAllProducts();
+	}
+
+	const onSubmit = async (data) => {
         const addData = {...data, isSurprise: false, startDate: null, endDate: null}
 		if (productError) {
 			toast.error(productMessage);
 		}
-		dispatch(createProduct(addData));
+		await dispatch(createProduct(addData));
 		if (productSuccess) {
 			toast.success('Create new product successfully!');
+			handleCloseBtn();
 		}
 	};
 
@@ -45,10 +52,12 @@ export const AddProduct = ({ setIsOpenAddForm }) => {
 		if (categoryError) {
 			toast.error(categoryMessage);
 		}
-		dispatch(getAllCategories());
+		if(!categories){
+			dispatch(getAllCategories());
+		}
 	}, [dispatch, categoryError, categoryMessage]);
 
-	if (productLoading || categoryLoading) {
+	if (productLoading || categoryLoading || !categories) {
 		return <Spinner />;
 	}
 

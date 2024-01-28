@@ -8,7 +8,10 @@ import {
 } from './../../../features/products/productsSlice';
 import { Spinner } from '../../../components';
 import { FaTrash, FaPenSquare } from 'react-icons/fa';
-import { getAllCategories, getCategoryById } from '../../../features/categories/categoriesSlice';
+import {
+	getAllCategories,
+	getCategoryById,
+} from '../../../features/categories/categoriesSlice';
 import { AddProduct } from './components/AddProduct/AddProduct';
 import { UpdateProduct } from './components/UpdateProduct/UpdateProduct';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
@@ -16,19 +19,29 @@ import { getAllNewestPrices } from '../../../features/prices/pricesSlice';
 
 export const AdminProduct = () => {
 	const dispatch = useDispatch();
-	const [ isOpenAddForm, setIsOpenAddForm ] = useState(false);
-	const [ isOpenUpdateForm, setIsOpenUpdateForm ] = useState(false);
-	const [ chosenProductId, setChosenProductId] = useState('')
-	const { products, isError: productError, isSuccess: productSuccess, isLoading: productLoading, message: productMessage } = useSelector(
-		(state) => state.products
-	);
-	const { categories, isError: categoryError, isLoading: categoryLoading, message: categoryMessage } = useSelector(
-		(state) => state.categories
-	);
+	const [isOpenAddForm, setIsOpenAddForm] = useState(false);
+	const [isOpenUpdateForm, setIsOpenUpdateForm] = useState(false);
+	const [chosenProductId, setChosenProductId] = useState('');
+	const {
+		products,
+		isError: productError,
+		isSuccess: productSuccess,
+		isLoading: productLoading,
+		message: productMessage,
+	} = useSelector((state) => state.products);
+	const {
+		categories,
+		isError: categoryError,
+		isLoading: categoryLoading,
+		message: categoryMessage,
+	} = useSelector((state) => state.categories);
 
-	const { prices, isError: priceError, isLoading: priceLoading, message: priceMessage } = useSelector(
-		(state) => state.prices
-	);
+	const {
+		prices,
+		isError: priceError,
+		isLoading: priceLoading,
+		message: priceMessage,
+	} = useSelector((state) => state.prices);
 
 	const handleDeleteProduct = async (productId) => {
 		try {
@@ -44,29 +57,34 @@ export const AdminProduct = () => {
 	const handleEditProduct = (productId) => {
 		setIsOpenUpdateForm(true);
 		setChosenProductId(productId);
-	}
+	};
 
 	const handleGetAllProducts = () => {
-		dispatch(getAllProducts(''));
-	}
+		Promise.all([
+			dispatch(getAllProducts('')),
+			dispatch(getAllNewestPrices()),
+		]).catch((error) => {
+			console.error('Error during dispatch:', error);
+		});
+	};
 
 	useEffect(() => {
 		if (productError) {
 			toast.error(productMessage);
 		}
-		if(categoryError) {
+		if (categoryError) {
 			toast.error(categoryMessage);
 		}
-		if(priceError) {
+		if (priceError) {
 			toast.error(priceMessage);
 		}
 		Promise.all([
-			dispatch(getAllProducts("")),
+			dispatch(getAllProducts('')),
 			dispatch(getAllCategories()),
-			dispatch(getAllNewestPrices())
-		  ]).catch((error) => {
-			console.error("Error during dispatch:", error);
-		  });
+			dispatch(getAllNewestPrices()),
+		]).catch((error) => {
+			console.error('Error during dispatch:', error);
+		});
 	}, [dispatch, productError, productMessage]);
 
 	if (productLoading || categoryLoading || priceLoading) {
@@ -75,8 +93,14 @@ export const AdminProduct = () => {
 
 	return (
 		<div className="d-flex" id="wrapper">
-			{isOpenAddForm && <AddProduct setIsOpenAddForm={setIsOpenAddForm} />}
-			{isOpenUpdateForm && <UpdateProduct setIsOpenUpdateForm={setIsOpenUpdateForm} chosenProductId={chosenProductId} handleGetAllProducts={handleGetAllProducts}/>}
+			{isOpenAddForm && <AddProduct setIsOpenAddForm={setIsOpenAddForm} handleGetAllProducts={handleGetAllProducts} />}
+			{isOpenUpdateForm && (
+				<UpdateProduct
+					setIsOpenUpdateForm={setIsOpenUpdateForm}
+					chosenProductId={chosenProductId}
+					handleGetAllProducts={handleGetAllProducts}
+				/>
+			)}
 
 			<AdminSidebar />
 
@@ -148,21 +172,42 @@ export const AdminProduct = () => {
 										{products.map((product) => {
 											return (
 												<tr>
-													<td>{product.name}</td>
+													<td>{product?.name}</td>
 													<td>
 														<img
-															src={product.image}
+															src={product?.image}
 															style={{ width: '40px', height: '40px' }}
 														/>
 													</td>
-													<td>{categories[categories.findIndex((category) => category._id === product.categoryID)].name}</td>
-													<td>{product.calories}</td>
-													<td>{product.isSurprise ? 'true' : 'false'}</td>
-													<td>{product.rating}</td>
-													<td>{product.accumulatedPoint}</td>
-													<td>{product.exchangedPoint}</td>
-													<td>{prices[prices.findIndex((price) => price.productId === product._id)].price} $</td>
-													<td>{product.productStatus ? 'true' : 'false'}</td>
+													<td>
+														{
+															categories[
+																categories.findIndex(
+																	(category) =>
+																		category._id === product.categoryID
+																)
+															].name
+														}
+													</td>
+													<td>{product?.calories}</td>
+													<td>{product?.isSurprise ? 'true' : 'false'}</td>
+													<td>{product?.rating}</td>
+													<td>{product?.accumulatedPoint}</td>
+													<td>{product?.exchangedPoint}</td>
+													<td>
+														{
+															prices[
+																prices.findIndex((price) => {
+																	return (
+																		price.productId === product._id &&
+																		price.endDate === null
+																	);
+																})
+															]?.price
+														}{' '}
+														$
+													</td>
+													<td>{product?.productStatus ? 'true' : 'false'}</td>
 													<td>
 														<a
 															className="edit"
