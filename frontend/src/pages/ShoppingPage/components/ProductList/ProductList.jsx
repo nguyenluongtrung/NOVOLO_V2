@@ -87,7 +87,7 @@ export const ProductList = ({ products, searchName }) => {
 											<i className="fas fa-shopping-cart"></i> Add to Cart
 										</a>
 									) : (
-										<a href="sorry.jsp" className="btn btn-danger px-5 py-3">
+										<a className="btn btn-danger px-4 py-2 text-white" onClick={() => toast.error('This product is already sold out!')}>
 											Sold out
 										</a>
 									)}

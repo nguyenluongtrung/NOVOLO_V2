@@ -251,7 +251,6 @@ export const ShoppingPage = () => {
 										</div>
 									</div>
 								</div>
-								{console.log(getProductByCategory)}
 								<ProductList products={products} searchName={searchName} />
 								{/* <div className="row product-lists">
                                 <c:if test="${ms != null}">
