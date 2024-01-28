@@ -1,18 +1,24 @@
 import './Header.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate,useLocation } from 'react-router-dom';
 import { logout, reset } from '../../features/auth/authSlice';
 import { FaHeart } from 'react-icons/fa';
 import './../../assets/css/main.css';
 import './../../assets/css/responsive.css';
 import './../../assets/css/scss/common/_header.scss';
+import  avt  from '../../assets/img/products/avt.png';
+import './Header.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export const Header = () => {
 	const { user } = useSelector((state) => state.auth);
-
+	const location = useLocation();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
+	const isHomeActive = location.pathname === '/home';
+    const isShopActive = location.pathname === '/shop';
+	const isContactActive = location.pathname === '#';
+    const isAboutActive = location.pathname === '#';
 	const onLogout = () => {
 		dispatch(logout());
 		dispatch(reset());
@@ -20,14 +26,13 @@ export const Header = () => {
 	};
 
 	return (
-		<div>
-			<div>
-				<div
-					className="container-fluid justify-content-center align-items-center"
+		 
+			<div className="top-header-area" id="sticker">
+				<div className="container-fluid justify-content-center align-items-center"
 					style={{
 						backgroundColor: 'rgba(0,0,0,0.5)',
 						padding: '0 100px',
-						marginTop: '-50px',
+						marginTop: '-25px'
 					}}
 				>
 					<div className="row">
@@ -36,13 +41,13 @@ export const Header = () => {
 								<div className="site-logo">
 									<a href="">
 										<img
-											src="/img/product/abc.png"
+											src={avt}
 											style={{
 												padding: 0,
 												marginTop: '-20px',
-												marginLeft: '-10px',
-												paddingTop: '20px',
-												width: '80%',
+												marginLeft: '-80px',
+												paddingTop: '30px'
+												 
 											}}
 										/>
 									</a>
@@ -50,7 +55,7 @@ export const Header = () => {
 
 								<nav className="main-menu" style={{ paddingTop: '30px' }}>
 									<ul>
-										<li className="current-list-item">
+										<li className={isHomeActive ? 'current-list-item' : ''}>
 											<Link to={'/home'}>Home</Link>
 										</li>
 										<li>
@@ -59,7 +64,7 @@ export const Header = () => {
 										<li>
 											<a href="#">Contact</a>
 										</li>
-										<li>
+										<li className={isShopActive ? 'current-list-item' : ''}>
 											<Link to={'/shop'}>Menu</Link>
 										</li>
 										{user?.role === 'admin' && (
@@ -99,8 +104,13 @@ export const Header = () => {
 												</>
 											) : (
 												<>
-													<Link to={'/login'}>Login</Link>
+												<li>
+												<Link to={'/login'}>Login</Link>
+												</li>
+													<li>
 													<Link to={'/register'}>Sign up</Link>
+													</li>
+													
 												</>
 											)}
 										</li>
@@ -114,7 +124,7 @@ export const Header = () => {
 						</div>
 					</div>
 				</div>
-			</div>
+			 
 		</div>
 	);
 };
