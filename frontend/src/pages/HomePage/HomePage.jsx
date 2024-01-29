@@ -7,6 +7,8 @@ import './../../assets/css/owl.carousel.css';
 import './../../assets/css/animate.css';
 import './../../assets/css/responsive.css';
 import { FaPhoneVolume, FaSync, FaShippingFast } from 'react-icons/fa';
+import ImageSlider from './components/ImageSlider'
+
 export const HomePage = () => {
 	return (
 		<div>
@@ -32,30 +34,9 @@ export const HomePage = () => {
 					</div>
 				</div>
 			</div>
-			<div className="">
-				<div className="homepage-bg-1">
-					<div className="container">
-						<div className="row">
-							<div className="col-md-12 col-lg-7 offset-lg-1 offset-xl-0">
-								<div className="hero-text">
-									<div className="hero-text-tablecell">
-										<p className="subtitle">Fresh & Organic</p>
-										<h1>Delicious Seasonal Fruits</h1>
-										<div className="hero-btns">
-											<a href="shop.html" className="boxed-btn">
-												Fruit Collection
-											</a>
-											<a href="contact.html" className="bordered-btn">
-												Contact Us
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			<div style={{marginTop: '-160px'}}>
+				<ImageSlider/>
+			</div> 
 			<div className="list-section pt-80 pb-80">
 				<div className="container">
 					<div className="row">

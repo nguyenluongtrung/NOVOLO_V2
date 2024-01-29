@@ -7,7 +7,7 @@ import { Layout } from './Layout';
 import { AboutMe } from './pages/AboutMe';
 import { ShoppingPage } from './pages/ShoppingPage';
 import { SingleProduct } from './pages/SingleProduct';
-import { AdminProduct } from './pages/AdminPage';
+import { AdminProduct, AdminSale } from './pages/AdminPage';
 import { WishList } from './pages/WishListPage';
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path="/" element={<Layout />}>
+						<Route path="/" element={<HomePage />} />
 						<Route path="/home" element={<HomePage />} />
 						<Route path="/login" element={<LoginPage />} />
 						<Route path="/register" element={<RegisterPage />} />
@@ -23,6 +24,7 @@ function App() {
 						<Route path="/shop" element={<ShoppingPage />} />
 						<Route path="/single-product/:id" element={<SingleProduct />} />
 						<Route path="/admin-product" element={<AdminProduct />} />
+						<Route path="/admin-sale" element={<AdminSale />} />
 						<Route path="/wishList" element={<WishList />} />
 						<Route path="*" element={<NotFound />} />
 					</Route>

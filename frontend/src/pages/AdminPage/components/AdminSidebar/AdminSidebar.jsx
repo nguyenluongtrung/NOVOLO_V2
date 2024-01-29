@@ -10,31 +10,31 @@ export const AdminSidebar = () => {
 				</div>
 				<div className="list-group list-group-flush my-3">
 					<Link
-                        to={'/admin-page'}
+                        to={'/admin-dashboard'}
 						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
 					>
 						<FaTachometerAlt />Dashboard
 					</Link>
 					<Link
-                        to={'/product-admin'}
+                        to={'/admin-product'}
 						className="list-group-item list-group-item-action bg-transparent second-text active fw-bold"
 					>
 						<FaTachometerAlt />Products
 					</Link>
 					<Link
-                        to={'/orders-admin'}
+                        to={'/admin-order'}
 						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
 					>
 						<FaGift />Orders
 					</Link>
 					<Link
-                        to={'/feedback-admin'}
+                        to={'/admin-feedback'}
 						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
 					>
 						<FaCommentDots />Feedbacks
 					</Link>
 					<Link
-                        to={'/sale-admin'}
+                        to={'/admin-sale'}
 						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
 					>
 						<FaCreditCard />Sales
