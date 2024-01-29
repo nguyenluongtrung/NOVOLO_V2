@@ -43,6 +43,13 @@ const productSchema = mongoose.Schema({
 		required: [true, 'Product status is mandatory'],
 		default: true,
 	},
+	promotionIds: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Promotion',
+			default: [],
+		},
+	],
 	startDate: {
 		type: Date,
 	},

@@ -111,7 +111,7 @@ const deleteProductFromWishList = asyncHandler(async (req, res) => {
 			},
 		});
 	} else {
-		res.status(400);
+		res.status(404);
 		throw new Error('ProductId not found!');
 	}
 });
