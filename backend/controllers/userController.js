@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const User = require('./../models/userModel');
+const Product = require('./../models/productModel');
 const jwt = require('jsonwebtoken');
 
 const generateToken = (id) => {
@@ -84,7 +85,7 @@ const addProductToWishList = asyncHandler(async (req, res) => {
 		req.user.wishList.productIds.push(req.params.productId);
 		await req.user.save();
 
-		res.status(200).json({
+		res.status(201).json({
 			status: 'success',
 			data: {
 				user: req.user,
@@ -116,6 +117,52 @@ const deleteProductFromWishList = asyncHandler(async (req, res) => {
 	}
 });
 
+const addProductsToCart = asyncHandler(async (req, res) => {
+	const product = await Product.findById(req.body.productId);
+	if (!product) {
+		res.status(404);
+		throw new Error('ProductId not found!');
+	}
+
+	const item = req.user.cart.products.find(
+		(product) => product.productId == req.body.productId
+	);
+	if (!item) {
+		req.user.cart.products.push(req.body);
+	} else {
+		item.quantity = item.quantity + req.body.quantity;
+	}
+
+	await req.user.save();
+
+	res.status(201).json({
+		status: 'success',
+		data: {
+			cart: req.user.cart,
+		},
+	});
+});
+
+const deleteProductsFromCart = asyncHandler(async (req, res) => {
+	const product = await Product.findById(req.params.productId);
+	if (!product) {
+		res.status(404);
+		throw new Error('ProductId not found!');
+	}
+
+	req.user.cart.products = req.user.cart.products.filter(
+		(product) => product.productId !== req.params.productId
+	);
+
+	await req.user.save();
+	res.status(200).json({
+		status: 'success',
+		data: {
+			cart: req.user.cart,
+		},
+	});
+});
+
 module.exports = {
 	login,
 	register,
@@ -123,4 +170,6 @@ module.exports = {
 	updateUserInformation,
 	addProductToWishList,
 	deleteProductFromWishList,
+	addProductsToCart,
+	deleteProductsFromCart,
 };

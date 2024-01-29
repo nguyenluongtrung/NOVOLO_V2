@@ -50,6 +50,21 @@ const userSchema = mongoose.Schema(
 			],
 			comboIds: Array,
 		},
+		cart: {
+			products: [
+				{
+					productId: {
+						type: mongoose.Schema.Types.ObjectId,
+						ref: 'Product',
+						required: [true, 'ProductId is mandatory'],
+					},
+					quantity: {
+						type: Number,
+						required: [true, 'Quantity is mandatory'],
+					},
+				},
+			],
+		},
 		password: {
 			type: String,
 			required: [true, 'User password is mandatory'],
