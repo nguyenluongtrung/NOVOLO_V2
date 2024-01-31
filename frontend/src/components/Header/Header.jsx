@@ -22,6 +22,7 @@ export const Header = () => {
 	const isCartActive = location.pathname === '/cart';
 	const isWishListActive = location.pathname === '/wishList';
 	const isAboutMeActive = location.pathname === '/about-me';
+	const isAdminPageActive = location.pathname === '/admin-product';
 	const onLogout = () => {
 		dispatch(logout());
 		dispatch(reset());
@@ -71,7 +72,7 @@ export const Header = () => {
 										<Link to={'/shop'}>Menu</Link>
 									</li>
 									{user?.role === 'admin' && (
-										<li>
+										<li className={isAdminPageActive ? 'current-list-item' : ''}>
 											<Link to={'/admin-product'}>Admin Page</Link>
 										</li>
 									)}
@@ -127,7 +128,9 @@ export const Header = () => {
 														My Account
 													</Link>
 												</li>
-												<button onClick={onLogout}>Log out</button>
+												<li>
+													<Link onClick={onLogout}>Log out</Link>
+												</li>
 											</>
 										) : (
 											<>

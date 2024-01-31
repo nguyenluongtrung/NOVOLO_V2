@@ -87,13 +87,25 @@ export const AdminProduct = () => {
 		});
 	}, [dispatch, productError, productMessage]);
 
-	if (productLoading || categoryLoading || priceLoading) {
+	if (
+		productLoading ||
+		categoryLoading ||
+		priceLoading ||
+		!Array.isArray(products) ||
+		!Array.isArray(categories) ||
+		!Array.isArray(prices)
+	) {
 		return <Spinner />;
 	}
 
 	return (
 		<div className="d-flex" id="wrapper">
-			{isOpenAddForm && <AddProduct setIsOpenAddForm={setIsOpenAddForm} handleGetAllProducts={handleGetAllProducts} />}
+			{isOpenAddForm && (
+				<AddProduct
+					setIsOpenAddForm={setIsOpenAddForm}
+					handleGetAllProducts={handleGetAllProducts}
+				/>
+			)}
 			{isOpenUpdateForm && (
 				<UpdateProduct
 					setIsOpenUpdateForm={setIsOpenUpdateForm}

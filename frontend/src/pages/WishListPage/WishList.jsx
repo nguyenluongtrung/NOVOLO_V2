@@ -30,7 +30,7 @@ export const WishList = () => {
 		dispatch(getProductsFromWishList());
 	}, [dispatch, isError, message]);
 
-	if (isLoading) {
+	if (isLoading || !Array.isArray(products)) {
 		return <Spinner />;
 	}
 

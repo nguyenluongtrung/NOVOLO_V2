@@ -62,8 +62,6 @@ const addProductToWishList = async (productId, token) => {
 		},
 	};
 
-	console.log('token from authService: ' + token);
-
 	const response = await axios.post(
 		API_URL + 'wishList/' + productId,
 		null,
@@ -95,7 +93,7 @@ const addProductsToCart = async (itemData, token) => {
 		},
 	};
 
-	const response = await axios.post(API_URL + '/cart', itemData, config);
+	const response = await axios.post(API_URL + 'cart', itemData, config);
 
 	return response.data.data.user;
 };
@@ -108,7 +106,7 @@ const deleteProductsFromCart = async (productId, token) => {
 		},
 	};
 
-	const response = await axios.delete(API_URL + `/cart/${productId}`, config);
+	const response = await axios.delete(API_URL + `cart/${productId}`, config);
 
 	return response.data.data.user;
 };

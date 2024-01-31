@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './ShoppingPage.css';
 import './../../assets/css/main.css';
-// import './../../assets/css/owl.carousel.css';
 import './../../assets/css/magnific-popup.css';
 import './../../assets/css/animate.css';
 import './../../assets/css/meanmenu.min.css';
@@ -15,7 +14,6 @@ import { toast } from 'react-toastify';
 
 export const ShoppingPage = () => {
 	const [searchName, setSearchName] = useState('');
-	const [getProductByCategory, setGetProductByCategory] = useState('');
 	const dispatch = useDispatch();
 	const {
 		products,
@@ -49,10 +47,7 @@ export const ShoppingPage = () => {
 			/calories_(\w+)__=(\d+)/g,
 			'calories[$1]=$2'
 		);
-    searchData = searchData.replace(
-			/price_(\w+)__=(\d+)/g,
-			'price[$1]=$2'
-		);
+		searchData = searchData.replace(/price_(\w+)__=(\d+)/g, 'price[$1]=$2');
 		dispatch(getAllProducts(searchData));
 	};
 
@@ -69,7 +64,12 @@ export const ShoppingPage = () => {
 		});
 	}, [dispatch, productErr, productMess]);
 
-	if (productLoad || categoriesLoad) {
+	if (
+		productLoad ||
+		categoriesLoad ||
+		!Array.isArray(categories) ||
+		!Array.isArray(products)
+	) {
 		return <Spinner />;
 	}
 
@@ -232,10 +232,7 @@ export const ShoppingPage = () => {
 											<ul>
 												{categories?.map((category, index) => {
 													return (
-														<li
-															key={index}
-															className="border-0 bg-orange"
-														>
+														<li key={index} className="border-0 bg-orange">
 															<a
 																className="text-white"
 																onClick={() =>

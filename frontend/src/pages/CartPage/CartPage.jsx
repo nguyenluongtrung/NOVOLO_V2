@@ -1,34 +1,65 @@
 import { Link } from 'react-router-dom';
-import './CartPage.css'
+import './CartPage.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify'; 
+import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { getProductsFromCart } from '../../features/products/productsSlice';
 import { Spinner } from '../../components';
-import { FaWindowClose } from 'react-icons/fa'
+import { FaWindowClose } from 'react-icons/fa';
 import { deleteProductsFromCart } from '../../features/auth/authSlice';
+import { getAllNewestPrices } from '../../features/prices/pricesSlice';
 
 export const CartPage = () => {
-    const dispatch = useDispatch();
-    const {products, isError, isLoading, isSuccess, message} = useSelector((state) => state.products);
+	const dispatch = useDispatch();
+	const {
+		products,
+		isError: productError,
+		isLoading: productLoading,
+		isSuccess: productSuccess,
+		message: productMessage,
+	} = useSelector((state) => state.products);
+	const {
+		prices,
+		isError: priceError,
+		isLoading: priceLoading,
+		message: priceMessage,
+	} = useSelector((state) => state.prices);
 
-    useEffect(() => {
-        dispatch(getProductsFromCart());
-    }, [dispatch])
+	const {
+		isSuccess: authSuccess,
+		isError: authError,
+		isLoading: authLoading,
+		message: authMessage,
+	} = useSelector((state) => state.auth);
 
-    const handleDeleteProductFromCart = async (productId) => {
-        await dispatch(deleteProductsFromCart(productId));
-        if(isSuccess) {
-            toast.success('Delete from cart successfully!');
-            dispatch(getProductsFromCart());
-        } else if(isError){
-            toast.error(message)
-        }
-    }
+	useEffect(() => {
+		Promise.all([
+			dispatch(getProductsFromCart()),
+			dispatch(getAllNewestPrices()),
+		]).catch((error) => {
+			console.error('Error during dispatch:', error);
+		});
+	}, [dispatch]);
 
-    if(isLoading){
-        return <Spinner />
-    }
+	const handleDeleteProductFromCart = async (productId) => {
+		await dispatch(deleteProductsFromCart(productId));
+		if (authSuccess) {
+			toast.success('Delete from cart successfully!');
+			dispatch(getProductsFromCart());
+		} else if (authError) {
+			toast.error(authMessage);
+		}
+	};
+
+	if (
+		productLoading ||
+		priceLoading ||
+		authLoading ||
+		!Array.isArray(products) ||
+		!Array.isArray(prices)
+	) {
+		return <Spinner />;
+	}
 
 	return (
 		<div>
@@ -62,33 +93,42 @@ export const CartPage = () => {
 										</tr>
 									</thead>
 									<tbody>
-                                        {products.map((product) => {
-                                            return (
-                                                <tr className="table-body-row">
-												<td className="product-remove" onClick={() => handleDeleteProductFromCart(product?.productId?._id)}>
-													<FaWindowClose/>
-												</td>
-												<td className="product-image">
-													<img
-														src={product?.productId?.image}
-														alt=""
-														style={{height: '50px', width: '50px'}}
-													/>
-												</td>
-												<td className="product-name">{product?.productId?.name}</td>
-												<td className="product-price">0$</td>
-												<td className="product-quantity">
-													<input
-														type="number"
-														defaultValue={product?.quantity}
-													/>
-												</td>
-												<td className="product-total">
-													{/* ${c.quantity * c.product.price}$ */}
-												</td>
-											</tr>
-                                            )
-                                        })}
+										{products.map((product) => {
+											return (
+												<tr className="table-body-row">
+													<td
+														className="product-remove"
+														onClick={() =>
+															handleDeleteProductFromCart(
+																product?.productId?._id
+															)
+														}
+													>
+														<FaWindowClose />
+													</td>
+													<td className="product-image">
+														<img
+															src={product?.productId?.image}
+															alt=""
+															style={{ height: '50px', width: '50px' }}
+														/>
+													</td>
+													<td className="product-name">
+														{product?.productId?.name}
+													</td>
+													<td className="product-price">{prices[prices.findIndex((price) => price.productId == product?.productId?._id)]?.price}$</td>
+													<td className="product-quantity">
+														<input
+															type="number"
+															defaultValue={product?.quantity}
+														/>
+													</td>
+													<td className="product-total">
+														{product?.quantity * prices[prices.findIndex((price) => price.productId == product?.productId?._id)]?.price}$
+													</td>
+												</tr>
+											);
+										})}
 										{/* <c:forEach items="${items}" var="c">
 											<tr className="table-body-row">
 												<td className="product-remove">
@@ -160,19 +200,19 @@ export const CartPage = () => {
 						</div>
 
 						<div className="col-lg-4">
-								<div className="total-section">
-									<table className="total-table">
-										<thead className="total-table-head">
-											<tr className="table-total-row">
-												<th>Name</th>
-												<th>Price</th>
-												{/* <c:if test="${sessionScope.acc.role != null}">
+							<div className="total-section">
+								<table className="total-table">
+									<thead className="total-table-head">
+										<tr className="table-total-row">
+											<th>Name</th>
+											<th>Price</th>
+											{/* <c:if test="${sessionScope.acc.role != null}">
 													<th>Exchanged points</th>
 												</c:if> */}
-											</tr>
-										</thead>
-										<tbody>
-											{/* <c:forEach items="${items}" var="c">
+										</tr>
+									</thead>
+									<tbody>
+										{/* <c:forEach items="${items}" var="c">
 												<tr className="total-data">
 													<td>
 														<strong>${c.product.name}</strong>
@@ -193,7 +233,7 @@ export const CartPage = () => {
 													</c:if>
 												</tr>
 											</c:forEach> */}
-											{/* <c:forEach items="${comboItems}" var="c">
+										{/* <c:forEach items="${comboItems}" var="c">
 												<tr className="total-data">
 													<td>
 														<strong>${c.combo.comboName}</strong>
@@ -218,20 +258,20 @@ export const CartPage = () => {
 													</c:if>
 												</tr>
 											</c:forEach> */}
-											<tr className="total-data">
-												<td>
-													<strong>Total: </strong>
-												</td>
-												{/* <td id="subtotalCell">${subtotal}$</td> */}
-												{/* <c:if test="${sessionScope.acc.role != null}">
+										<tr className="total-data">
+											<td>
+												<strong>Total: </strong>
+											</td>
+											{/* <td id="subtotalCell">${subtotal}$</td> */}
+											{/* <c:if test="${sessionScope.acc.role != null}">
 													<td></td>
 												</c:if> */}
-											</tr>
-										</tbody>
-									</table>
-									<div className="cart-buttons">
-										<form action="checkout">
-											{/* <c:if test="${sessionScope.acc.role != null}">
+										</tr>
+									</tbody>
+								</table>
+								<div className="cart-buttons">
+									<form action="checkout">
+										{/* <c:if test="${sessionScope.acc.role != null}">
 												<p>
 													Your points are:{' '}
 													<span id="my-point">
@@ -240,23 +280,23 @@ export const CartPage = () => {
 												</p>
 											</c:if> */}
 
-											<button type="submit" className="btn-orange">
-												Check Out
-											</button>
-										</form>
-									</div>
+										<button type="submit" className="btn-orange">
+											Check Out
+										</button>
+									</form>
 								</div>
+							</div>
 
-								<div className="total-section">
-									<table className="total-table">
-										<thead className="total-table-head">
-											<tr className="table-total-row">
-												<th>Name</th>
-												<th>Price</th>
-											</tr>
-										</thead>
-										<tbody>
-											{/* <c:set var="cnt" value="0"></c:set>
+							<div className="total-section">
+								<table className="total-table">
+									<thead className="total-table-head">
+										<tr className="table-total-row">
+											<th>Name</th>
+											<th>Price</th>
+										</tr>
+									</thead>
+									<tbody>
+										{/* <c:set var="cnt" value="0"></c:set>
 											<c:forEach items="${items}" var="c">
 												<tr className="total-data">
 													<td>
@@ -369,15 +409,15 @@ export const CartPage = () => {
                                                                                     <td><strong>Shipping: </strong></td>
                                                                                     <td>$50</td>
                                                                                 </tr>--> */}
-											<tr className="total-data">
-												<td>
-													<strong>Total: </strong>
-												</td>
-												{/* <td>${subtotal}$</td> */}
-											</tr>
-										</tbody>
-									</table>
-									{/* <c:if test="${cnt == 1}">
+										<tr className="total-data">
+											<td>
+												<strong>Total: </strong>
+											</td>
+											{/* <td>${subtotal}$</td> */}
+										</tr>
+									</tbody>
+								</table>
+								{/* <c:if test="${cnt == 1}">
 										<p
 											className="text-danger"
 											style={{fontSize: '80%', fontStyle: 'italic'}}
@@ -427,8 +467,8 @@ export const CartPage = () => {
 										</p>
 									</c:if> */}
 
-									<div className="cart-buttons">
-										{/* <c:if test="${(saleList != null) && (code != null)}">
+								<div className="cart-buttons">
+									{/* <c:if test="${(saleList != null) && (code != null)}">
 											<a
 												href="checkout?okela=${1}&code=${code}"
 												className="boxed-btn black"
@@ -441,8 +481,8 @@ export const CartPage = () => {
 												Check Out
 											</a>
 										</c:if> */}
-									</div>
 								</div>
+							</div>
 
 							<div className="coupon-section">
 								<h3>Apply Coupon</h3>
