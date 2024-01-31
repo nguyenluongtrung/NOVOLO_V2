@@ -198,7 +198,7 @@ export const AdminProduct = () => {
 																	(category) =>
 																		category._id === product.categoryID
 																)
-															].name
+															]?.name
 														}
 													</td>
 													<td>{product?.calories}</td>
