@@ -19,6 +19,9 @@ export const Header = () => {
 	const isShopActive = location.pathname === '/shop';
 	const isContactActive = location.pathname === '#';
 	const isAboutActive = location.pathname === '#';
+	const isCartActive = location.pathname === '/cart';
+	const isWishListActive = location.pathname === '/wishList';
+	const isAboutMeActive = location.pathname === '/about-me';
 	const onLogout = () => {
 		dispatch(logout());
 		dispatch(reset());
@@ -47,7 +50,7 @@ export const Header = () => {
 											marginTop: '-20px',
 											marginLeft: '-80px',
 											paddingTop: '20px',
-											width: '70%'
+											width: '70%',
 										}}
 									/>
 								</a>
@@ -96,13 +99,34 @@ export const Header = () => {
 
 										{user ? (
 											<>
-												<Link to={'/cart'}>
-													<FaShoppingCart />
-												</Link>
-												<Link to={'/wishList'} className="wishlist">
-													<FaHeart />
-												</Link>
-												<Link to={'/about-me'}>My Account</Link>
+												<li>
+													<Link
+														className={isCartActive ? 'current-list-item' : ''}
+														to={'/cart'}
+													>
+														<FaShoppingCart />
+													</Link>
+												</li>
+												<li>
+													<Link
+														className={
+															isWishListActive ? 'current-list-item' : ''
+														}
+														to={'/wishList'}
+													>
+														<FaHeart />
+													</Link>
+												</li>
+												<li>
+													<Link
+														className={
+															isAboutMeActive ? 'current-list-item' : ''
+														}
+														to={'/about-me'}
+													>
+														My Account
+													</Link>
+												</li>
 												<button onClick={onLogout}>Log out</button>
 											</>
 										) : (
