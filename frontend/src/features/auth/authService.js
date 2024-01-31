@@ -87,6 +87,32 @@ const deleteProductFromWishList = async (productId, token) => {
 	return response.data.data.user;
 };
 
+// Add products to cart
+const addProductsToCart = async (itemData, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.post(API_URL + '/cart', itemData, config);
+
+	return response.data.data.user;
+};
+
+// Delete products from cart
+const deleteProductsFromCart = async (productId, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.delete(API_URL + `/cart/${productId}`, config);
+
+	return response.data.data.user;
+};
+
 const authService = {
 	login,
 	logout,
@@ -95,6 +121,8 @@ const authService = {
 	updateUserInformation,
 	addProductToWishList,
 	deleteProductFromWishList,
+	addProductsToCart,
+	deleteProductsFromCart,
 };
 
 export default authService;

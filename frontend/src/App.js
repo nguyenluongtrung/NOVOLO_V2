@@ -9,6 +9,7 @@ import { ShoppingPage } from './pages/ShoppingPage';
 import { SingleProduct } from './pages/SingleProduct';
 import { AdminProduct, AdminSale } from './pages/AdminPage';
 import { WishList } from './pages/WishListPage';
+import { CartPage } from './pages/CartPage/CartPage';
 
 function App() {
 	return (
@@ -26,6 +27,7 @@ function App() {
 						<Route path="/admin-product" element={<AdminProduct />} />
 						<Route path="/admin-sale" element={<AdminSale />} />
 						<Route path="/wishList" element={<WishList />} />
+						<Route path="/cart" element={<CartPage />} />
 						<Route path="*" element={<NotFound />} />
 					</Route>
 				</Routes>

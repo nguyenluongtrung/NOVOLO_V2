@@ -1,0 +1,26 @@
+.continue-btn{
+    cursor: pointer;
+    border-radius: 30px;
+    background-color: #f28123;
+    color: white;
+    border:none;
+}
+
+.continue-btn:hover{
+    background-color: black;
+    color: #f28123;
+    border: none;
+}
+
+.btn-orange{
+    cursor: pointer;
+    border-radius: 30px;
+    background-color: #f28123;
+    color: white;
+    border:none;
+    padding: 15px;
+}
+
+.product-remove:hover{
+    cursor: pointer;
+}

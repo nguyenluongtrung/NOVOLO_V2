@@ -64,7 +64,7 @@ const updateProduct = async (chosenProductId, updateData, token) => {
 	return response.data;
 };
 
-// Get product from wishlist
+// Get products from wishlist
 const getProductsFromWishList = async (token) => {
 	const config = {
 		headers: {
@@ -77,6 +77,19 @@ const getProductsFromWishList = async (token) => {
 	return response.data.data.productList;
 };
 
+// Get products from cart
+const getProductsFromCart = async (token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.get(API_URL + 'cart', config);
+
+	return response.data.data.productList.cart.products;
+};
+
 const productsService = {
 	getAllProducts,
 	getProductById,
@@ -84,6 +97,7 @@ const productsService = {
 	deleteProduct,
 	updateProduct,
 	getProductsFromWishList,
+	getProductsFromCart,
 };
 
 export default productsService;

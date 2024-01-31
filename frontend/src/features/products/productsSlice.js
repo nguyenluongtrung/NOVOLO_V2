@@ -53,7 +53,8 @@ export const createProduct = createAsyncThunk(
 	'products/create',
 	async (productData, thunkAPI) => {
 		try {
-			const token = user.data.token;
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
 			return await productsService.createProduct(productData, token);
 		} catch (error) {
 			const message =
@@ -72,7 +73,8 @@ export const updateProduct = createAsyncThunk(
 	'products/update',
 	async ({ chosenProductId, updateData }, thunkAPI) => {
 		try {
-			const token = user.data.token;
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
 			return await productsService.updateProduct(
 				chosenProductId,
 				updateData,
@@ -95,7 +97,8 @@ export const deleteProduct = createAsyncThunk(
 	'products/delete',
 	async (id, thunkAPI) => {
 		try {
-			const token = user.data.token;
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
 			return await productsService.deleteProduct(id, token);
 		} catch (error) {
 			const message =
@@ -114,8 +117,29 @@ export const getProductsFromWishList = createAsyncThunk(
 	'products/getProductsFromWishList',
 	async (_, thunkAPI) => {
 		try {
-			const token = user.data.token;
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
 			return await productsService.getProductsFromWishList(token);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+// Get products from cart
+export const getProductsFromCart = createAsyncThunk(
+	'products/getProductsFromCart',
+	async (_, thunkAPI) => {
+		try {
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
+			return await productsService.getProductsFromCart(token);
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -218,6 +242,19 @@ export const productSlice = createSlice({
 				state.products = action.payload;
 			})
 			.addCase(getProductsFromWishList.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(getProductsFromCart.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getProductsFromCart.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.products = action.payload;
+			})
+			.addCase(getProductsFromCart.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

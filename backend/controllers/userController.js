@@ -138,7 +138,7 @@ const addProductsToCart = asyncHandler(async (req, res) => {
 	res.status(201).json({
 		status: 'success',
 		data: {
-			cart: req.user.cart,
+			user: req.user,
 		},
 	});
 });
@@ -151,14 +151,15 @@ const deleteProductsFromCart = asyncHandler(async (req, res) => {
 	}
 
 	req.user.cart.products = req.user.cart.products.filter(
-		(product) => product.productId !== req.params.productId
+		(product) =>
+			product.productId.toString() !== req.params.productId.toString()
 	);
 
 	await req.user.save();
 	res.status(200).json({
 		status: 'success',
 		data: {
-			cart: req.user.cart,
+			user: req.user,
 		},
 	});
 });

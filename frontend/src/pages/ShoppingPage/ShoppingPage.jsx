@@ -230,7 +230,7 @@ export const ShoppingPage = () => {
 									<div className="col-md-12">
 										<div className="product-filters">
 											<ul>
-												{categories.map((category, index) => {
+												{categories?.map((category, index) => {
 													return (
 														<li
 															key={index}

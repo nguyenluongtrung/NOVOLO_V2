@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 
 const Product = require('./../models/productModel');
 const Price = require('./../models/priceModel');
+const User = require('./../models/userModel');
 const ApiFeatures = require('../utils/apiFeatures');
 
 const getAllProducts = asyncHandler(async (req, res) => {
@@ -197,6 +198,20 @@ const getProductsFromWishList = asyncHandler(async (req, res) => {
 	});
 });
 
+const getProductsFromCart = asyncHandler(async (req, res) => {
+	const productList = await User.findById(req.user._id).populate({
+		path: 'cart.products.productId',
+		model: 'Product',
+	});
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			productList,
+		},
+	});
+});
+
 module.exports = {
 	getAllProducts,
 	getProductById,
@@ -204,4 +219,5 @@ module.exports = {
 	updateProduct,
 	deleteProduct,
 	getProductsFromWishList,
+	getProductsFromCart,
 };
