@@ -5,11 +5,12 @@ import { createProduct } from '../../../../../features/products/productsSlice';
 import { Spinner } from '../../../../../components';
 import './AddProduct.css';
 import { FaTimes } from 'react-icons/fa';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllCategories } from '../../../../../features/categories/categoriesSlice';
 
 export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 	const dispatch = useDispatch();
+	const [isSurprise, setIsSurprise] = useState(false);
 
 	const {
 		isLoading: productLoading,
@@ -34,10 +35,14 @@ export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 	const handleCloseBtn = () => {
 		setIsOpenAddForm(false);
 		handleGetAllProducts();
-	}
+	};
 
 	const onSubmit = async (data) => {
-        const addData = {...data, isSurprise: false, startDate: null, endDate: null}
+		const addData = {
+			...data,
+			isSurprise: isSurprise,
+		};
+
 		if (productError) {
 			toast.error(productMessage);
 		}
@@ -52,7 +57,7 @@ export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 		if (categoryError) {
 			toast.error(categoryMessage);
 		}
-		if(!categories){
+		if (!categories) {
 			dispatch(getAllCategories());
 		}
 	}, [dispatch, categoryError, categoryMessage]);
@@ -165,26 +170,45 @@ export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 							/>
 						</div>
 					</div>
-					{/* <c:if test="${surpriseProduct != null}">
-								<div className="column">
-									<div className="input-box">
-										<label>Surprise start day</label>
-										<input
-											type="date"
-											name="p_startDate"
-											min="<%= LocalDate.now()%>"
-										/>
-									</div>
-									<div className="input-box">
-										<label>Surprise end day</label>
-										<input
-											type="date"
-											name="p_endDate"
-											min="<%= LocalDate.now()%>"
-										/>
-									</div>
-								</div>
-							</c:if> */}
+					<div className="column">
+						<div className="input-box">
+							<label>
+								Is surprise <span className="text-danger">*</span>
+							</label>
+							<input
+								type="radio"
+								name="isSurprise"
+								onChange={() => setIsSurprise(true)}
+							/>{' '}
+							True
+							<input
+								type="radio"
+								name="isSurprise"
+								onChange={() => setIsSurprise(false)}
+							/>{' '}
+							False
+						</div>
+					</div>
+					{isSurprise && (
+						<div className="column">
+							<div className="input-box">
+								<label>Start day</label>
+								<input
+									type="date"
+									{...register('startDate')}
+									min={new Date().toISOString().split('T')[0]}
+								/>
+							</div>
+							<div className="input-box">
+								<label>End day</label>
+								<input
+									type="date"
+									{...register('endDate')}
+									min={new Date().toISOString().split('T')[0]}
+								/>
+							</div>
+						</div>
+					)}
 					<button type="submit">Submit</button>
 				</form>
 			</div>

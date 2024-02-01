@@ -9,29 +9,31 @@ const getAllProducts = asyncHandler(async (req, res) => {
 	const features = new ApiFeatures(Product.find(), req.query).filter();
 
 	const products = await features.query;
+	let results = [];
+	for (let p of products) {
+		let product = req.query.price
+			? await Product.findById(p.productId)
+			: await Product.findById(p._id);
 
-	if (req.query.price) {
-		let results = [];
-		for (let p of products) {
-			const product = await Product.findById(p.productId);
+		if (product.isSurprise) {
+			if (
+				new Date().getTime() >= product.startDate.getTime() &&
+				new Date().getTime() <= product.endDate.getTime()
+			) {
+				results.push(product);
+			}
+		} else {
 			results.push(product);
 		}
-		res.status(200).json({
-			status: 'success',
-			length: results.length,
-			data: {
-				products: results,
-			},
-		});
-	} else {
-		res.status(200).json({
-			status: 'success',
-			length: products.length,
-			data: {
-				products,
-			},
-		});
 	}
+
+	res.status(200).json({
+		status: 'success',
+		length: results.length,
+		data: {
+			products: results,
+		},
+	});
 });
 
 const getProductById = asyncHandler(async (req, res) => {

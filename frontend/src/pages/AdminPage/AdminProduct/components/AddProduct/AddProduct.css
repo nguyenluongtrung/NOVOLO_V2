@@ -25,6 +25,6 @@
 .close-btn:hover{
     cursor: pointer;
 }
-.addProductForm input, select{
+.addProductForm input[type='text'], input[type='number'], select{
     width: 75%;
 }

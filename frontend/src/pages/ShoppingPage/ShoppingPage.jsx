@@ -52,52 +52,29 @@ export const ShoppingPage = () => {
 	};
 
 	useEffect(() => {
-		if (productErr) {
-			toast.error(productMess);
-		}
-
 		Promise.all([
 			dispatch(getAllProducts('')),
 			dispatch(getAllCategories()),
 		]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
+		// if(productErr){
+		// 	toast.error(productMess)
+		// }
 	}, [dispatch, productErr, productMess]);
 
 	if (
 		productLoad ||
 		categoriesLoad ||
 		!Array.isArray(categories) ||
-		!Array.isArray(products)
+		!Array.isArray(products) ||
+		products === undefined
 	) {
 		return <Spinner />;
 	}
 
 	return (
 		<div>
-			<div className="search-area">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-12">
-							<span className="close-btn">
-								<i className="fas fa-window-close"></i>
-							</span>
-							<div className="search-bar">
-								<div className="search-bar-tablecell">
-									<h3>Search For:</h3>
-									<form>
-										<input type="text" placeholder="Search by name..." />
-										<button type="submit">
-											Search <i className="fas fa-search"></i>
-										</button>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
 			<div className="breadcrumb-section breadcrumb-bg">
 				<div className="container">
 					<div className="row">
@@ -250,127 +227,127 @@ export const ShoppingPage = () => {
 								</div>
 								<ProductList products={products} searchName={searchName} />
 								{/* <div className="row product-lists">
-                                <c:if test="${ms != null}">
-                                    <p className="w-100 text-center text-secondary">${ms}</p>
-                                </c:if>
-                                <c:if test="${ms == null}">
-                                    <c:if test="${isCombo == null}">
-                                        <c:forEach items="${list}" var="c">
-                                            <c:if test="${(c.isSurprise == true && c.status == true) || (c.isSurprise == false)}">
-                                                <div className="col-lg-4 col-md-6 text-center strawberry">
-                                                    <div className="single-product-item ${c.isSurprise ? "bg-yellow" : ''}" >
-                                                        <div className="product-image">
-                                                            <a href="single-product?id=${c.productID}"><img src="${c.image}" style='width:100%;height:250px'></a>
-                                                        </div>
-                                                        <h3 style="${c.isSurprise ? "color: grey" : ''}">${c.name}</h3>
-                                                        <p style="${c.isSurprise ? "color: grey" : ''}" className="product-price"> ${c.price}$ </p>
-                                                        <p className="${c.isSurprise ? "text-white" : 'text-secondary'}">${c.calories} Calories</p>
-                                                        <c:if test="${c.status == false}">
-                                                            <a href="sorry.jsp" className="btn btn-danger px-5 py-3">Sold out</a>
-                                                        </c:if>
-                                                        <c:if test="${c.status == true}">
-                                                            <a href="add-to-cart?productID=${c.productID}" className="cart-btn"><i className="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                        </c:if>
-
-                                                        <c:if test="${sessionScope.acc.role != null}">
-                                                            <c:if test="${c.isSurprise == false}">
-                                                                <a href="add-to-wishlist?productID=${c.productID}"><button className="btn btn-danger px-5 py-3"><i className="fas fa-heart" onclick="changeColor(this)"></i></button></a>
-                                                                    </c:if>
-                                                                </c:if>
-                                                    </div>
-                                                </div>
-                                            </c:if>
-                                        </c:forEach>
-                                    </c:if>
-                                    <c:if test="${isCombo != null}">
-                                        <c:forEach items="${listCombo}" var="c">
-                                            <div className="col-lg-4 col-md-6 text-center strawberry border-danger">
-                                                <div className="single-product-item">
-                                                    <div className="product-image">
-                                                        <a href="combo-detail?id=${c.comboID}"><img src="${c.image}" style='width:100%;height:250px'></a>
-                                                    </div>
-                                                    <h3>${c.comboName}</h3>
-                                                    <p className="product-price"> ${c.totalPrice}$ </p>
-                                                    <p className="text-secondary">${c.totalCalories} Calories</p>
-                                                    <a href="add-to-cart?comboID=${c.comboID}" className="cart-btn"><i className="fas fa-shopping-cart"></i> Add to Cart</a>
-                                                    <c:if test="${sessionScope.acc.role != null}">
-                                                        <a href="add-to-wishlist?comboID=${c.comboID}"><button className="btn btn-danger px-5 py-3"><i className="fas fa-heart" onclick="changeColor(this)"></i></button></a>
-                                                            </c:if>
-                                                </div>
-                                            </div>
-                                        </c:forEach>
-                                    </c:if>
-                                </c:if> */}
+									<c:if test="${ms != null}">
+										<p className="w-100 text-center text-secondary">${ms}</p>
+									</c:if>
+									<c:if test="${ms == null}">
+										<c:if test="${isCombo == null}">
+											<c:forEach items="${list}" var="c">
+												<c:if test="${(c.isSurprise == true && c.status == true) || (c.isSurprise == false)}">
+													<div className="col-lg-4 col-md-6 text-center strawberry">
+														<div className="single-product-item ${c.isSurprise ? "bg-yellow" : ''}" >
+															<div className="product-image">
+																<a href="single-product?id=${c.productID}"><img src="${c.image}" style='width:100%;height:250px'></a>
+															</div>
+															<h3 style="${c.isSurprise ? "color: grey" : ''}">${c.name}</h3>
+															<p style="${c.isSurprise ? "color: grey" : ''}" className="product-price"> ${c.price}$ </p>
+															<p className="${c.isSurprise ? "text-white" : 'text-secondary'}">${c.calories} Calories</p>
+															<c:if test="${c.status == false}">
+																<a href="sorry.jsp" className="btn btn-danger px-5 py-3">Sold out</a>
+															</c:if>
+															<c:if test="${c.status == true}">
+																<a href="add-to-cart?productID=${c.productID}" className="cart-btn"><i className="fas fa-shopping-cart"></i> Add to Cart</a>
+															</c:if>
+	
+															<c:if test="${sessionScope.acc.role != null}">
+																<c:if test="${c.isSurprise == false}">
+																	<a href="add-to-wishlist?productID=${c.productID}"><button className="btn btn-danger px-5 py-3"><i className="fas fa-heart" onclick="changeColor(this)"></i></button></a>
+																		</c:if>
+																	</c:if>
+														</div>
+													</div>
+												</c:if>
+											</c:forEach>
+										</c:if>
+										<c:if test="${isCombo != null}">
+											<c:forEach items="${listCombo}" var="c">
+												<div className="col-lg-4 col-md-6 text-center strawberry border-danger">
+													<div className="single-product-item">
+														<div className="product-image">
+															<a href="combo-detail?id=${c.comboID}"><img src="${c.image}" style='width:100%;height:250px'></a>
+														</div>
+														<h3>${c.comboName}</h3>
+														<p className="product-price"> ${c.totalPrice}$ </p>
+														<p className="text-secondary">${c.totalCalories} Calories</p>
+														<a href="add-to-cart?comboID=${c.comboID}" className="cart-btn"><i className="fas fa-shopping-cart"></i> Add to Cart</a>
+														<c:if test="${sessionScope.acc.role != null}">
+															<a href="add-to-wishlist?comboID=${c.comboID}"><button className="btn btn-danger px-5 py-3"><i className="fas fa-heart" onclick="changeColor(this)"></i></button></a>
+																</c:if>
+													</div>
+												</div>
+											</c:forEach>
+										</c:if>
+									</c:if> */}
 
 								{/* <c:if test="${price == null && s_name == null && calo == null && category == null}">
-                                <div className="row">
-                                    <div className="col-lg-12 text-center">
-                                        <div className="pagination-wrap">
-                                            <ul>
-                                                <c:forEach begin="1" end="${pageNumber}" var="i">
-                                                    <li><a href="shopping?index=${i}">${i}</a></li>
-                                                    </c:forEach>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:if> */}
+									<div className="row">
+										<div className="col-lg-12 text-center">
+											<div className="pagination-wrap">
+												<ul>
+													<c:forEach begin="1" end="${pageNumber}" var="i">
+														<li><a href="shopping?index=${i}">${i}</a></li>
+														</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</c:if> */}
 
 								{/* <c:if test="${price != null && s_name == null && calo == null && category == null}">
-                                <div className="row">
-                                    <div className="col-lg-12 text-center">
-                                        <div className="pagination-wrap">
-                                            <ul>
-                                                <c:forEach begin="1" end="${pageNumber}" var="i">
-                                                    <li><a href="search-price?from=${from}&to=${to}&index=${i}">${i}</a></li>
-                                                    </c:forEach>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:if> */}
+									<div className="row">
+										<div className="col-lg-12 text-center">
+											<div className="pagination-wrap">
+												<ul>
+													<c:forEach begin="1" end="${pageNumber}" var="i">
+														<li><a href="search-price?from=${from}&to=${to}&index=${i}">${i}</a></li>
+														</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</c:if> */}
 
 								{/* <c:if test="${price == null && s_name != null && calo == null && category == null}">
-                                <div className="row">
-                                    <div className="col-lg-12 text-center">
-                                        <div className="pagination-wrap">
-                                            <ul>
-                                                <c:forEach begin="1" end="${pageNumber}" var="i">
-                                                    <li><a href="search-name?name=${name}&index=${i}">${i}</a></li>
-                                                    </c:forEach>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:if> */}
+									<div className="row">
+										<div className="col-lg-12 text-center">
+											<div className="pagination-wrap">
+												<ul>
+													<c:forEach begin="1" end="${pageNumber}" var="i">
+														<li><a href="search-name?name=${name}&index=${i}">${i}</a></li>
+														</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</c:if> */}
 
 								{/* <c:if test="${price == null && s_name == null && calo != null && category == null}">
-                                <div className="row">
-                                    <div className="col-lg-12 text-center">
-                                        <div className="pagination-wrap">
-                                            <ul>
-                                                <c:forEach begin="1" end="${pageNumber}" var="i">
-                                                    <li><a href="search-by-calories?from=${from}&to=${to}&index=${i}">${i}</a></li>
-                                                    </c:forEach>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:if> */}
+									<div className="row">
+										<div className="col-lg-12 text-center">
+											<div className="pagination-wrap">
+												<ul>
+													<c:forEach begin="1" end="${pageNumber}" var="i">
+														<li><a href="search-by-calories?from=${from}&to=${to}&index=${i}">${i}</a></li>
+														</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</c:if> */}
 
 								{/* <c:if test="${price == null && s_name == null && calo == null && category != null}">
-                                <div className="row">
-                                    <div className="col-lg-12 text-center">
-                                        <div className="pagination-wrap">
-                                            <ul>
-                                                <c:forEach begin="1" end="${pageNumber}" var="i">
-                                                    <li><a href="search-category?id=${id}&index=${i}">${i}</a></li>
-                                                    </c:forEach>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:if> */}
+									<div className="row">
+										<div className="col-lg-12 text-center">
+											<div className="pagination-wrap">
+												<ul>
+													<c:forEach begin="1" end="${pageNumber}" var="i">
+														<li><a href="search-category?id=${id}&index=${i}">${i}</a></li>
+														</c:forEach>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</c:if> */}
 							</div>
 						</div>
 					</div>

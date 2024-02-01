@@ -1,3 +1,61 @@
 .cart-btn:hover{
     color: white!important;
 }
+
+.fix-ui{
+    background-color: white;
+}
+
+.bg-orange{
+    background-color: #f28123;
+}
+
+.calories-ul{
+    list-style: none;
+    padding-left: 5px;
+}
+
+.calories-ul li a{
+    color: grey ;
+    font-size: 100%;
+}
+
+.calories-ul li a:hover{
+    border-bottom: #f28123 3px solid;
+    display:block;
+    transition: 0.3s ease-in-out;
+}
+
+.price-ul{
+    list-style: none;
+    padding-left: 5px;
+}
+
+.price-ul li a{
+    color: grey;
+    font-size: 100%;
+}
+
+.price-ul li a:hover{
+    border-bottom: #f28123 3px solid;
+    display:block;
+    transition: 0.3s ease-in-out;
+}
+
+.overlay {
+    position: absolute; 
+    left: 15px;
+    top: 0;
+}
+
+.overlay p{
+    background-color: orange;
+    font-weight: bold;
+    font-size: 95%;
+    padding: 13;
+    color: white;
+}
+
+.bg-yellow {
+    background-color: pink !important;
+}
