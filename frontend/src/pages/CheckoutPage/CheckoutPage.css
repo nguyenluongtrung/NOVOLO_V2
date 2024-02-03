@@ -1,0 +1,13 @@
+.place-btn{
+    cursor: pointer;
+    border-radius: 30px;
+    background-color: #f28123;
+    color: white;
+    border:none;
+}
+
+.place-btn:hover{
+    background-color: black;
+    color: #f28123;
+    border: none;
+}

@@ -111,6 +111,19 @@ const deleteProductsFromCart = async (productId, token) => {
 	return response.data.data.user;
 };
 
+// Delete all products from cart
+const deleteAllProductsFromCart = async (token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.delete(API_URL + 'cart', config);
+
+	return response.data.data.user;
+};
+
 const authService = {
 	login,
 	logout,
@@ -121,6 +134,7 @@ const authService = {
 	deleteProductFromWishList,
 	addProductsToCart,
 	deleteProductsFromCart,
+	deleteAllProductsFromCart,
 };
 
 export default authService;

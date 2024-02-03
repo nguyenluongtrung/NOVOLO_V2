@@ -164,6 +164,18 @@ const deleteProductsFromCart = asyncHandler(async (req, res) => {
 	});
 });
 
+const deleteAllProductsFromCart = asyncHandler(async (req, res) => {
+	req.user.cart.products = [];
+
+	await req.user.save();
+	res.status(200).json({
+		status: 'success',
+		data: {
+			user: req.user,
+		},
+	});
+});
+
 module.exports = {
 	login,
 	register,
@@ -173,4 +185,5 @@ module.exports = {
 	deleteProductFromWishList,
 	addProductsToCart,
 	deleteProductsFromCart,
+	deleteAllProductsFromCart,
 };

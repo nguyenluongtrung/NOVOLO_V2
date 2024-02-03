@@ -10,6 +10,7 @@ import { SingleProduct } from './pages/SingleProduct';
 import { AdminProduct, AdminSale } from './pages/AdminPage';
 import { WishList } from './pages/WishListPage';
 import { CartPage } from './pages/CartPage/CartPage';
+import { CheckoutPage } from './pages/CheckoutPage';
 
 function App() {
 	return (
@@ -28,6 +29,7 @@ function App() {
 						<Route path="/admin-sale" element={<AdminSale />} />
 						<Route path="/wishList" element={<WishList />} />
 						<Route path="/cart" element={<CartPage />} />
+						<Route path="/check-out" element={<CheckoutPage />} />
 						<Route path="*" element={<NotFound />} />
 					</Route>
 				</Routes>

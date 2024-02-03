@@ -18,6 +18,7 @@ app.use('/novolo/api/users', require('./routes/userRoutes'));
 app.use('/novolo/api/categories', require('./routes/categoryRoutes'));
 app.use('/novolo/api/prices', require('./routes/priceRoutes'));
 app.use('/novolo/api/promotions', require('./routes/promotionRoutes'));
+app.use('/novolo/api/orders', require('./routes/orderRoutes'));
 
 app.use(errorHandler);
 
