@@ -10,6 +10,8 @@ import { SingleProduct } from './pages/SingleProduct';
 import { AdminProduct, AdminSale } from './pages/AdminPage';
 import { WishList } from './pages/WishListPage';
 import { CartPage } from './pages/CartPage/CartPage';
+import { AboutUs } from './pages/AboutUs';
+import { Contact } from './pages/Contact';
 
 function App() {
 	return (
@@ -28,6 +30,8 @@ function App() {
 						<Route path="/admin-sale" element={<AdminSale />} />
 						<Route path="/wishList" element={<WishList />} />
 						<Route path="/cart" element={<CartPage />} />
+						<Route path="/about-us" element={<AboutUs />} />
+						<Route path="/contact" element={<Contact />} />
 						<Route path="*" element={<NotFound />} />
 					</Route>
 				</Routes>
