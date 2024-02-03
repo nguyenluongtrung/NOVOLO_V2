@@ -74,7 +74,7 @@ const moreTeamsData = [
     linkInstagram: "",
     linkTwitter: "",
     image: "",
-    description: "I Love Dog"
+    description: "I Love Eating Dog"
   },
   {
     name: "Van Toan",
