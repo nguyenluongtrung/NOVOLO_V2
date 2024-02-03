@@ -17,8 +17,8 @@ export const Header = () => {
 	const navigate = useNavigate();
 	const isHomeActive = location.pathname === '/home';
 	const isShopActive = location.pathname === '/shop';
-	const isContactActive = location.pathname === '#';
-	const isAboutActive = location.pathname === '#';
+	const isContactActive = location.pathname === '/contact';
+	const isAboutActive = location.pathname === '/about-us';
 	const isCartActive = location.pathname === '/cart';
 	const isWishListActive = location.pathname === '/wishList';
 	const isAboutMeActive = location.pathname === '/about-me';
@@ -62,11 +62,11 @@ export const Header = () => {
 									<li className={isHomeActive ? 'current-list-item' : ''}>
 										<Link to={'/home'}>Home</Link>
 									</li>
-									<li>
-										<a href="#">About</a>
+									<li className={isAboutActive ? 'current-list-item' : ''}>
+										<Link to={'/about-us'}>About</Link>
 									</li>
-									<li>
-										<a href="#">Contact</a>
+									<li className={isContactActive ? 'current-list-item' : ''}>
+										<Link to={'/contact'}>Contact</Link>
 									</li>
 									<li className={isShopActive ? 'current-list-item' : ''}>
 										<Link to={'/shop'}>Menu</Link>
