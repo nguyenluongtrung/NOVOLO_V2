@@ -5,10 +5,11 @@ import { getProductById, updateProduct } from '../../../../../features/products/
 import { Spinner } from '../../../../../components';
 import './UpdateProduct.css';
 import { FaTimes } from 'react-icons/fa';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllCategories } from '../../../../../features/categories/categoriesSlice';
 
 export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId, handleGetAllProducts }) => {
+	const [isSurprise, setIsSurprise] = useState(false);
 	const dispatch = useDispatch();
 
 	const {
@@ -39,9 +40,7 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId, handleGetA
 	const onSubmit = async (data) => {
 		const updateData = {
 			...data,
-			isSurprise: false,
-			startDate: null,
-			endDate: null,
+			isSurprise: isSurprise,
 		};
 		if (productError) {
 			toast.error(productMessage);
@@ -184,26 +183,45 @@ export const UpdateProduct = ({ setIsOpenUpdateForm, chosenProductId, handleGetA
 						/>{' '}
 						False
 					</div>
-					{/* <c:if test="${surpriseProduct != null}">
-								<div className="column">
-									<div className="input-box">
-										<label>Surprise start day</label>
-										<input
-											type="date"
-											name="p_startDate"
-											min="<%= LocalDate.now()%>"
-										/>
-									</div>
-									<div className="input-box">
-										<label>Surprise end day</label>
-										<input
-											type="date"
-											name="p_endDate"
-											min="<%= LocalDate.now()%>"
-										/>
-									</div>
-								</div>
-							</c:if> */}
+					<div className="column">
+						<div className="input-box">
+							<label>
+								Is surprise <span className="text-danger">*</span>
+							</label>
+							<input
+								type="radio"
+								name="isSurprise"
+								onChange={() => setIsSurprise(true)}
+							/>{' '}
+							True
+							<input
+								type="radio"
+								name="isSurprise"
+								onChange={() => setIsSurprise(false)}
+							/>{' '}
+							False
+						</div>
+					</div>
+					{isSurprise && (
+						<div className="column">
+							<div className="input-box">
+								<label>Start day</label>
+								<input
+									type="date"
+									{...register('startDate')}
+									min={new Date().toISOString().split('T')[0]}
+								/>
+							</div>
+							<div className="input-box">
+								<label>End day</label>
+								<input
+									type="date"
+									{...register('endDate')}
+									min={new Date().toISOString().split('T')[0]}
+								/>
+							</div>
+						</div>
+					)}
 					<button type="submit">Submit</button>
 				</form>
 			</div>
