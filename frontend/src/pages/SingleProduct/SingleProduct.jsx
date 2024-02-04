@@ -1,24 +1,43 @@
 import './SingleProduct.css';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { getProductById } from '../../features/products/productsSlice';
 import { Spinner } from '../../components';
 import { getCategoryById } from '../../features/categories/categoriesSlice';
+import { FaShoppingCart } from 'react-icons/fa';
+import { addProductsToCart } from '../../features/auth/authSlice';
 
 export const SingleProduct = () => {
+	const [quantity, setQuantity] = useState(0);
 	const { id } = useParams();
 
 	const dispatch = useDispatch();
 	const {
 		products: product,
-		isError,
-		isLoading,
-		isSuccess,
-		message,
+		isError: productError,
+		isLoading: productLoading,
+		isSuccess: productSuccess,
+		message: productMessage,
 	} = useSelector((state) => state.products);
+	const {
+		isError: authError,
+		isLoading: authLoading,
+		isSuccess: authSuccess,
+		message: authMessage,
+	} = useSelector((state) => state.auth);
+
 	const { categories: category } = useSelector((state) => state.categories);
+
+	const addProductToCart = async (productId, quantity) => {
+		await dispatch(addProductsToCart({ productId: productId, quantity: Number(quantity) }));
+		if(authSuccess) {
+			toast.success('Add to cart successfully!')
+		} else if(authError){
+			toast.error(authMessage);
+		}
+	};
 
 	useEffect(() => {
 		const loadData = async () => {
@@ -38,7 +57,7 @@ export const SingleProduct = () => {
 		}
 	}, [dispatch, product]);
 
-	if (isLoading) {
+	if (productLoading || authLoading) {
 		return <Spinner />;
 	}
 
@@ -75,28 +94,30 @@ export const SingleProduct = () => {
 									<p>
 										<strong>Rating: {product?.rating} /5.0</strong>
 									</p>
-									<form>
-										<input
-											type="number"
-											placeholder="0"
-											name="quantity"
-											min="1"
-										/>
-										<br />
-										{/* <c:if test="${product.status == false}">
-											<a href="sorry.jsp" className="btn btn-danger px-5 py-3">
-												Sold out
-											</a>
-										</c:if>
-										<c:if test="${product.status == true}">
-											<button
-												className="btn btn-success px-5 py-3"
-												type="submit"
-											>
-												<i className="fas fa-shopping-cart"></i> Add to Cart
-											</button>
-										</c:if> */}
-									</form>
+									<input
+										type="number"
+										placeholder="0"
+										onChange={(e) => setQuantity(e.target.value)}
+										min="1"
+									/>
+									<br />
+									{product?.productStatus ? (
+										<a
+											className="cart-btn"
+											onClick={() => addProductToCart(id, quantity)}
+										>
+											<FaShoppingCart /> Add to Cart
+										</a>
+									) : (
+										<a
+											className="btn btn-danger px-4 py-2 text-white"
+											onClick={() =>
+												toast.error('This product is already sold out!')
+											}
+										>
+											Sold out
+										</a>
+									)}
 									<br />
 									{/* <c:if test="${sessionScope.acc.role != null}">
 										<a href="add-to-wishlist?productID=${product.productID}">
@@ -132,14 +153,14 @@ export const SingleProduct = () => {
 							</div>
 						</div>
 					</div>
-		
-				<div className="row row-content">
-					<div className="col-12">
-						<h3 className="mx-auto text-black mt-5 mb-5 text-center">
-							Feedback
-						</h3>
-					</div>
-					{/* <div className="col-9 offset-2 mx-auto">
+
+					<div className="row row-content">
+						<div className="col-12">
+							<h3 className="mx-auto text-black mt-5 mb-5 text-center">
+								Feedback
+							</h3>
+						</div>
+						{/* <div className="col-9 offset-2 mx-auto">
                     <c:if test="${write != null}" >
                         <form action="feedback" method="post">
                             <input name="pid" value="${product.productID}" style="display:none;">
@@ -214,8 +235,8 @@ export const SingleProduct = () => {
                         </form>
                     </div>
                 </div> */}
+					</div>
 				</div>
-			</div>
 			</div>
 
 			<div className="more-products mb-150">

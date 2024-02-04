@@ -44,21 +44,23 @@ export const CartPage = () => {
 	}, [dispatch]);
 
 	useEffect(() => {
-		const calculatedTotal = products.reduce((accumulator, currentValue) => {
-			return (
-				accumulator +
-				currentValue?.quantity *
-					prices[
-						prices.findIndex(
-							(price) =>
-								price.productId ==
-								currentValue?.productId?._id
-						)
-					]?.price
-			);
-		}, 0);
-
-		setTotalPrice(calculatedTotal)
+		if(Array.isArray(products)){
+			const calculatedTotal = products.reduce((accumulator, currentValue) => {
+				return (
+					accumulator +
+					currentValue?.quantity *
+						prices[
+							prices.findIndex(
+								(price) =>
+									price.productId ==
+									currentValue?.productId?._id
+							)
+						]?.price
+				);
+			}, 0);
+	
+			setTotalPrice(calculatedTotal)
+		}
 	}, [products, prices])
 
 	const handleDeleteProductFromCart = async (productId) => {

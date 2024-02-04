@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'novolo/api/users/';
+const API_URL = '/novolo/api/users/';
 
 // Login
 const login = async (userData) => {
