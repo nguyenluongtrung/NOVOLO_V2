@@ -1,30 +1,42 @@
 import { useDispatch, useSelector } from 'react-redux';
-import './CheckoutPage.css'
+import './CheckoutPage.css';
 import { useEffect } from 'react';
-import { deleteAllProductsFromCart, getUserInformation } from '../../features/auth/authSlice';
-import { useForm } from 'react-hook-form'
-import { useLocation } from 'react-router-dom';
+import {
+	deleteAllProductsFromCart,
+	getUserInformation,
+} from '../../features/auth/authSlice';
+import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { createOrder } from '../../features/orders/ordersSlice';
 import { Spinner } from '../../components';
 import { toast } from 'react-toastify';
 
 export const CheckoutPage = () => {
-	const {user, isLoading, isError, isSuccess, message} = useSelector((state) => state.auth)
+	const { user, isLoading, isError, isSuccess, message } = useSelector(
+		(state) => state.auth
+	);
 
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const data = location.state;
 	const totalPrice = data.totalPrice;
 	const products = data.cart.products;
 
-	const {register, handleSubmit, formState: {errors}} = useForm();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
 
 	const onSubmit = async (data) => {
 		const productList = [];
-		products.map((product) => productList.push({
-			productId: product.productId._id,
-			quantity: product.quantity
-		}))
+		products.map((product) =>
+			productList.push({
+				productId: product.productId._id,
+				quantity: product.quantity,
+			})
+		);
 		const orderData = {
 			totalPrice: totalPrice,
 			note: data.note,
@@ -32,32 +44,33 @@ export const CheckoutPage = () => {
 				name: data.name,
 				address: data.address,
 				phone: data.phone,
-				email: data.email
+				email: data.email,
 			},
 			userId: user._id,
 			purchasedItems: {
-				products: productList
-			}
-		}
+				products: productList,
+			},
+		};
 
 		await Promise.all([
 			dispatch(createOrder(orderData)),
-			dispatch(deleteAllProductsFromCart())
-		])
+			dispatch(deleteAllProductsFromCart()),
+		]);
 
-		if(isSuccess){
-			toast.success('Place order successfully!')
-		} else if(isError){
-			toast.error(message)
+		if (isSuccess) {
+			toast.success('Place order successfully!');
+			navigate('/thank-you');
+		} else if (isError) {
+			toast.error(message);
 		}
-	}
+	};
 
 	useEffect(() => {
 		dispatch(getUserInformation());
-	}, [dispatch])
+	}, [dispatch]);
 
-	if(isLoading) {
-		return <Spinner />
+	if (isLoading) {
+		return <Spinner />;
 	}
 
 	return (
@@ -110,34 +123,58 @@ export const CheckoutPage = () => {
 															<input
 																type="text"
 																placeholder="Name"
-																{...register('name')}
+																{...register('name', {
+																	required: {
+																		value: true,
+																		message: 'Name is required!',
+																	},
+																})}
 																defaultValue={user.name}
 															/>
 														</p>
+														{errors.name && <p className='text-danger'>{errors.name.message}</p>}
 														<p>
 															<input
 																type="email"
 																placeholder="Email"
-																{...register('email')}
+																{...register('email', {
+																	required: {
+																		value: true,
+																		message: 'Email is required!',
+																	},
+																})}
 																defaultValue={user.email}
 															/>
 														</p>
+														{errors.email && <p  className='text-danger'>{errors.email.message}</p>}
 														<p>
 															<input
 																type="text"
 																placeholder="Address"
-																{...register('address')}
+																{...register('address', {
+																	required: {
+																		value: true,
+																		message: 'Address is required!',
+																	},
+																})}
 																defaultValue={user.address}
 															/>
 														</p>
+														{errors.address && <p className='text-danger'>{errors.address.message}</p>}
 														<p>
 															<input
 																type="text"
 																placeholder="Phone"
-																{...register('phone')}
+																{...register('phone', {
+																	required: {
+																		value: true,
+																		message: 'Phone is required!',
+																	},
+																})}
 																defaultValue={user.phone}
 															/>
 														</p>
+														{errors.phone && <p className='text-danger'>{errors.phone.message}</p>}
 														<p>
 															<textarea
 																{...register('note')}
