@@ -1,7 +1,7 @@
 import './Header.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { logout, reset } from '../../features/auth/authSlice';
+import { getUserInformation, logout, reset } from '../../features/auth/authSlice';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import './../../assets/css/main.css';
 import './../../assets/css/responsive.css';
@@ -9,6 +9,7 @@ import './../../assets/css/scss/common/_header.scss';
 import avt from '../../assets/img/products/avt.png';
 import './Header.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect } from 'react';
 
 export const Header = () => {
 	const { user } = useSelector((state) => state.auth);
@@ -28,6 +29,10 @@ export const Header = () => {
 		dispatch(reset());
 		navigate('/home');
 	};
+
+	useEffect(() => {
+		dispatch(getUserInformation());
+	}, [dispatch])
 
 	return (
 		<div className="top-header-area" id="sticker">
