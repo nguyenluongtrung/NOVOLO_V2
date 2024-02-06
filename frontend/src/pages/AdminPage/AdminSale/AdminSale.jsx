@@ -1,10 +1,48 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
+import { AddSale } from './components/AddComponent/AddSale';
+import { Spinner } from '../../../components';
+import { toast } from 'react-toastify';
 
 export const AdminSale = () => {
+	const dispatch = useDispatch();
+const [isOpenAddSaleForm, setIsOpenAddSaleForm] = useState(false);
+
+const {
+	sales,
+    isError: saleError,
+    isSuccess: saleSuccess,
+    isLoading: saleLoading,
+    message: saleMessage,
+} = useSelector((state) => state.sales);
+
+useEffect(() => {
+    if (saleError) {
+        toast.error(saleMessage);
+    }
+
+    Promise.all([
+
+    ]).catch((error) => {
+        console.error('Error during dispatch:', error);
+    });
+}, [dispatch, saleError, saleMessage]);
+
+if (saleLoading || !Array.isArray(sales)) {
+    return <Spinner />;
+}
+	
 	return (
 		<div>
 			<div className="d-flex" id="wrapper">
+				{isOpenAddSaleForm && (
+					<AddSale
+						setIsOpenAddSaleForm={setIsOpenAddSaleForm}
+					/>
+				)}
+
 				<AdminSidebar />
 
 				<div id="page-content-wrapper">
@@ -36,7 +74,7 @@ export const AdminSale = () => {
 							<button className="btn btn-success px-3 py-1 col-sm-2">
 								<a
 									className="view-modal text-decoration-none text-white"
-									href="add-sale"
+									onClick={() => setIsOpenAddSaleForm(true)}
 								>
 									<span>
 										<i className="fa-sharp fa-solid fa-plus"></i>
@@ -60,21 +98,9 @@ export const AdminSale = () => {
 										</tr>
 									</thead>
 									<tbody>
-										{/* <c:forEach items="${sList}" var="c">
-                                        <tr>
-                                            <td>${c.saleID}</td>
-                                            <td>${c.saleName}</td>
-                                            <td>${c.saleValue}</td>
-                                            <td>${c.startDate}</td>
-                                            <td>${c.endDate}</td>
-                                            <td>${c.saleCode}</td>
-                                            <td><a href="view-sale-products?id=${c.saleID}"><i className="view-modal fa-solid fa-eye text-dark text-center"></i></a></td>
-                                            <td>
-                                                <a href="update-sale?id=${c.saleID}" className="edit"><i className="view-modal fa-sharp fa-regular fa-pen-to-square  text-dark"></i></a> &nbsp;&nbsp;&nbsp;
-                                                <a href="delete-sale?id=${c.saleID}" className="delete"><i className="fa-sharp fa-solid fa-trash  text-dark"></i></a>
-                                            </td>
-                                        </tr>
-                                    </c:forEach> */}
+										{sales.map((sale) => {
+
+										})}
 									</tbody>
 								</table>
 							</div>
