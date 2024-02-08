@@ -179,6 +179,100 @@ const increaseDislikeCount = asyncHandler(async (req, res) => {
 	});
 });
 
+const increaseReplyLikeCount = asyncHandler(async (req, res) => {
+	const comment = await Comment.findById(req.params.commentId);
+
+	if (!comment) {
+		res.status(404);
+		throw new Error('Comment not found!');
+	}
+
+	comment.replies.map((reply) =>
+		reply._id.toString() === req.params.replyId
+			? (reply.likeCount = reply.likeCount + 1)
+			: reply
+	);
+
+	await comment.save();
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			comment,
+		},
+	});
+});
+
+const increaseReplyDislikeCount = asyncHandler(async (req, res) => {
+	const comment = await Comment.findById(req.params.commentId);
+
+	if (!comment) {
+		res.status(404);
+		throw new Error('Comment not found!');
+	}
+
+	comment.replies.map((reply) =>
+		reply._id.toString() === req.params.replyId
+			? (reply.dislikeCount = reply.dislikeCount + 1)
+			: reply
+	);
+
+	await comment.save();
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			comment,
+		},
+	});
+});
+
+const deleteReply = asyncHandler(async (req, res) => {
+	const comment = await Comment.findById(req.params.commentId);
+
+	if (!comment) {
+		res.status(404);
+		throw new Error('Comment not found!');
+	}
+
+	comment.replies = comment.replies.filter(
+		(reply) => reply._id.toString() !== req.params.replyId
+	);
+
+	await comment.save();
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			comment,
+		},
+	});
+});
+
+const updateReply = asyncHandler(async (req, res) => {
+	const comment = await Comment.findById(req.params.commentId);
+
+	if (!comment) {
+		res.status(404);
+		throw new Error('Comment not found!');
+	}
+
+	comment.replies.map((reply) =>
+		reply._id.toString() === req.params.replyId
+			? (reply.content = req.body.content)
+			: reply
+	);
+
+	await comment.save();
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			comment,
+		},
+	});
+});
+
 module.exports = {
 	createComment,
 	replyComment,
@@ -190,4 +284,8 @@ module.exports = {
 	getAllProductComments,
 	increaseLikeCount,
 	increaseDislikeCount,
+	increaseReplyLikeCount,
+	increaseReplyDislikeCount,
+	deleteReply,
+	updateReply,
 };

@@ -92,6 +92,21 @@ const updateComment = async (commentId, commentData, token) => {
 	return response.data.data.updatedComment;
 };
 
+// Delete reply
+const deleteReply = async (commentId, replyId, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.delete(
+		API_URL + 'comment/' + commentId + '/reply/' + replyId,
+		config
+	);
+	return response.data.data.comment;
+};
+
 const commentsService = {
 	createComment,
 	getAllProductComments,
@@ -100,6 +115,7 @@ const commentsService = {
 	replyComment,
 	deleteComment,
 	updateComment,
+	deleteReply,
 };
 
 export default commentsService;
