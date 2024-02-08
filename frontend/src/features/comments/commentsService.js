@@ -107,6 +107,38 @@ const deleteReply = async (commentId, replyId, token) => {
 	return response.data.data.comment;
 };
 
+// Increase reply like count
+const increaseReplyLikeCount = async (commentId, replyId, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.patch(
+		API_URL + 'like/' + commentId + '/reply/' + replyId,
+		null,
+		config
+	);
+	return response.data.data.comment;
+};
+
+// Increase reply dislike count
+const increaseReplyDislikeCount = async (commentId, replyId, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.patch(
+		API_URL + 'dislike/' + commentId + '/reply/' + replyId,
+		null,
+		config
+	);
+	return response.data.data.comment;
+};
+
 const commentsService = {
 	createComment,
 	getAllProductComments,
@@ -116,6 +148,8 @@ const commentsService = {
 	deleteComment,
 	updateComment,
 	deleteReply,
+	increaseReplyLikeCount,
+	increaseReplyDislikeCount,
 };
 
 export default commentsService;

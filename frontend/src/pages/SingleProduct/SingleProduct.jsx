@@ -3,7 +3,10 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { getProductById, updateRatings } from '../../features/products/productsSlice';
+import {
+	getProductById,
+	updateRatings,
+} from '../../features/products/productsSlice';
 import { Spinner } from '../../components';
 import { getCategoryById } from '../../features/categories/categoriesSlice';
 import {
@@ -27,6 +30,8 @@ import {
 	getAllProductComments,
 	increaseDislikeCount,
 	increaseLikeCount,
+	increaseReplyDislikeCount,
+	increaseReplyLikeCount,
 	replyComment,
 	updateComment,
 } from '../../features/comments/commentsSlice';
@@ -130,11 +135,11 @@ export const SingleProduct = () => {
 
 		setComment('');
 
-		if(rate != 0){
+		if (rate != 0) {
 			const ratingData = {
-				rating: Number(rate)
-			}
-			await dispatch(updateRatings({ratingData, productId: id}))
+				rating: Number(rate),
+			};
+			await dispatch(updateRatings({ ratingData, productId: id }));
 			await dispatch(getProductById(id));
 		}
 
@@ -186,7 +191,7 @@ export const SingleProduct = () => {
 		await dispatch(updateComment({ commentId, commentData }));
 
 		setUpdatedContent('');
-		toggleEditCommentVisibility(commentId)
+		toggleEditCommentVisibility(commentId);
 
 		await dispatch(getAllProductComments(id));
 
@@ -204,6 +209,16 @@ export const SingleProduct = () => {
 
 	const handleDislikeAction = async (commentId) => {
 		await dispatch(increaseDislikeCount(commentId));
+		await dispatch(getAllProductComments(id));
+	};
+
+	const handleReplyLikeAction = async (commentId, replyId) => {
+		await dispatch(increaseReplyLikeCount({commentId, replyId}));
+		await dispatch(getAllProductComments(id));
+	};
+
+	const handleReplyDislikeAction = async (commentId, replyId) => {
+		await dispatch(increaseReplyDislikeCount({commentId, replyId}));
 		await dispatch(getAllProductComments(id));
 	};
 
@@ -344,23 +359,53 @@ export const SingleProduct = () => {
 						<div className="col-9 offset-2 mx-auto">
 							<div className="rating mx-auto">
 								<div className="star">
-									<input type="radio" name="rate" id="rate-1" value="5" onClick={(e) => setRate(e.target.value)}/>
+									<input
+										type="radio"
+										name="rate"
+										id="rate-1"
+										value="5"
+										onClick={(e) => setRate(e.target.value)}
+									/>
 									<label for="rate-1">
 										<FaStar />
 									</label>
-									<input type="radio" name="rate" id="rate-2" value="4" onClick={(e) => setRate(e.target.value)}/>
+									<input
+										type="radio"
+										name="rate"
+										id="rate-2"
+										value="4"
+										onClick={(e) => setRate(e.target.value)}
+									/>
 									<label for="rate-2">
 										<FaStar />
 									</label>
-									<input type="radio" name="rate" id="rate-3" value="3" onClick={(e) => setRate(e.target.value)}/>
+									<input
+										type="radio"
+										name="rate"
+										id="rate-3"
+										value="3"
+										onClick={(e) => setRate(e.target.value)}
+									/>
 									<label for="rate-3">
 										<FaStar />
 									</label>
-									<input type="radio" name="rate" id="rate-4" value="2" onClick={(e) => setRate(e.target.value)}/>
+									<input
+										type="radio"
+										name="rate"
+										id="rate-4"
+										value="2"
+										onClick={(e) => setRate(e.target.value)}
+									/>
 									<label for="rate-4">
 										<FaStar />
 									</label>
-									<input type="radio" name="rate" id="rate-5" value="1" onClick={(e) => setRate(e.target.value)}/>
+									<input
+										type="radio"
+										name="rate"
+										id="rate-5"
+										value="1"
+										onClick={(e) => setRate(e.target.value)}
+									/>
 									<label for="rate-5">
 										<FaStar />
 									</label>
@@ -413,7 +458,9 @@ export const SingleProduct = () => {
 															/>
 														</div>
 														<div className="user-meta">
-															<div className="name">{comment?.userId?.name}</div>
+															<div className="name">
+																{comment?.userId?.name}
+															</div>
 															<div className="day">
 																{formatDate(comment.date)}
 															</div>
@@ -611,7 +658,7 @@ export const SingleProduct = () => {
 																			</span>
 																			<FaThumbsUp
 																				onClick={() =>
-																					handleLikeAction(reply._id)
+																					handleReplyLikeAction(comment._id, reply._id)
 																				}
 																			/>
 																		</div>
@@ -621,11 +668,42 @@ export const SingleProduct = () => {
 																			</span>
 																			<FaThumbsDown
 																				onClick={() =>
-																					handleDislikeAction(reply._id)
+																					handleReplyDislikeAction(comment._id, reply._id)
 																				}
 																			/>
 																		</div>
 																		<div className="re-comment">Reply</div>
+																		<div className="other-options">
+																			<FaEllipsisV
+																				onClick={() =>
+																					toggleOpenOptionsVisibility(
+																						comment._id
+																					)
+																				}
+																			/>
+																			{showOpenOptionsMap[comment._id] && (
+																				<div className="options">
+																					<div
+																						className="edit-option"
+																						onClick={() =>
+																							toggleEditCommentVisibility(
+																								comment._id
+																							)
+																						}
+																					>
+																						<FaPenSquare /> Edit
+																					</div>
+																					<div
+																						className="delete-option"
+																						onClick={() =>
+																							handleDeleteComment(comment._id)
+																						}
+																					>
+																						<FaTrash /> Delete
+																					</div>
+																				</div>
+																			)}
+																		</div>
 																	</div>
 																</div>
 																<div className="comment">{reply.content}</div>
