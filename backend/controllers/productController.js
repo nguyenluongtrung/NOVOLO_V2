@@ -214,6 +214,36 @@ const getProductsFromCart = asyncHandler(async (req, res) => {
 	});
 });
 
+const updateRatings = asyncHandler(async (req, res) => {
+	const product = await Product.findById(req.params.id);
+
+	if (!product) {
+		res.status(404);
+		throw new Error('Product not found!');
+	}
+
+	const { rating } = req.body;
+
+	if (product.numberOfRatings === 0) {
+		product.rating = rating;
+	} else {
+		product.rating = parseFloat(
+			(product.rating * product.numberOfRatings + rating) /
+				(product.numberOfRatings + 1)
+		).toFixed(1);
+	}
+
+	product.numberOfRatings = product.numberOfRatings + 1;
+	await product.save();
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			product,
+		},
+	});
+});
+
 module.exports = {
 	getAllProducts,
 	getProductById,
@@ -222,4 +252,5 @@ module.exports = {
 	deleteProduct,
 	getProductsFromWishList,
 	getProductsFromCart,
+	updateRatings,
 };

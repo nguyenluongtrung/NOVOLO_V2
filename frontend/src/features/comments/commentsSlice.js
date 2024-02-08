@@ -130,6 +130,26 @@ export const deleteComment = createAsyncThunk(
 	}
 );
 
+// Update comment
+export const updateComment = createAsyncThunk(
+	'comments/updateComment',
+	async ({ commentId, commentData }, thunkAPI) => {
+		try {
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
+			return await commentsService.updateComment(commentId, commentData, token);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
 export const commentSlice = createSlice({
 	name: 'comments',
 	initialState,
@@ -162,6 +182,21 @@ export const commentSlice = createSlice({
 				);
 			})
 			.addCase(deleteComment.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(updateComment.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(updateComment.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.comments = state.comments.map((comment) =>
+					comment._id === action.payload._id ? action.payload : comment
+				);
+			})
+			.addCase(updateComment.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;
@@ -211,6 +246,24 @@ export const commentSlice = createSlice({
 				}
 			})
 			.addCase(increaseDislikeCount.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(replyComment.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(replyComment.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				const commentIndex = state.comments.findIndex(
+					(comment) => comment._id === action.payload._id
+				);
+				if (commentIndex !== -1) {
+					state.comments[commentIndex] = action.payload;
+				}
+			})
+			.addCase(replyComment.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { getProductById } from '../../features/products/productsSlice';
+import { getProductById, updateRatings } from '../../features/products/productsSlice';
 import { Spinner } from '../../components';
 import { getCategoryById } from '../../features/categories/categoriesSlice';
 import {
@@ -28,15 +28,19 @@ import {
 	increaseDislikeCount,
 	increaseLikeCount,
 	replyComment,
+	updateComment,
 } from '../../features/comments/commentsSlice';
 
 export const SingleProduct = () => {
+	const [rate, setRate] = useState(0);
 	const [quantity, setQuantity] = useState(0);
 	const [comment, setComment] = useState('');
 	const [reply, setReply] = useState('');
+	const [updatedContent, setUpdatedContent] = useState('');
 	const [showReplyMap, setShowReplyMap] = useState({});
 	const [showRepliesMap, setShowRepliesMap] = useState({});
 	const [showOpenOptionsMap, setShowOpenOptionsMap] = useState({});
+	const [showEditCommentMap, setShowEditCommentMap] = useState({});
 	const { id } = useParams();
 
 	const dispatch = useDispatch();
@@ -105,6 +109,13 @@ export const SingleProduct = () => {
 		}));
 	};
 
+	const toggleEditCommentVisibility = (commentId) => {
+		setShowEditCommentMap((prevMap) => ({
+			...prevMap,
+			[commentId]: !prevMap[commentId],
+		}));
+	};
+
 	const sendComment = async (e, comment) => {
 		e.preventDefault();
 
@@ -118,6 +129,14 @@ export const SingleProduct = () => {
 		await dispatch(getAllProductComments(id));
 
 		setComment('');
+
+		if(rate != 0){
+			const ratingData = {
+				rating: Number(rate)
+			}
+			await dispatch(updateRatings({ratingData, productId: id}))
+			await dispatch(getProductById(id));
+		}
 
 		if (commentSuccess) {
 			toast.success('Write comment successfully!');
@@ -135,6 +154,12 @@ export const SingleProduct = () => {
 		};
 
 		await dispatch(replyComment({ replyData, commentId }));
+
+		setReply('');
+		toggleReplyVisibility(commentId);
+
+		await dispatch(getAllProductComments(id));
+
 		if (commentSuccess) {
 			toast.success('Reply comment successfully!');
 		} else if (commentError) {
@@ -149,7 +174,28 @@ export const SingleProduct = () => {
 		} else if (commentError) {
 			toast.error(commentMessage);
 		}
-	}
+	};
+
+	const handleUpdateComment = async (e, commentId, updatedContent) => {
+		e.preventDefault();
+
+		const commentData = {
+			content: updatedContent,
+		};
+
+		await dispatch(updateComment({ commentId, commentData }));
+
+		setUpdatedContent('');
+		toggleEditCommentVisibility(commentId)
+
+		await dispatch(getAllProductComments(id));
+
+		if (commentSuccess) {
+			toast.success('Update comment successfully!');
+		} else if (commentError) {
+			toast.error(commentMessage);
+		}
+	};
 
 	const handleLikeAction = async (commentId) => {
 		await dispatch(increaseLikeCount(commentId));
@@ -298,23 +344,23 @@ export const SingleProduct = () => {
 						<div className="col-9 offset-2 mx-auto">
 							<div className="rating mx-auto">
 								<div className="star">
-									<input type="radio" name="rate" id="rate-1" value="5" />
+									<input type="radio" name="rate" id="rate-1" value="5" onClick={(e) => setRate(e.target.value)}/>
 									<label for="rate-1">
 										<FaStar />
 									</label>
-									<input type="radio" name="rate" id="rate-2" value="4" />
+									<input type="radio" name="rate" id="rate-2" value="4" onClick={(e) => setRate(e.target.value)}/>
 									<label for="rate-2">
 										<FaStar />
 									</label>
-									<input type="radio" name="rate" id="rate-3" value="3" />
+									<input type="radio" name="rate" id="rate-3" value="3" onClick={(e) => setRate(e.target.value)}/>
 									<label for="rate-3">
 										<FaStar />
 									</label>
-									<input type="radio" name="rate" id="rate-4" value="2" />
+									<input type="radio" name="rate" id="rate-4" value="2" onClick={(e) => setRate(e.target.value)}/>
 									<label for="rate-4">
 										<FaStar />
 									</label>
-									<input type="radio" name="rate" id="rate-5" value="1" />
+									<input type="radio" name="rate" id="rate-5" value="1" onClick={(e) => setRate(e.target.value)}/>
 									<label for="rate-5">
 										<FaStar />
 									</label>
@@ -367,7 +413,7 @@ export const SingleProduct = () => {
 															/>
 														</div>
 														<div className="user-meta">
-															<div className="name">{comment.userId.name}</div>
+															<div className="name">{comment?.userId?.name}</div>
 															<div className="day">
 																{formatDate(comment.date)}
 															</div>
@@ -404,10 +450,20 @@ export const SingleProduct = () => {
 															/>
 															{showOpenOptionsMap[comment._id] && (
 																<div className="options">
-																	<div className="edit-option">
+																	<div
+																		className="edit-option"
+																		onClick={() =>
+																			toggleEditCommentVisibility(comment._id)
+																		}
+																	>
 																		<FaPenSquare /> Edit
 																	</div>
-																	<div className="delete-option" onClick={() => handleDeleteComment(comment._id)}>
+																	<div
+																		className="delete-option"
+																		onClick={() =>
+																			handleDeleteComment(comment._id)
+																		}
+																	>
 																		<FaTrash /> Delete
 																	</div>
 																</div>
@@ -417,44 +473,95 @@ export const SingleProduct = () => {
 												</div>
 
 												<div className="comment">{comment.content}</div>
-												{showReplyMap[comment._id] && (
-													<form
-														className="reply-box"
-														onSubmit={(e) => sendReply(e, reply, comment._id)}
-													>
-														<div className="reply-section">
-															<div className="user-image">
-																<img
-																	src={
-																		'https://bootdey.com/img/Content/avatar/avatar7.png'
-																	}
-																	alt="avatar"
-																	className="ml-3 mr-2"
-																	style={{ width: '35px', height: '35px' }}
-																/>
+												{showReplyMap[comment._id] &&
+													!showEditCommentMap[comment._id] && (
+														<form
+															className="reply-box"
+															onSubmit={(e) => sendReply(e, reply, comment._id)}
+														>
+															<div className="reply-section">
+																<div className="user-image">
+																	<img
+																		src={
+																			'https://bootdey.com/img/Content/avatar/avatar7.png'
+																		}
+																		alt="avatar"
+																		className="ml-3 mr-2"
+																		style={{ width: '35px', height: '35px' }}
+																	/>
+																</div>
+																<input
+																	className="reply-content"
+																	placeholder="Add a reply..."
+																	onChange={(e) => setReply(e.target.value)}
+																	value={reply}
+																	required
+																></input>
 															</div>
-															<input
-																className="reply-content"
-																placeholder="Add a reply..."
-																onChange={(e) => setReply(e.target.value)}
-																value={reply}
-																required
-															></input>
-														</div>
-														<div className="button-section">
-															<button type="submit" className="reply-submit">
-																Reply
-															</button>
-															<button
-																type="button"
-																className="cancel-submit mr-2"
-																onClick={() => toggleReplyVisibility(comment._id)}
-															>
-																Cancel
-															</button>
-														</div>
-													</form>
-												)}
+															<div className="button-section">
+																<button type="submit" className="reply-submit">
+																	Reply
+																</button>
+																<button
+																	type="button"
+																	className="cancel-submit mr-2"
+																	onClick={() =>
+																		toggleReplyVisibility(comment._id)
+																	}
+																>
+																	Cancel
+																</button>
+															</div>
+														</form>
+													)}
+												{showEditCommentMap[comment._id] &&
+													!showReplyMap[comment._id] && (
+														<form
+															className="reply-box"
+															onSubmit={(e) =>
+																handleUpdateComment(
+																	e,
+																	comment._id,
+																	updatedContent
+																)
+															}
+														>
+															<div className="reply-section">
+																<div className="user-image">
+																	<img
+																		src={
+																			'https://bootdey.com/img/Content/avatar/avatar7.png'
+																		}
+																		alt="avatar"
+																		className="ml-3 mr-2"
+																		style={{ width: '35px', height: '35px' }}
+																	/>
+																</div>
+																<input
+																	className="reply-content"
+																	onChange={(e) =>
+																		setUpdatedContent(e.target.value)
+																	}
+																	defaultValue={comment.content}
+																	required
+																></input>
+															</div>
+															<div className="button-section">
+																<button type="submit" className="reply-submit">
+																	Edit
+																</button>
+																<button
+																	type="button"
+																	className="cancel-submit mr-2"
+																	onClick={() =>
+																		toggleEditCommentVisibility(comment._id)
+																	}
+																>
+																	Cancel
+																</button>
+															</div>
+														</form>
+													)}
 												{comment.replies.length > 0 && (
 													<div
 														className="show-replies"
@@ -532,52 +639,6 @@ export const SingleProduct = () => {
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-
-			<div className="more-products mb-150">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-8 offset-lg-2 text-center">
-							<div className="section-title">
-								<h3>
-									<span className="orange-text">Related</span> Products
-								</h3>
-								<p>
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-									Aliquid, fuga quas itaque eveniet beatae optio.
-								</p>
-							</div>
-						</div>
-					</div>
-					{/* <div className="row">
-						<c:forEach items="${relatedProducts}" var="c">
-							<div className="col-lg-4 col-md-6 text-center">
-								<div className="single-product-item">
-									<div className="product-image">
-										<a href="single-product?id=${c.productID}">
-											<img src="${c.image}" style="width:100%;height:250px" />
-										</a>
-									</div>
-									<h3>${c.name}</h3>
-									<p className="product-price"> ${c.price}$ </p>
-									<a
-										href="add-to-cart?productID=${c.productID}"
-										className="cart-btn"
-									>
-										<i className="fas fa-shopping-cart"></i> Add to Cart
-									</a>
-									<c:if test="${sessionScope.acc.role != null}">
-										<a href="add-to-wishlist?productID=${c.productID}">
-											<button className="btn btn-danger px-5 py-3">
-												<i className="fas fa-heart"></i>
-											</button>
-										</a>
-									</c:if>
-								</div>
-							</div>
-						</c:forEach>
-					</div> */}
 				</div>
 			</div>
 		</div>

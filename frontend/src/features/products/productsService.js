@@ -90,6 +90,23 @@ const getProductsFromCart = async (token) => {
 	return response.data.data.productList.cart.products;
 };
 
+// Update product's rating
+const updateRatings = async (ratingData, productId, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.patch(
+		API_URL + 'rate/' + productId,
+		ratingData,
+		config
+	);
+
+	return response.data.data.product;
+};
+
 const productsService = {
 	getAllProducts,
 	getProductById,
@@ -98,6 +115,7 @@ const productsService = {
 	updateProduct,
 	getProductsFromWishList,
 	getProductsFromCart,
+	updateRatings,
 };
 
 export default productsService;

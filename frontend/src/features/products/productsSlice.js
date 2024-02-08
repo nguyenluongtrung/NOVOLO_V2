@@ -152,6 +152,26 @@ export const getProductsFromCart = createAsyncThunk(
 	}
 );
 
+// Update product's rating
+export const updateRatings = createAsyncThunk(
+	'products/updateRatings',
+	async ({ ratingData, productId }, thunkAPI) => {
+		try {
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
+			return await productsService.updateRatings(ratingData, productId, token);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
 export const productSlice = createSlice({
 	name: 'products',
 	initialState,
@@ -255,6 +275,23 @@ export const productSlice = createSlice({
 				state.products = action.payload;
 			})
 			.addCase(getProductsFromCart.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(updateRatings.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(updateRatings.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				if (Array.isArray(state.products)) {
+					state.products = state.products.map((product) =>
+						product._id === action.payload._id ? action.payload : product
+					);
+				}
+			})
+			.addCase(updateRatings.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

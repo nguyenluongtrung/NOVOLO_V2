@@ -28,6 +28,10 @@ const productSchema = mongoose.Schema({
 		min: [1.0, 'Rating must be greater or equal to 1.0'],
 		max: [5.0, 'Rating must be less or equal to 5.0'],
 	},
+	numberOfRatings: {
+		type: Number,
+		default: 0,
+	},
 	accumulatedPoint: {
 		type: Number,
 		required: [true, 'Accumulated point is mandatory'],
