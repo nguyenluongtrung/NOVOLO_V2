@@ -1,91 +1,306 @@
-.fix-ui{
-    background-color: white;
+.fix-ui {
+	background-color: white;
 }
-.rating{
-    width: 400px;
-    background: white;
-    padding: 20px 30px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.rating .star input{
-    display: none;
+.rating {
+	width: 400px;
+	background: white;
+	padding: 20px 30px;
+	border: 1px solid #444;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 }
 
-.star label{
-    font-size: 40px;
-    color: #444;
-    padding: 10px;
-    float:right;
-    transition: all 0.2s ease;
+.rating .star input {
+	display: none;
 }
 
-input:not(:checked) ~ label:hover,
-input:not(:checked) ~ label:hover ~ label{
-    color: #fd4;
-}
-
-input:checked ~ label{
-    color: #fd4;
-}
-.rating{
-
-    padding: 20px 30px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    border:0;
-}
-
-.rating .star input{
-    display: none;
-}
-
-.star label{
-    font-size: 20px;
-    color: #444;
-    padding: 10px;
-    float:right;
-    transition: all 0.2s ease;
+.star label {
+	font-size: 40px;
+	color: #444;
+	padding: 10px;
+	float: right;
+	transition: all 0.2s ease;
 }
 
 input:not(:checked) ~ label:hover,
-input:not(:checked) ~ label:hover ~ label{
-    color: #fd4;
+input:not(:checked) ~ label:hover ~ label {
+	color: #fd4;
 }
 
-input:checked ~ label{
-    color: #fd4;
+input:checked ~ label {
+	color: #fd4;
+}
+.rating {
+	padding: 20px 30px;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	border: 0;
 }
 
-.feedback{
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    padding: 20px;
+.rating .star input {
+	display: none;
 }
 
-.feedback-content{
-
-    margin-top: 20px;
+.star label {
+	font-size: 20px;
+	color: #444;
+	padding: 10px;
+	float: right;
+	transition: all 0.2s ease;
 }
 
-.feedback-content .date{
-    float: right;
-    margin-right: 30px;
-    margin-top: 5px;
+input:not(:checked) ~ label:hover,
+input:not(:checked) ~ label:hover ~ label {
+	color: #fd4;
 }
 
-.date p{
-    color: #2F4F4F;
+input:checked ~ label {
+	color: #fd4;
 }
 
-.feedback-content img{
-    margin-bottom: 30px;
+.feedback {
+	background-color: #f5f5f5;
+	border-radius: 5px;
+	padding: 20px;
+}
+
+.feedback-content {
+	margin-top: 20px;
+}
+
+.feedback-content .date {
+	float: right;
+	margin-right: 30px;
+	margin-top: 5px;
+}
+
+.date p {
+	color: #2f4f4f;
+}
+
+.feedback-content img {
+	margin-bottom: 30px;
+}
+
+.flex {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
+img {
+	width: 100%;
+	height: 100%;
+}
+
+.comment-box,
+.comment-list {
+	background: #fff;
+	border-radius: 4px;
+	box-shadow: 0 2px 2px #0002;
+    margin-bottom: 3rem;
+}
+
+.reply-box{
+    outline: none;
+	border-bottom: none;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+}
+
+.comment-session {
+	width: 650px;
+	height: auto;
+	margin: 0 auto;
+}
+
+.comment-list {
+	width: 100%;
+	margin-bottom: 12px;
+}
+
+.comment-list .user {
+	display: flex;
+	padding: 8px;
+	overflow: hidden;
+}
+
+.comment-list .name {
+	text-transform: uppercase;
+	font-weight: 600;
+}
+
+.user .name {
+	margin-left: 2px;
+}
+
+.user-name {
+	width: 50vw;
+}
+
+.image-user {
+	margin-right: -27px;
+}
+
+.comment-list .day {
+	font-size: 12px;
+}
+
+.post-comment .comment {
+	padding: 0 0 15px 58px;
+}
+
+.comment-box {
+	padding: 10px;
+	overflow: hidden;
+}
+
+.comment-box .user {
+	display: flex;
+	width: min-content;
+}
+
+.comment-box .image img {
+	width: 100%;
+	width: 38px;
+	height: 38px;
+	margin-right: 30px;
+	border-radius: 50%;
+}
+
+.comment-box textarea {
+	background-color: #eee;
+	width: -webkit-fill-available;
+	height: 152px;
+	margin: 10px 0;
+	padding: 10px;
+	border: none;
+	border-radius: 4px;
+	box-shadow: 0 0 0 0.5px #0003;
+}
+
+.comment-box textarea:focus {
+	outline-color: #009cff;
+}
+
+.comment-box .comment-submit {
+	float: right;
+	padding: 6px 14px;
+	border: none;
+	background: #009cff;
+	color: #fff;
+	cursor: pointer;
+	border-radius: 2px;
+}
+
+.comment-box .comment-submit:hover {
+	background: #027ecc;
+}
+
+.reply {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	gap: 10px;
+}
+
+.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 24px;
+	color: #777;
+	gap: 5px;
+}
+
+.icon:hover {
+	color: #000;
+	cursor: pointer;
+}
+
+.replies {
+	margin-left: 3rem;
+}
+
+.show-replies {
+	margin-left: 4rem;
+	color: #009cff;
+}
+
+.show-replies:hover {
+	cursor: pointer;
+}
+
+.re-comment:hover {
+	cursor: pointer;
+}
+
+.re-comment{
+    font-weight: 600;
+}
+
+.reply-content {
+	width: 95%;
+	border: none;
+	margin-bottom: 2rem;
+	border-bottom: 1px solid black;
+}
+
+.reply-content:focus {
+	outline: none;
+	border-top: none;
+	border-right: none;
+	border-left: none;
+}
+
+.reply-submit,
+.cancel-submit {
+	padding: 10px 20px;
+	border-radius: 30px;
+    border: none;
+}
+
+.reply-submit {
+	color: white;
+	background-color: #027ecc;
+}
+
+.reply-section{
+    display: flex;
+    width: 95%;
+    margin-left: 2.3rem;
+}
+
+.button-section{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.other-options:hover{
+    cursor: pointer;
+}
+
+.options{
+    border-radius: 15px;
+    padding: 15px 20px;
+    background-color: #e0dfdf;
+    width: 100px;
+    position: absolute;
+    left: 10px;
+}
+
+.other-options{
+    position: relative;
+}
+
+.edit-option:hover, .delete-option:hover{
+    border-bottom: 2px solid black;
+    transition: 0.2s;
 }

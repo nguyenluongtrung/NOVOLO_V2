@@ -7,6 +7,9 @@ const {
 	updateComment,
 	getComment,
 	getAllComments,
+	getAllProductComments,
+	increaseLikeCount,
+	increaseDislikeCount,
 } = require('../controllers/commentController');
 const { protect } = require('../middleware/userMiddleware');
 const router = express.Router();
@@ -16,6 +19,9 @@ router
 	.route('/reply/:commentId')
 	.get(getAllReplies)
 	.post(protect, replyComment);
+router.route('/product/:productId').get(getAllProductComments);
+router.route('/like/:commentId').patch(protect, increaseLikeCount);
+router.route('/dislike/:commentId').patch(protect, increaseDislikeCount);
 router
 	.route('/:commentId')
 	.get(getComment)

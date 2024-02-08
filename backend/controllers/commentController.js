@@ -117,6 +117,68 @@ const getAllComments = asyncHandler(async (req, res) => {
 	});
 });
 
+const getAllProductComments = asyncHandler(async (req, res) => {
+	const comments = await Comment.find({
+		productId: req.params.productId,
+	})
+		.populate({
+			path: 'userId',
+			model: 'User',
+		})
+		.populate({
+			path: 'replies.userId',
+			model: 'User',
+		});
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			length: comments.length,
+			comments,
+		},
+	});
+});
+
+const increaseLikeCount = asyncHandler(async (req, res) => {
+	const comment = await Comment.findById(req.params.commentId);
+
+	if (!comment) {
+		res.status(404);
+		throw new Error('Comment not found!');
+	}
+
+	comment.likeCount = comment.likeCount + 1;
+
+	await comment.save();
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			comment,
+		},
+	});
+});
+
+const increaseDislikeCount = asyncHandler(async (req, res) => {
+	const comment = await Comment.findById(req.params.commentId);
+
+	if (!comment) {
+		res.status(404);
+		throw new Error('Comment not found!');
+	}
+
+	comment.dislikeCount = comment.dislikeCount + 1;
+
+	await comment.save();
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			comment,
+		},
+	});
+});
+
 module.exports = {
 	createComment,
 	replyComment,
@@ -125,4 +187,7 @@ module.exports = {
 	updateComment,
 	getComment,
 	getAllComments,
+	getAllProductComments,
+	increaseLikeCount,
+	increaseDislikeCount,
 };

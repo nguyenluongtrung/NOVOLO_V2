@@ -19,6 +19,10 @@ const commentSchema = mongoose.Schema({
 		type: Number,
 		default: 0,
 	},
+	dislikeCount: {
+		type: Number,
+		default: 0,
+	},
 	replies: {
 		type: [
 			{
@@ -32,6 +36,10 @@ const commentSchema = mongoose.Schema({
 					required: true,
 				},
 				likeCount: {
+					type: Number,
+					default: 0,
+				},
+				dislikeCount: {
 					type: Number,
 					default: 0,
 				},
