@@ -27,6 +27,7 @@ import {
 import {
 	createComment,
 	deleteComment,
+	deleteReply,
 	getAllProductComments,
 	increaseDislikeCount,
 	increaseLikeCount,
@@ -45,6 +46,7 @@ export const SingleProduct = () => {
 	const [showReplyMap, setShowReplyMap] = useState({});
 	const [showRepliesMap, setShowRepliesMap] = useState({});
 	const [showOpenOptionsMap, setShowOpenOptionsMap] = useState({});
+	const [showReplyOpenOptionsMap, setShowReplyOpenOptionsMap] = useState({});
 	const [showEditCommentMap, setShowEditCommentMap] = useState({});
 	const { id } = useParams();
 
@@ -104,6 +106,13 @@ export const SingleProduct = () => {
 		setShowOpenOptionsMap((prevMap) => ({
 			...prevMap,
 			[commentId]: !prevMap[commentId],
+		}));
+	};
+
+	const toggleReplyOpenOptionsVisibility = (replyId) => {
+		setShowReplyOpenOptionsMap((prevMap) => ({
+			...prevMap,
+			[replyId]: !prevMap[replyId],
 		}));
 	};
 
@@ -176,6 +185,16 @@ export const SingleProduct = () => {
 		await dispatch(deleteComment(commentId));
 		if (commentSuccess) {
 			toast.success('Delete comment successfully!');
+		} else if (commentError) {
+			toast.error(commentMessage);
+		}
+	};
+
+	const handleDeleteReply = async (commentId, replyId) => {
+		await dispatch(deleteReply({commentId, replyId}));
+		if (commentSuccess) {
+			await dispatch(getAllProductComments(id));
+			toast.success('Delete reply successfully!');
 		} else if (commentError) {
 			toast.error(commentMessage);
 		}
@@ -676,18 +695,18 @@ export const SingleProduct = () => {
 																		<div className="other-options">
 																			<FaEllipsisV
 																				onClick={() =>
-																					toggleOpenOptionsVisibility(
-																						comment._id
+																					toggleReplyOpenOptionsVisibility(
+																						reply._id
 																					)
 																				}
 																			/>
-																			{showOpenOptionsMap[comment._id] && (
+																			{showReplyOpenOptionsMap[reply._id] && (
 																				<div className="options">
 																					<div
 																						className="edit-option"
 																						onClick={() =>
 																							toggleEditCommentVisibility(
-																								comment._id
+																								reply._id
 																							)
 																						}
 																					>
@@ -696,7 +715,7 @@ export const SingleProduct = () => {
 																					<div
 																						className="delete-option"
 																						onClick={() =>
-																							handleDeleteComment(comment._id)
+																							handleDeleteReply(comment._id, reply._id)
 																						}
 																					>
 																						<FaTrash /> Delete
