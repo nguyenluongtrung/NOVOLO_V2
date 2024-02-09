@@ -35,6 +35,7 @@ import {
 	increaseReplyLikeCount,
 	replyComment,
 	updateComment,
+	updateReply,
 } from '../../features/comments/commentsSlice';
 
 export const SingleProduct = () => {
@@ -48,6 +49,7 @@ export const SingleProduct = () => {
 	const [showOpenOptionsMap, setShowOpenOptionsMap] = useState({});
 	const [showReplyOpenOptionsMap, setShowReplyOpenOptionsMap] = useState({});
 	const [showEditCommentMap, setShowEditCommentMap] = useState({});
+	const [showEditReplyMap, setShowEditReplyMap] = useState({});
 	const { id } = useParams();
 
 	const dispatch = useDispatch();
@@ -130,6 +132,13 @@ export const SingleProduct = () => {
 		}));
 	};
 
+	const toggleEditReplyVisibility = (replyId) => {
+		setShowEditReplyMap((prevMap) => ({
+			...prevMap,
+			[replyId]: !prevMap[replyId],
+		}));
+	};
+
 	const sendComment = async (e, comment) => {
 		e.preventDefault();
 
@@ -191,7 +200,7 @@ export const SingleProduct = () => {
 	};
 
 	const handleDeleteReply = async (commentId, replyId) => {
-		await dispatch(deleteReply({commentId, replyId}));
+		await dispatch(deleteReply({ commentId, replyId }));
 		if (commentSuccess) {
 			await dispatch(getAllProductComments(id));
 			toast.success('Delete reply successfully!');
@@ -221,6 +230,27 @@ export const SingleProduct = () => {
 		}
 	};
 
+	const handleUpdateReply = async (e, replyId, commentId, updatedContent) => {
+		e.preventDefault();
+
+		const replyData = {
+			content: updatedContent,
+		};
+
+		await dispatch(updateReply({ replyId, commentId, replyData }));
+
+		setUpdatedContent('');
+		toggleEditReplyVisibility(replyId);
+
+		await dispatch(getAllProductComments(id));
+
+		if (commentSuccess) {
+			toast.success('Update reply successfully!');
+		} else if (commentError) {
+			toast.error(commentMessage);
+		}
+	};
+
 	const handleLikeAction = async (commentId) => {
 		await dispatch(increaseLikeCount(commentId));
 		await dispatch(getAllProductComments(id));
@@ -232,12 +262,12 @@ export const SingleProduct = () => {
 	};
 
 	const handleReplyLikeAction = async (commentId, replyId) => {
-		await dispatch(increaseReplyLikeCount({commentId, replyId}));
+		await dispatch(increaseReplyLikeCount({ commentId, replyId }));
 		await dispatch(getAllProductComments(id));
 	};
 
 	const handleReplyDislikeAction = async (commentId, replyId) => {
-		await dispatch(increaseReplyDislikeCount({commentId, replyId}));
+		await dispatch(increaseReplyDislikeCount({ commentId, replyId }));
 		await dispatch(getAllProductComments(id));
 	};
 
@@ -642,6 +672,7 @@ export const SingleProduct = () => {
 														{comment.replies.length > 1 ? 'replies' : 'reply'}
 													</div>
 												)}
+
 												{showRepliesMap[comment._id] &&
 													comment.replies.map((reply) => {
 														return (
@@ -677,7 +708,10 @@ export const SingleProduct = () => {
 																			</span>
 																			<FaThumbsUp
 																				onClick={() =>
-																					handleReplyLikeAction(comment._id, reply._id)
+																					handleReplyLikeAction(
+																						comment._id,
+																						reply._id
+																					)
 																				}
 																			/>
 																		</div>
@@ -687,7 +721,10 @@ export const SingleProduct = () => {
 																			</span>
 																			<FaThumbsDown
 																				onClick={() =>
-																					handleReplyDislikeAction(comment._id, reply._id)
+																					handleReplyDislikeAction(
+																						comment._id,
+																						reply._id
+																					)
 																				}
 																			/>
 																		</div>
@@ -704,18 +741,24 @@ export const SingleProduct = () => {
 																				<div className="options">
 																					<div
 																						className="edit-option"
-																						onClick={() =>
-																							toggleEditCommentVisibility(
+																						onClick={() => {
+																							toggleEditReplyVisibility(
 																								reply._id
-																							)
-																						}
+																							);
+																							toggleReplyOpenOptionsVisibility(
+																								reply._id
+																							);
+																						}}
 																					>
 																						<FaPenSquare /> Edit
 																					</div>
 																					<div
 																						className="delete-option"
 																						onClick={() =>
-																							handleDeleteReply(comment._id, reply._id)
+																							handleDeleteReply(
+																								comment._id,
+																								reply._id
+																							)
 																						}
 																					>
 																						<FaTrash /> Delete
@@ -726,6 +769,60 @@ export const SingleProduct = () => {
 																	</div>
 																</div>
 																<div className="comment">{reply.content}</div>
+																{showEditReplyMap[reply._id] && (
+																	<form
+																		className="reply-box"
+																		onSubmit={(e) =>
+																			handleUpdateReply(
+																				e,
+																				reply._id,
+																				comment._id,
+																				updatedContent
+																			)
+																		}
+																	>
+																		<div className="reply-section">
+																			<div className="user-image">
+																				<img
+																					src={
+																						'https://bootdey.com/img/Content/avatar/avatar7.png'
+																					}
+																					alt="avatar"
+																					className="ml-3 mr-2"
+																					style={{
+																						width: '35px',
+																						height: '35px',
+																					}}
+																				/>
+																			</div>
+																			<input
+																				className="reply-content"
+																				onChange={(e) =>
+																					setUpdatedContent(e.target.value)
+																				}
+																				defaultValue={reply.content}
+																				required
+																			></input>
+																		</div>
+																		<div className="button-section">
+																			<button
+																				type="submit"
+																				className="reply-submit"
+																			>
+																				Edit
+																			</button>
+																			<button
+																				type="button"
+																				className="cancel-submit mr-2"
+																				onClick={() =>
+																					toggleEditReplyVisibility(reply._id)
+																				}
+																			>
+																				Cancel
+																			</button>
+																		</div>
+																	</form>
+																)}
 															</div>
 														);
 													})}

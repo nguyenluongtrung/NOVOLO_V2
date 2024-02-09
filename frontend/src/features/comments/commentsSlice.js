@@ -150,6 +150,31 @@ export const updateComment = createAsyncThunk(
 	}
 );
 
+// Update reply
+export const updateReply = createAsyncThunk(
+	'comments/updateReply',
+	async ({ replyId, commentId, replyData }, thunkAPI) => {
+		try {
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
+			return await commentsService.updateReply(
+				replyId,
+				commentId,
+				replyData,
+				token
+			);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
 // Delete reply
 export const deleteReply = createAsyncThunk(
 	'comments/deleteReply',
@@ -350,6 +375,24 @@ export const commentSlice = createSlice({
 				}
 			})
 			.addCase(deleteReply.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(updateReply.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(updateReply.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				const commentIndex = state.comments.findIndex(
+					(comment) => comment._id === action.payload._id
+				);
+				if (commentIndex !== -1) {
+					state.comments[commentIndex] = action.payload;
+				}
+			})
+			.addCase(updateReply.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

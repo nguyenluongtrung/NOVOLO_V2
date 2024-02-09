@@ -92,6 +92,22 @@ const updateComment = async (commentId, commentData, token) => {
 	return response.data.data.updatedComment;
 };
 
+// Update reply
+const updateReply = async (replyId, commentId, replyData, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.patch(
+		API_URL + 'comment/' + commentId + '/reply/' + replyId,
+		replyData,
+		config
+	);
+	return response.data.data.comment;
+};
+
 // Delete reply
 const deleteReply = async (commentId, replyId, token) => {
 	const config = {
@@ -150,6 +166,7 @@ const commentsService = {
 	deleteReply,
 	increaseReplyLikeCount,
 	increaseReplyDislikeCount,
+	updateReply,
 };
 
 export default commentsService;
