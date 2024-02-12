@@ -467,19 +467,24 @@ export const SingleProduct = () => {
 										className="comment-box"
 										onSubmit={(e) => sendComment(e, comment)}
 									>
-										<div className="user">
-											<div className="image image-user">
-												<img
-													src={
-														'https://bootdey.com/img/Content/avatar/avatar7.png'
-													}
-													alt="avatar"
-													className="ml-3"
-													style={{ width: '35px', height: '35px' }}
-												/>
+										{user && (
+											<div className="user">
+												<div className="image image-user">
+													<img
+														src={
+															user?.gender
+																? 'https://bootdey.com/img/Content/avatar/avatar7.png'
+																: 'https://bootdey.com/img/Content/avatar/avatar7.png'
+														}
+														alt="avatar"
+														className="ml-3"
+														style={{ width: '35px', height: '35px' }}
+													/>
+												</div>
+												<div className="name user-name">{user?.name}</div>
 											</div>
-											<div className="name user-name">{user.name}</div>
-										</div>
+										)}
+
 										<textarea
 											name="comment"
 											value={comment}
@@ -499,7 +504,9 @@ export const SingleProduct = () => {
 														<div className="user-image">
 															<img
 																src={
-																	'https://bootdey.com/img/Content/avatar/avatar7.png'
+																	comment?.userId?.gender
+																		? 'https://bootdey.com/img/Content/avatar/avatar7.png'
+																		: 'https://bootdey.com/img/Content/avatar/avatar7.png'
 																}
 																alt="avatar"
 																className="ml-3"
@@ -511,45 +518,72 @@ export const SingleProduct = () => {
 																{comment?.userId?.name}
 															</div>
 															<div className="day">
-																{formatDate(comment.date)}
+																{formatDate(comment?.date)}
 															</div>
 														</div>
 													</div>
 													<div className="reply">
 														<div className="like icon">
 															<span className="likeCount">
-																{comment.likeCount}
+																{comment?.likeCount}
 															</span>
-															<FaThumbsUp
-																onClick={() => handleLikeAction(comment._id)}
-															/>
+															{comment?.likedBy.findIndex(
+																(likedUser) =>
+																	String(likedUser.userId) == String(user._id)
+															) != -1 ? (
+																<FaThumbsUp
+																	style={{ color: '#2b74e0' }}
+																	onClick={() => handleLikeAction(comment?._id)}
+																/>
+															) : (
+																<FaThumbsUp
+																	onClick={() => handleLikeAction(comment?._id)}
+																/>
+															)}
 														</div>
 														<div className="dislike icon">
 															<span className="dislikeCount">
-																{comment.dislikeCount}
+																{comment?.dislikeCount}
 															</span>
-															<FaThumbsDown
-																onClick={() => handleDislikeAction(comment._id)}
-															/>
+															{comment?.dislikedBy.findIndex(
+																(dislikedUser) =>
+																	String(dislikedUser.userId) ==
+																	String(user._id)
+															) != -1 ? (
+																<FaThumbsDown
+																	style={{ color: '#2b74e0' }}
+																	onClick={() =>
+																		handleDislikeAction(comment?._id)
+																	}
+																/>
+															) : (
+																<FaThumbsDown
+																	onClick={() =>
+																		handleDislikeAction(comment?._id)
+																	}
+																/>
+															)}
 														</div>
 														<div
 															className="re-comment"
-															onClick={() => toggleReplyVisibility(comment._id)}
+															onClick={() =>
+																toggleReplyVisibility(comment?._id)
+															}
 														>
 															Reply
 														</div>
 														<div className="other-options">
 															<FaEllipsisV
 																onClick={() =>
-																	toggleOpenOptionsVisibility(comment._id)
+																	toggleOpenOptionsVisibility(comment?._id)
 																}
 															/>
-															{showOpenOptionsMap[comment._id] && (
+															{showOpenOptionsMap[comment?._id] && (
 																<div className="options">
 																	<div
 																		className="edit-option"
 																		onClick={() =>
-																			toggleEditCommentVisibility(comment._id)
+																			toggleEditCommentVisibility(comment?._id)
 																		}
 																	>
 																		<FaPenSquare /> Edit
@@ -557,7 +591,7 @@ export const SingleProduct = () => {
 																	<div
 																		className="delete-option"
 																		onClick={() =>
-																			handleDeleteComment(comment._id)
+																			handleDeleteComment(comment?._id)
 																		}
 																	>
 																		<FaTrash /> Delete
@@ -568,18 +602,22 @@ export const SingleProduct = () => {
 													</div>
 												</div>
 
-												<div className="comment">{comment.content}</div>
-												{showReplyMap[comment._id] &&
-													!showEditCommentMap[comment._id] && (
+												<div className="comment">{comment?.content}</div>
+												{showReplyMap[comment?._id] &&
+													!showEditCommentMap[comment?._id] && (
 														<form
 															className="reply-box"
-															onSubmit={(e) => sendReply(e, reply, comment._id)}
+															onSubmit={(e) =>
+																sendReply(e, reply, comment?._id)
+															}
 														>
 															<div className="reply-section">
 																<div className="user-image">
 																	<img
 																		src={
-																			'https://bootdey.com/img/Content/avatar/avatar7.png'
+																			comment?.userId?.gender
+																				? 'https://bootdey.com/img/Content/avatar/avatar7.png'
+																				: 'https://bootdey.com/img/Content/avatar/avatar7.png'
 																		}
 																		alt="avatar"
 																		className="ml-3 mr-2"
@@ -602,7 +640,7 @@ export const SingleProduct = () => {
 																	type="button"
 																	className="cancel-submit mr-2"
 																	onClick={() =>
-																		toggleReplyVisibility(comment._id)
+																		toggleReplyVisibility(comment?._id)
 																	}
 																>
 																	Cancel
@@ -610,14 +648,14 @@ export const SingleProduct = () => {
 															</div>
 														</form>
 													)}
-												{showEditCommentMap[comment._id] &&
-													!showReplyMap[comment._id] && (
+												{showEditCommentMap[comment?._id] &&
+													!showReplyMap[comment?._id] && (
 														<form
 															className="reply-box"
 															onSubmit={(e) =>
 																handleUpdateComment(
 																	e,
-																	comment._id,
+																	comment?._id,
 																	updatedContent
 																)
 															}
@@ -626,7 +664,9 @@ export const SingleProduct = () => {
 																<div className="user-image">
 																	<img
 																		src={
-																			'https://bootdey.com/img/Content/avatar/avatar7.png'
+																			comment?.userId?.gender
+																				? 'https://bootdey.com/img/Content/avatar/avatar7.png'
+																				: 'https://bootdey.com/img/Content/avatar/avatar7.png'
 																		}
 																		alt="avatar"
 																		className="ml-3 mr-2"
@@ -638,7 +678,7 @@ export const SingleProduct = () => {
 																	onChange={(e) =>
 																		setUpdatedContent(e.target.value)
 																	}
-																	defaultValue={comment.content}
+																	defaultValue={comment?.content}
 																	required
 																></input>
 															</div>
@@ -650,7 +690,7 @@ export const SingleProduct = () => {
 																	type="button"
 																	className="cancel-submit mr-2"
 																	onClick={() =>
-																		toggleEditCommentVisibility(comment._id)
+																		toggleEditCommentVisibility(comment?._id)
 																	}
 																>
 																	Cancel
@@ -658,23 +698,25 @@ export const SingleProduct = () => {
 															</div>
 														</form>
 													)}
-												{comment.replies.length > 0 && (
+												{comment?.replies?.length > 0 && (
 													<div
 														className="show-replies"
-														onClick={() => toggleRepliesVisibility(comment._id)}
+														onClick={() =>
+															toggleRepliesVisibility(comment?._id)
+														}
 													>
-														{!showRepliesMap[comment._id] ? (
+														{!showRepliesMap[comment?._id] ? (
 															<FaCaretUp />
 														) : (
 															<FaCaretDown />
 														)}{' '}
-														{comment.replies.length}{' '}
-														{comment.replies.length > 1 ? 'replies' : 'reply'}
+														{comment?.replies?.length}{' '}
+														{comment?.replies?.length > 1 ? 'replies' : 'reply'}
 													</div>
 												)}
 
-												{showRepliesMap[comment._id] &&
-													comment.replies.map((reply) => {
+												{showRepliesMap[comment?._id] &&
+													comment?.replies.map((reply) => {
 														return (
 															<div className="replies">
 																<div className="flex">
@@ -682,7 +724,9 @@ export const SingleProduct = () => {
 																		<div className="user-image">
 																			<img
 																				src={
-																					'https://bootdey.com/img/Content/avatar/avatar7.png'
+																					reply?.userId?.gender
+																						? 'https://bootdey.com/img/Content/avatar/avatar7.png'
+																						: 'https://bootdey.com/img/Content/avatar/avatar7.png'
 																				}
 																				alt="avatar"
 																				className="ml-3"
@@ -694,36 +738,36 @@ export const SingleProduct = () => {
 																		</div>
 																		<div className="user-meta">
 																			<div className="name">
-																				{reply.userId.name}
+																				{reply?.userId?.name}
 																			</div>
 																			<div className="day">
-																				{formatDate(reply.date)}
+																				{formatDate(reply?.date)}
 																			</div>
 																		</div>
 																	</div>
 																	<div className="reply">
 																		<div className="like icon">
 																			<span className="likeCount">
-																				{reply.likeCount}
+																				{reply?.likeCount}
 																			</span>
 																			<FaThumbsUp
 																				onClick={() =>
 																					handleReplyLikeAction(
-																						comment._id,
-																						reply._id
+																						comment?._id,
+																						reply?._id
 																					)
 																				}
 																			/>
 																		</div>
 																		<div className="dislike icon">
 																			<span className="dislikeCount">
-																				{reply.dislikeCount}
+																				{reply?.dislikeCount}
 																			</span>
 																			<FaThumbsDown
 																				onClick={() =>
 																					handleReplyDislikeAction(
-																						comment._id,
-																						reply._id
+																						comment?._id,
+																						reply?._id
 																					)
 																				}
 																			/>
@@ -733,20 +777,20 @@ export const SingleProduct = () => {
 																			<FaEllipsisV
 																				onClick={() =>
 																					toggleReplyOpenOptionsVisibility(
-																						reply._id
+																						reply?._id
 																					)
 																				}
 																			/>
-																			{showReplyOpenOptionsMap[reply._id] && (
+																			{showReplyOpenOptionsMap[reply?._id] && (
 																				<div className="options">
 																					<div
 																						className="edit-option"
 																						onClick={() => {
 																							toggleEditReplyVisibility(
-																								reply._id
+																								reply?._id
 																							);
 																							toggleReplyOpenOptionsVisibility(
-																								reply._id
+																								reply?._id
 																							);
 																						}}
 																					>
@@ -756,8 +800,8 @@ export const SingleProduct = () => {
 																						className="delete-option"
 																						onClick={() =>
 																							handleDeleteReply(
-																								comment._id,
-																								reply._id
+																								comment?._id,
+																								reply?._id
 																							)
 																						}
 																					>
@@ -768,15 +812,15 @@ export const SingleProduct = () => {
 																		</div>
 																	</div>
 																</div>
-																<div className="comment">{reply.content}</div>
-																{showEditReplyMap[reply._id] && (
+																<div className="comment">{reply?.content}</div>
+																{showEditReplyMap[reply?._id] && (
 																	<form
 																		className="reply-box"
 																		onSubmit={(e) =>
 																			handleUpdateReply(
 																				e,
-																				reply._id,
-																				comment._id,
+																				reply?._id,
+																				comment?._id,
 																				updatedContent
 																			)
 																		}
@@ -785,7 +829,9 @@ export const SingleProduct = () => {
 																			<div className="user-image">
 																				<img
 																					src={
-																						'https://bootdey.com/img/Content/avatar/avatar7.png'
+																						reply?.userId?.gender
+																							? 'https://bootdey.com/img/Content/avatar/avatar7.png'
+																							: 'https://bootdey.com/img/Content/avatar/avatar7.png'
 																					}
 																					alt="avatar"
 																					className="ml-3 mr-2"
@@ -800,7 +846,7 @@ export const SingleProduct = () => {
 																				onChange={(e) =>
 																					setUpdatedContent(e.target.value)
 																				}
-																				defaultValue={reply.content}
+																				defaultValue={reply?.content}
 																				required
 																			></input>
 																		</div>
@@ -815,7 +861,7 @@ export const SingleProduct = () => {
 																				type="button"
 																				className="cancel-submit mr-2"
 																				onClick={() =>
-																					toggleEditReplyVisibility(reply._id)
+																					toggleEditReplyVisibility(reply?._id)
 																				}
 																			>
 																				Cancel

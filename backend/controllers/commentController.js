@@ -147,16 +147,46 @@ const increaseLikeCount = asyncHandler(async (req, res) => {
 		throw new Error('Comment not found!');
 	}
 
-	comment.likeCount = comment.likeCount + 1;
+	const hasUserLiked = comment.likedBy.some((like) =>
+		like.userId.equals(req.user._id)
+	);
 
-	await comment.save();
+	const hasUserDisliked = comment.dislikedBy.some((dislike) =>
+		dislike.userId.equals(req.user._id)
+	);
 
-	res.status(200).json({
-		status: 'success',
-		data: {
-			comment,
-		},
-	});
+	if (hasUserDisliked) {
+		res.status(404);
+		throw new Error('User has already disliked this comment!');
+	}
+
+	if (!hasUserLiked) {
+		comment.likeCount = comment.likeCount + 1;
+		comment.likedBy.push({ userId: req.user._id });
+
+		await comment.save();
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				comment,
+			},
+		});
+	} else {
+		comment.likeCount = comment.likeCount - 1;
+		comment.likedBy = comment.likedBy.filter(
+			(likedUser) => String(likedUser.userId) != String(req.user._id)
+		);
+
+		await comment.save();
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				comment,
+			},
+		});
+	}
 });
 
 const increaseDislikeCount = asyncHandler(async (req, res) => {
@@ -167,16 +197,46 @@ const increaseDislikeCount = asyncHandler(async (req, res) => {
 		throw new Error('Comment not found!');
 	}
 
-	comment.dislikeCount = comment.dislikeCount + 1;
+	const hasUserDisliked = comment.dislikedBy.some((dislike) =>
+		dislike.userId.equals(req.user._id)
+	);
 
-	await comment.save();
+	const hasUserLiked = comment.likedBy.some((like) =>
+		like.userId.equals(req.user._id)
+	);
 
-	res.status(200).json({
-		status: 'success',
-		data: {
-			comment,
-		},
-	});
+	if (hasUserLiked) {
+		res.status(404);
+		throw new Error('User has already liked this comment!');
+	}
+
+	if (!hasUserDisliked) {
+		comment.dislikeCount = comment.dislikeCount + 1;
+		comment.dislikedBy.push({ userId: req.user._id });
+
+		await comment.save();
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				comment,
+			},
+		});
+	} else {
+		comment.dislikeCount = comment.dislikeCount - 1;
+		comment.dislikedBy = comment.dislikedBy.filter(
+			(dislikedUser) => String(dislikedUser.userId) != String(req.user._id)
+		);
+
+		await comment.save();
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				comment,
+			},
+		});
+	}
 });
 
 const increaseReplyLikeCount = asyncHandler(async (req, res) => {

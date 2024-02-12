@@ -19,9 +19,31 @@ const commentSchema = mongoose.Schema({
 		type: Number,
 		default: 0,
 	},
+	likedBy: {
+		type: [
+			{
+				userId: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: 'User',
+				},
+			},
+		],
+		default: [],
+	},
 	dislikeCount: {
 		type: Number,
 		default: 0,
+	},
+	dislikedBy: {
+		type: [
+			{
+				userId: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: 'User',
+				},
+			},
+		],
+		default: [],
 	},
 	replies: {
 		type: [
@@ -42,6 +64,28 @@ const commentSchema = mongoose.Schema({
 				dislikeCount: {
 					type: Number,
 					default: 0,
+				},
+				likedBy: {
+					type: [
+						{
+							userId: {
+								type: mongoose.Schema.Types.ObjectId,
+								ref: 'User',
+							},
+						},
+					],
+					default: [],
+				},
+				dislikedBy: {
+					type: [
+						{
+							userId: {
+								type: mongoose.Schema.Types.ObjectId,
+								ref: 'User',
+							},
+						},
+					],
+					default: [],
 				},
 				date: {
 					type: Date,
