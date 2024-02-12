@@ -529,7 +529,7 @@ export const SingleProduct = () => {
 															</span>
 															{comment?.likedBy.findIndex(
 																(likedUser) =>
-																	String(likedUser.userId) == String(user._id)
+																	String(likedUser?.userId) == String(user?._id)
 															) != -1 ? (
 																<FaThumbsUp
 																	style={{ color: '#2b74e0' }}
@@ -547,8 +547,8 @@ export const SingleProduct = () => {
 															</span>
 															{comment?.dislikedBy.findIndex(
 																(dislikedUser) =>
-																	String(dislikedUser.userId) ==
-																	String(user._id)
+																	String(dislikedUser?.userId) ==
+																	String(user?._id)
 															) != -1 ? (
 																<FaThumbsDown
 																	style={{ color: '#2b74e0' }}
