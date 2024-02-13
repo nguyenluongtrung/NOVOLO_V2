@@ -15,6 +15,7 @@ const categorySchema = mongoose.Schema({
 			'French Fries',
 			'Dessert',
 			'Side Dish',
+			'Combo',
 		],
 	},
 });

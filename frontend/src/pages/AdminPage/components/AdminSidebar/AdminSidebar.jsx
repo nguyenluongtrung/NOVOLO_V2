@@ -40,6 +40,12 @@ export const AdminSidebar = () => {
 						<FaCreditCard />Sales
 					</Link>
 					<Link
+                        to={'/admin-combo'}
+						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+					>
+						<FaCreditCard />Combo
+					</Link>
+					<Link
                         to={'/home'}
 						className="list-group-item list-group-item-action bg-transparent text-danger fw-bold"
 					>
