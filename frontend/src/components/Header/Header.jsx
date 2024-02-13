@@ -1,7 +1,11 @@
 import './Header.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { getUserInformation, logout, reset } from '../../features/auth/authSlice';
+import {
+	getUserInformation,
+	logout,
+	reset,
+} from '../../features/auth/authSlice';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import './../../assets/css/main.css';
 import './../../assets/css/responsive.css';
@@ -24,6 +28,8 @@ export const Header = () => {
 	const isWishListActive = location.pathname === '/wishList';
 	const isAboutMeActive = location.pathname === '/about-me';
 	const isAdminPageActive = location.pathname === '/admin-product';
+	const isLoginPageActive = location.pathname === '/login';
+	const isRegisterPageActive = location.pathname === '/register';
 	const onLogout = () => {
 		dispatch(logout());
 		dispatch(reset());
@@ -32,7 +38,7 @@ export const Header = () => {
 
 	useEffect(() => {
 		dispatch(getUserInformation());
-	}, [dispatch])
+	}, [dispatch]);
 
 	return (
 		<div className="top-header-area" id="sticker">
@@ -77,7 +83,9 @@ export const Header = () => {
 										<Link to={'/shop'}>Menu</Link>
 									</li>
 									{user?.role === 'admin' && (
-										<li className={isAdminPageActive ? 'current-list-item' : ''}>
+										<li
+											className={isAdminPageActive ? 'current-list-item' : ''}
+										>
 											<Link to={'/admin-product'}>Admin Page</Link>
 										</li>
 									)}
@@ -140,10 +148,24 @@ export const Header = () => {
 										) : (
 											<>
 												<li>
-													<Link to={'/login'}>Login</Link>
+													<Link
+														style={{
+															color: isLoginPageActive ? '#F28123' : '',
+														}}
+														to={'/login'}
+													>
+														Login
+													</Link>
 												</li>
 												<li>
-													<Link to={'/register'}>Sign up</Link>
+													<Link
+														style={{
+															color: isRegisterPageActive ? '#F28123' : '',
+														}}
+														to={'/register'}
+													>
+														Sign up
+													</Link>
 												</li>
 											</>
 										)}

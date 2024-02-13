@@ -1,6 +1,7 @@
 import './SingleProduct.css';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -53,6 +54,8 @@ export const SingleProduct = () => {
 	const { id } = useParams();
 
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const {
 		products: product,
 		isError: productError,
@@ -139,13 +142,22 @@ export const SingleProduct = () => {
 		}));
 	};
 
+	const handleNavigateLoginPage = () => {
+		if (!user) {
+			if (window.confirm('You need to login!')) {
+				return navigate('/login');
+			}
+		}
+	};
+
 	const sendComment = async (e, comment) => {
 		e.preventDefault();
+		handleNavigateLoginPage();
 
 		const commentData = {
 			content: comment,
 			productId: id,
-			userId: user._id,
+			userId: user?._id,
 		};
 
 		await dispatch(createComment(commentData));
@@ -161,19 +173,20 @@ export const SingleProduct = () => {
 			await dispatch(getProductById(id));
 		}
 
-		if (commentSuccess) {
+		if (user && commentSuccess) {
 			toast.success('Write comment successfully!');
-		} else if (commentError) {
+		} else if (user && commentError) {
 			toast.error(commentMessage);
 		}
 	};
 
 	const sendReply = async (e, reply, commentId) => {
 		e.preventDefault();
+		handleNavigateLoginPage();
 
 		const replyData = {
 			content: reply,
-			userId: user._id,
+			userId: user?._id,
 		};
 
 		await dispatch(replyComment({ replyData, commentId }));
@@ -183,9 +196,9 @@ export const SingleProduct = () => {
 
 		await dispatch(getAllProductComments(id));
 
-		if (commentSuccess) {
+		if (user && commentSuccess) {
 			toast.success('Reply comment successfully!');
-		} else if (commentError) {
+		} else if (user && commentError) {
 			toast.error(commentMessage);
 		}
 	};
@@ -252,21 +265,25 @@ export const SingleProduct = () => {
 	};
 
 	const handleLikeAction = async (commentId) => {
+		handleNavigateLoginPage();
 		await dispatch(increaseLikeCount(commentId));
 		await dispatch(getAllProductComments(id));
 	};
 
 	const handleDislikeAction = async (commentId) => {
+		handleNavigateLoginPage();
 		await dispatch(increaseDislikeCount(commentId));
 		await dispatch(getAllProductComments(id));
 	};
 
 	const handleReplyLikeAction = async (commentId, replyId) => {
+		handleNavigateLoginPage();
 		await dispatch(increaseReplyLikeCount({ commentId, replyId }));
 		await dispatch(getAllProductComments(id));
 	};
 
 	const handleReplyDislikeAction = async (commentId, replyId) => {
+		handleNavigateLoginPage();
 		await dispatch(increaseReplyDislikeCount({ commentId, replyId }));
 		await dispatch(getAllProductComments(id));
 	};

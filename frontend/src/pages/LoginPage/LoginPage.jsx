@@ -17,17 +17,17 @@ export const LoginPage = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
+	
     const {user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth)
 
     useEffect(() => {
-        if(isError){
+        if(isError && String(message) == 'Email or password is invalid!'){
             toast.error(message)
         }
 
         if(isSuccess || user){
-            navigate('/home');
-        }
+			navigate('/home');
+        } 
 
         dispatch(reset());
     }, [user, isError, isSuccess, message, navigate, dispatch])
