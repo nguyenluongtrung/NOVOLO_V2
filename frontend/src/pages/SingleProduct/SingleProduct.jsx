@@ -589,33 +589,37 @@ export const SingleProduct = () => {
 														>
 															Reply
 														</div>
-														<div className="other-options">
-															<FaEllipsisV
-																onClick={() =>
-																	toggleOpenOptionsVisibility(comment?._id)
-																}
-															/>
-															{showOpenOptionsMap[comment?._id] && (
-																<div className="options">
-																	<div
-																		className="edit-option"
-																		onClick={() =>
-																			toggleEditCommentVisibility(comment?._id)
-																		}
-																	>
-																		<FaPenSquare /> Edit
+														{comment?.userId?._id == user?._id && (
+															<div className="other-options">
+																<FaEllipsisV
+																	onClick={() =>
+																		toggleOpenOptionsVisibility(comment?._id)
+																	}
+																/>
+																{showOpenOptionsMap[comment?._id] && (
+																	<div className="options">
+																		<div
+																			className="edit-option"
+																			onClick={() =>
+																				toggleEditCommentVisibility(
+																					comment?._id
+																				)
+																			}
+																		>
+																			<FaPenSquare /> Edit
+																		</div>
+																		<div
+																			className="delete-option"
+																			onClick={() =>
+																				handleDeleteComment(comment?._id)
+																			}
+																		>
+																			<FaTrash /> Delete
+																		</div>
 																	</div>
-																	<div
-																		className="delete-option"
-																		onClick={() =>
-																			handleDeleteComment(comment?._id)
-																		}
-																	>
-																		<FaTrash /> Delete
-																	</div>
-																</div>
-															)}
-														</div>
+																)}
+															</div>
+														)}
 													</div>
 												</div>
 
@@ -821,44 +825,47 @@ export const SingleProduct = () => {
 																				/>
 																			)}
 																		</div>
-																		<div className="re-comment">Reply</div>
-																		<div className="other-options">
-																			<FaEllipsisV
-																				onClick={() =>
-																					toggleReplyOpenOptionsVisibility(
-																						reply?._id
-																					)
-																				}
-																			/>
-																			{showReplyOpenOptionsMap[reply?._id] && (
-																				<div className="options">
-																					<div
-																						className="edit-option"
-																						onClick={() => {
-																							toggleEditReplyVisibility(
-																								reply?._id
-																							);
-																							toggleReplyOpenOptionsVisibility(
-																								reply?._id
-																							);
-																						}}
-																					>
-																						<FaPenSquare /> Edit
+																		{reply?.userId?._id == user?._id && (
+																			<div className="other-options">
+																				<FaEllipsisV
+																					onClick={() =>
+																						toggleReplyOpenOptionsVisibility(
+																							reply?._id
+																						)
+																					}
+																				/>
+																				{showReplyOpenOptionsMap[
+																					reply?._id
+																				] && (
+																					<div className="options">
+																						<div
+																							className="edit-option"
+																							onClick={() => {
+																								toggleEditReplyVisibility(
+																									reply?._id
+																								);
+																								toggleReplyOpenOptionsVisibility(
+																									reply?._id
+																								);
+																							}}
+																						>
+																							<FaPenSquare /> Edit
+																						</div>
+																						<div
+																							className="delete-option"
+																							onClick={() =>
+																								handleDeleteReply(
+																									comment?._id,
+																									reply?._id
+																								)
+																							}
+																						>
+																							<FaTrash /> Delete
+																						</div>
 																					</div>
-																					<div
-																						className="delete-option"
-																						onClick={() =>
-																							handleDeleteReply(
-																								comment?._id,
-																								reply?._id
-																							)
-																						}
-																					>
-																						<FaTrash /> Delete
-																					</div>
-																				</div>
-																			)}
-																		</div>
+																				)}
+																			</div>
+																		)}
 																	</div>
 																</div>
 																<div className="comment">{reply?.content}</div>
