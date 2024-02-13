@@ -767,27 +767,59 @@ export const SingleProduct = () => {
 																			<span className="likeCount">
 																				{reply?.likeCount}
 																			</span>
-																			<FaThumbsUp
-																				onClick={() =>
-																					handleReplyLikeAction(
-																						comment?._id,
-																						reply?._id
-																					)
-																				}
-																			/>
+																			{reply?.likedBy.findIndex(
+																				(likedUser) =>
+																					String(likedUser?.userId) ==
+																					String(user?._id)
+																			) != -1 ? (
+																				<FaThumbsUp
+																					style={{ color: '#2b74e0' }}
+																					onClick={() =>
+																						handleReplyLikeAction(
+																							comment?._id,
+																							reply?._id
+																						)
+																					}
+																				/>
+																			) : (
+																				<FaThumbsUp
+																					onClick={() =>
+																						handleReplyLikeAction(
+																							comment?._id,
+																							reply?._id
+																						)
+																					}
+																				/>
+																			)}
 																		</div>
 																		<div className="dislike icon">
 																			<span className="dislikeCount">
 																				{reply?.dislikeCount}
 																			</span>
-																			<FaThumbsDown
-																				onClick={() =>
-																					handleReplyDislikeAction(
-																						comment?._id,
-																						reply?._id
-																					)
-																				}
-																			/>
+																			{reply?.dislikedBy.findIndex(
+																				(dislikedUser) =>
+																					String(dislikedUser?.userId) ==
+																					String(user?._id)
+																			) != -1 ? (
+																				<FaThumbsDown
+																					style={{ color: '#2b74e0' }}
+																					onClick={() =>
+																						handleReplyDislikeAction(
+																							comment?._id,
+																							reply?._id
+																						)
+																					}
+																				/>
+																			) : (
+																				<FaThumbsDown
+																					onClick={() =>
+																						handleReplyDislikeAction(
+																							comment?._id,
+																							reply?._id
+																						)
+																					}
+																				/>
+																			)}
 																		</div>
 																		<div className="re-comment">Reply</div>
 																		<div className="other-options">
