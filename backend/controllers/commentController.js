@@ -155,14 +155,16 @@ const increaseLikeCount = asyncHandler(async (req, res) => {
 		dislike.userId.equals(req.user._id)
 	);
 
-	if (hasUserDisliked) {
-		res.status(404);
-		throw new Error('User has already disliked this comment!');
-	}
-
 	if (!hasUserLiked) {
 		comment.likeCount = comment.likeCount + 1;
 		comment.likedBy.push({ userId: req.user._id });
+
+		if (hasUserDisliked) {
+			comment.dislikeCount = comment.dislikeCount - 1;
+			comment.dislikedBy = comment.dislikedBy.filter(
+				(dislikedUser) => String(dislikedUser.userId) != String(req.user._id)
+			);
+		}
 
 		await comment.save();
 
@@ -205,14 +207,16 @@ const increaseDislikeCount = asyncHandler(async (req, res) => {
 		like.userId.equals(req.user._id)
 	);
 
-	if (hasUserLiked) {
-		res.status(404);
-		throw new Error('User has already liked this comment!');
-	}
-
 	if (!hasUserDisliked) {
 		comment.dislikeCount = comment.dislikeCount + 1;
 		comment.dislikedBy.push({ userId: req.user._id });
+
+		if (hasUserLiked) {
+			comment.likeCount = comment.likeCount - 1;
+			comment.likedBy = comment.likedBy.filter(
+				(likedUser) => String(likedUser.userId) != String(req.user._id)
+			);
+		}
 
 		await comment.save();
 
@@ -259,14 +263,16 @@ const increaseReplyLikeCount = asyncHandler(async (req, res) => {
 		dislike.userId.equals(req.user._id)
 	);
 
-	if (hasUserDisliked) {
-		res.status(404);
-		throw new Error('User has already disliked this reply!');
-	}
-
 	if (!hasUserLiked) {
 		reply.likedBy.push({ userId: req.user._id });
 		reply.likeCount = reply.likeCount + 1;
+
+		if (hasUserDisliked) {
+			reply.dislikedBy = reply.dislikedBy.filter(
+				(likedUser) => String(likedUser.userId) != String(req.user._id)
+			);
+			reply.dislikeCount = reply.dislikeCount - 1;
+		}
 	} else {
 		reply.likedBy = reply.likedBy.filter(
 			(likedUser) => String(likedUser.userId) != String(req.user._id)
@@ -304,14 +310,16 @@ const increaseReplyDislikeCount = asyncHandler(async (req, res) => {
 		dislike.userId.equals(req.user._id)
 	);
 
-	if (hasUserLiked) {
-		res.status(404);
-		throw new Error('User has already liked this reply!');
-	}
-
 	if (!hasUserDisliked) {
 		reply.dislikedBy.push({ userId: req.user._id });
 		reply.dislikeCount = reply.dislikeCount + 1;
+
+		if (hasUserLiked) {
+			reply.likedBy = reply.likedBy.filter(
+				(likedUser) => String(likedUser.userId) != String(req.user._id)
+			);
+			reply.likeCount = reply.likeCount - 1;
+		}
 	} else {
 		reply.dislikedBy = reply.dislikedBy.filter(
 			(likedUser) => String(likedUser.userId) != String(req.user._id)
