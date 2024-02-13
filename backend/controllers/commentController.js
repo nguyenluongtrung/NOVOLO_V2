@@ -292,11 +292,32 @@ const increaseReplyDislikeCount = asyncHandler(async (req, res) => {
 		throw new Error('Comment not found!');
 	}
 
-	comment.replies.map((reply) =>
-		reply._id.toString() === req.params.replyId
-			? (reply.dislikeCount = reply.dislikeCount + 1)
-			: reply
+	const reply = comment.replies.find(
+		(reply) => reply._id.toString() === req.params.replyId
 	);
+
+	const hasUserLiked = reply.likedBy?.some((like) =>
+		like.userId.equals(req.user._id)
+	);
+
+	const hasUserDisliked = reply.dislikedBy?.some((dislike) =>
+		dislike.userId.equals(req.user._id)
+	);
+
+	if (hasUserLiked) {
+		res.status(404);
+		throw new Error('User has already liked this reply!');
+	}
+
+	if (!hasUserDisliked) {
+		reply.dislikedBy.push({ userId: req.user._id });
+		reply.dislikeCount = reply.dislikeCount + 1;
+	} else {
+		reply.dislikedBy = reply.dislikedBy.filter(
+			(likedUser) => String(likedUser.userId) != String(req.user._id)
+		);
+		reply.dislikeCount = reply.dislikeCount - 1;
+	}
 
 	await comment.save();
 
