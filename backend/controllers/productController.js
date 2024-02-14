@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler');
 const Product = require('./../models/productModel');
 const Price = require('./../models/priceModel');
 const User = require('./../models/userModel');
+const Category = require('./../models/categoryModel');
 const ApiFeatures = require('../utils/apiFeatures');
 
 const getAllProducts = asyncHandler(async (req, res) => {
@@ -43,6 +44,20 @@ const getProductById = asyncHandler(async (req, res) => {
 		status: 'success',
 		data: {
 			product,
+		},
+	});
+});
+
+const getProductsByCategory = asyncHandler(async (req, res) => {
+	const category = await Category.findOne({
+		name: req.params.categoryName,
+	});
+	const products = await Product.find({ categoryID: category._id });
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			products,
 		},
 	});
 });
@@ -253,4 +268,5 @@ module.exports = {
 	getProductsFromWishList,
 	getProductsFromCart,
 	updateRatings,
+	getProductsByCategory,
 };

@@ -10,7 +10,6 @@ import { Spinner } from '../../../components';
 import { FaTrash, FaPenSquare } from 'react-icons/fa';
 import {
 	getAllCategories,
-	getCategoryById,
 } from '../../../features/categories/categoriesSlice';
 import { AddProduct } from './components/AddProduct/AddProduct';
 import { UpdateProduct } from './components/UpdateProduct/UpdateProduct';

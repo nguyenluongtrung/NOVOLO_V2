@@ -4,10 +4,11 @@ const productSchema = mongoose.Schema({
 	name: {
 		type: String,
 		required: [true, 'Product name is mandatory'],
+		unique: true,
 	},
 	image: {
 		type: String,
-		required: [true, 'Product image is mandatory'],
+		// required: [true, 'Product image is mandatory'],
 	},
 	categoryID: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -21,6 +22,7 @@ const productSchema = mongoose.Schema({
 	isSurprise: {
 		type: Boolean,
 		required: [true, 'Is surprise is mandatory'],
+		default: false,
 	},
 	rating: {
 		type: Number,

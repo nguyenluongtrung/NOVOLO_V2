@@ -6,6 +6,9 @@ console.log(user);
 
 const initialState = {
 	products: [],
+	mainCourses: [],
+	sideDishes: [],
+	beverages: [],
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
@@ -36,6 +39,28 @@ export const getProductById = createAsyncThunk(
 	async (id, thunkAPI) => {
 		try {
 			return await productsService.getProductById(id);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+// Get products by category
+export const getProductsByCategory = createAsyncThunk(
+	'products/getProductsByCategory',
+	async ({ data, type }, thunkAPI) => {
+		try {
+			const categoryName = data;
+			const response = await productsService.getProductsByCategory(
+				categoryName
+			);
+			return { response: response, type };
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -203,6 +228,30 @@ export const productSlice = createSlice({
 				state.products = action.payload;
 			})
 			.addCase(getProductById.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				state.products = [];
+			})
+			.addCase(getProductsByCategory.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getProductsByCategory.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				switch (action.payload.type) {
+					case 'mainCourse':
+						state.mainCourses = action.payload.response;
+						break;
+					case 'sideDish':
+						state.sideDishes = action.payload.response;
+						break;
+					case 'beverage':
+						state.beverages = action.payload.response;
+						break;
+				}
+			})
+			.addCase(getProductsByCategory.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

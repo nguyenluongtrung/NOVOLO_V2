@@ -21,6 +21,13 @@ const getProductById = async (id) => {
 	return response.data.data.product;
 };
 
+// Get products by category
+const getProductsByCategory = async (categoryName) => {
+	const response = await axios.get(API_URL + 'category/' + categoryName);
+
+	return response.data.data.products;
+};
+
 // Create product
 const createProduct = async (productData, token) => {
 	const config = {
@@ -116,6 +123,7 @@ const productsService = {
 	getProductsFromWishList,
 	getProductsFromCart,
 	updateRatings,
+	getProductsByCategory,
 };
 
 export default productsService;

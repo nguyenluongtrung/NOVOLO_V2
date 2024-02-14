@@ -8,6 +8,7 @@ const {
 	getProductsFromWishList,
 	getProductsFromCart,
 	updateRatings,
+	getProductsByCategory,
 } = require('../controllers/productController');
 const { protect, restrict } = require('./../middleware/userMiddleware');
 const router = express.Router();
@@ -18,6 +19,7 @@ router
 	.post(protect, restrict('admin', 'staff'), createProduct);
 router.route('/wishList').get(protect, getProductsFromWishList);
 router.route('/cart').get(protect, getProductsFromCart);
+router.route('/category/:categoryName').get(getProductsByCategory);
 router.route('/rate/:id').patch(protect, updateRatings);
 router
 	.route('/:id')

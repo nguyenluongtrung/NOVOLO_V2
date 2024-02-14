@@ -1,9 +1,40 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	createProduct,
+	getAllProducts,
+	getProductsByCategory,
+	reset,
+} from '../../../../../features/products/productsSlice';
+import { toast } from 'react-toastify';
 
-export const AddCombo = ({ setIsOpenAddForm }) => {
+export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 	const [image, setImage] = useState('');
-	const [discount, setDiscount] = useState();
+	const [discount, setDiscount] = useState(0);
+	const [mainCourse, setMainCourse] = useState({
+		product: {},
+		quantity: 0,
+	});
+	const [sideDish, setSideDish] = useState({
+		product: {},
+		quantity: 0,
+	});
+	const [beverage, setBeverage] = useState({
+		product: {},
+		quantity: 0,
+	});
+	const {
+		mainCourses,
+		sideDishes,
+		beverages,
+		isLoading: productLoading,
+		isSuccess: productSuccess,
+		isError: productError,
+		message: productMessage,
+	} = useSelector((state) => state.products);
+
+	const dispatch = useDispatch();
 
 	const {
 		register,
@@ -11,9 +42,47 @@ export const AddCombo = ({ setIsOpenAddForm }) => {
 		formState: { errors },
 	} = useForm();
 
-    const onSubmit = () => {
+	const handleCloseBtn = () => {
+		setIsOpenAddForm(false);
+		handleGetAllCombos();
+	};
 
-    }
+	const onSubmit = async (data) => {
+		const calories =
+			mainCourse.product.calories +
+			sideDish.product.calories +
+			beverage.product.calories;
+
+		const addData = {
+			...data,
+			categoryID: '65bf55ce65e2e3ced184149a',
+			calories,
+			isSurprise: false,
+			price: 200,
+			image,
+		};
+
+		await dispatch(createProduct(addData));
+		if (productSuccess) {
+			toast.success('Create new product successfully!');
+			dispatch(reset());
+			handleCloseBtn();
+		} else if (productError) {
+			toast.error(productMessage);
+		}
+	};
+
+	const getAllMainCourseProducts = (mainCourse) => {
+		dispatch(getProductsByCategory({ data: mainCourse, type: 'mainCourse' }));
+	};
+
+	const getAllBeverageProducts = (beverage) => {
+		dispatch(getProductsByCategory({ data: beverage, type: 'beverage' }));
+	};
+
+	const getAllSideDishProducts = (sideDish) => {
+		dispatch(getProductsByCategory({ data: sideDish, type: 'sideDish' }));
+	};
 
 	return (
 		<div className="popup active" id="popup-2">
@@ -46,39 +115,56 @@ export const AddCombo = ({ setIsOpenAddForm }) => {
 									<td>Main course</td>
 									<td>
 										<select
-											style={{ width: '200px' }}
-											onchange="redirectToURL(this)"
-											name=""
-											value=""
+											style={{ width: '200px', height: '30px' }}
+											onChange={(e) => getAllMainCourseProducts(e.target.value)}
 										>
 											<option value="">Select</option>
-											<option value="search-product-by-category?id=${1}&ok=${1}">
-												Chicken
-											</option>
-											<option value="search-product-by-category?id=${3}&ok=${1}">
-												Burger
-											</option>
-											<option value="search-product-by-category?id=${5}&ok=${1}">
-												Spaghetti
-											</option>
-											<option value="search-product-by-category?id=${7}&ok=${1}">
-												Taco
-											</option>
+											<option value="Chicken">Chicken</option>
+											<option value="Burger">Burger</option>
+											<option value="Spaghetti">Spaghetti</option>
+											<option value="Taco">Taco</option>
 										</select>
 									</td>
 									<td>
-										<select required style={{ width: '200px' }} name="main">
-											{/* <c:if test="${mainCourse != null}">
-														<c:forEach items="${mainCourse}" var="c">
-															<option className="py-1" value="${c.productID}">
-																${c.name}
-															</option>
-														</c:forEach>
-													</c:if> */}
+										<select
+											required
+											style={{ width: '200px', height: '30px' }}
+											name="product"
+											onChange={(e) =>
+												setMainCourse({
+													...mainCourse,
+													product: mainCourses.find(
+														(product) => product._id === e.target.value
+													),
+												})
+											}
+										>
+											<option disabled selected>
+												Select a product
+											</option>
+											{mainCourses.map((product) => {
+												return (
+													<option className="py-1" value={product._id}>
+														{product.name}
+													</option>
+												);
+											})}
 										</select>
 									</td>
 									<td>
-										<input type="number" name="m_quantity" min="1" required />
+										<input
+											style={{ height: '30px' }}
+											type="number"
+											name="quantity"
+											min="1"
+											required
+											onChange={(e) =>
+												setMainCourse({
+													...mainCourse,
+													quantity: e.target.value,
+												})
+											}
+										/>
 									</td>
 								</tr>
 								<tr>
@@ -86,34 +172,55 @@ export const AddCombo = ({ setIsOpenAddForm }) => {
 
 									<td>
 										<select
-											style={{ width: '200px' }}
-											onchange="redirectToURL(this)"
-											name=""
-											value=""
+											style={{ width: '200px', height: '30px' }}
+											onChange={(e) => getAllSideDishProducts(e.target.value)}
 										>
 											<option value="">Select</option>
-											<option value="search-product-by-category?id=${2}&ok=${2}">
-												Sandwich
-											</option>
-											<option value="search-product-by-category?id=${6}&ok=${2}">
-												Salad
-											</option>
-											<option value="search-product-by-category?id=${8}&ok=${2}">
-												French Fries
-											</option>
+											<option value="Sandwich">Sandwich</option>
+											<option value="Salad">Salad</option>
+											<option value="French Fries">French Fries</option>
 										</select>
 									</td>
 									<td>
-										<select required style={{ width: '200px' }} name="side">
-											{/* <c:if test="${sideDish != null}">
-														<c:forEach items="${sideDish}" var="c">
-															<option value="${c.productID}">${c.name}</option>
-														</c:forEach>
-													</c:if> */}
+										<select
+											required
+											style={{ width: '200px', height: '30px' }}
+											name="product"
+											onChange={(e) =>
+												setSideDish({
+													...sideDish,
+													product: sideDishes.find(
+														(product) => product._id === e.target.value
+													),
+												})
+											}
+										>
+											<option disabled selected>
+												Select a product
+											</option>
+											{sideDishes.map((product) => {
+												return (
+													<option className="py-1" value={product._id}>
+														{product.name}
+													</option>
+												);
+											})}
 										</select>
 									</td>
 									<td>
-										<input type="number" name="s_quantity" min="1" required />
+										<input
+											style={{ height: '30px' }}
+											type="number"
+											name="quantity"
+											min="1"
+											required
+											onChange={(e) =>
+												setSideDish({
+													...sideDish,
+													quantity: e.target.value,
+												})
+											}
+										/>
 									</td>
 								</tr>
 								<tr>
@@ -121,28 +228,53 @@ export const AddCombo = ({ setIsOpenAddForm }) => {
 
 									<td>
 										<select
-											style={{ width: '200px' }}
-											onchange="redirectToURL(this)"
-											name=""
-											value=""
+											style={{ width: '200px', height: '30px' }}
+											onChange={(e) => getAllBeverageProducts(e.target.value)}
 										>
 											<option value="">Select</option>
-											<option value="search-product-by-category?id=${4}&ok=${3}">
-												Beverage
+											<option value="Beverage">Beverage</option>
+										</select>
+									</td>
+									<td>
+										<select
+											required
+											style={{ width: '200px', height: '30px' }}
+											name="product"
+											onChange={(e) =>
+												setBeverage({
+													...beverage,
+													product: beverages.find(
+														(product) => product._id === e.target.value
+													),
+												})
+											}
+										>
+											<option disabled selected>
+												Select a product
 											</option>
+											{beverages.map((product) => {
+												return (
+													<option className="py-1" value={product._id}>
+														{product.name}
+													</option>
+												);
+											})}
 										</select>
 									</td>
 									<td>
-										<select required style={{ width: '200px' }} name="beverage">
-											{/* <c:if test="${beverage != null}">
-														<c:forEach items="${beverage}" var="c">
-															<option value="${c.productID}">${c.name}</option>
-														</c:forEach>
-													</c:if> */}
-										</select>
-									</td>
-									<td>
-										<input type="number" name="b_quantity" min="1" required />
+										<input
+											style={{ height: '30px' }}
+											type="number"
+											name="quantity"
+											min="1"
+											required
+											onChange={(e) =>
+												setBeverage({
+													...beverage,
+													quantity: e.target.value,
+												})
+											}
+										/>
 									</td>
 								</tr>
 							</tbody>
@@ -215,7 +347,6 @@ export const AddCombo = ({ setIsOpenAddForm }) => {
 											type="file"
 											name="image"
 											onChange={(e) => setImage(e.target.files[0])}
-											required
 										/>
 									</td>
 								</tr>

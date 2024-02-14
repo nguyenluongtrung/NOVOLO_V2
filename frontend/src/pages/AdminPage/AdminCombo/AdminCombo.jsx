@@ -1,17 +1,55 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
 import './AdminCombo.css';
 import { AddCombo } from './components/AddCombo/AddCombo';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteProduct, getAllProducts } from '../../../features/products/productsSlice';
+import { FaTrash, FaPenSquare } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 export const AdminCombo = () => {
 	const [isOpenAddForm, setIsOpenAddForm] = useState(false);
+	const {
+		products,
+		isLoading: productLoading,
+		isSuccess: productSuccess,
+		isError: productError,
+		message: productMessage,
+	} = useSelector((state) => state.products);
+
+	const dispatch = useDispatch();
+
+	const handleDeleteProduct = async (productId) => {
+		try {
+			await dispatch(deleteProduct(productId));
+			if (productSuccess) {
+				dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a'));
+				toast.success('Delete combo successfully!')
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+
+	const handleGetAllCombos = () => {
+		Promise.all([
+			dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a'))
+		]).catch((error) => {
+			console.error('Error during dispatch:', error);
+		});
+	};
+
+	useEffect(() => {
+		dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a'));
+	}, []);
 
 	return (
 		<div className="d-flex" id="wrapper">
 			{isOpenAddForm && (
 				<AddCombo
 					setIsOpenAddForm={setIsOpenAddForm}
-					// handleGetAllProducts={handleGetAllProducts}
+					handleGetAllCombos={handleGetAllCombos}
 				/>
 			)}
 
@@ -42,55 +80,63 @@ export const AdminCombo = () => {
 
 				<div className="container-fluid px-4">
 					<div className="row my-5">
-							<h3 className="fs-4 mb-3 d-inline col-sm-10">List of combos</h3>
-							<button
-								className="view-modal text-decoration-none text-white btn btn-success px-2 py-1 col-sm-2 mb-4"
-								onClick={() => setIsOpenAddForm(true)}
-							>
-								<span>
-									<i className="fa-sharp fa-solid fa-plus"></i>
-								</span>
-								&nbsp; Add new combo
-							</button>
+						<h3 className="fs-4 mb-3 d-inline col-sm-10">List of combos</h3>
+						<button
+							className="view-modal text-decoration-none text-white btn btn-success px-2 py-1 col-sm-2 mb-4"
+							onClick={() => setIsOpenAddForm(true)}
+						>
+							<span>
+								<i className="fa-sharp fa-solid fa-plus"></i>
+							</span>
+							&nbsp; Add new combo
+						</button>
 
 						<div className="col">
 							<table className="table bg-white rounded shadow-sm  table-hover">
 								<thead>
 									<tr>
-										<th scope="col">Combo ID</th>
 										<th scope="col">Combo Name</th>
-										<th scope="col">Total Price</th>
+										<th scope="col">Combo Image</th>
 										<th scope="col">Total Calories</th>
+										<th scope="col">Is Surprise</th>
 										<th scope="col">Rating</th>
 										<th scope="col">Accumulated Point</th>
 										<th scope="col">Exchanged Point</th>
+										<th scope="col">Price</th>
+										<th scope="col">Status</th>
 										<th scope="col">Action</th>
 									</tr>
 								</thead>
 								<tbody>
-									{/* <c:forEach items="${combos}" var="c">
-										<tr>
-											<td>${c.comboID}</td>
-											<td>${c.comboName}</td>
-											<td>${c.totalPrice}</td>
-											<td>${c.totalCalories}</td>
-											<td>${c.rating}</td>
-											<td>${c.accumulatedPoint}</td>
-											<td>${c.exchangedPoint}</td>
-											<td>
-												<a href="update-combo?id=${c.comboID}" className="edit">
-													<i className="view-modal fa-sharp fa-regular fa-pen-to-square  text-dark"></i>
-												</a>{' '}
-												&nbsp;&nbsp;&nbsp;
-												<a
-													href="delete-combo?id=${c.comboID}"
-													className="delete"
-												>
-													<i className="fa-sharp fa-solid fa-trash  text-dark"></i>
-												</a>
-											</td>
-										</tr>
-									</c:forEach> */}
+									{products && products.map((product) => {
+										return (
+											<tr>
+												<td>{product?.name}</td>
+												<td>
+													<img
+														src={product?.image}
+														style={{ width: '40px', height: '40px' }}
+													/>
+												</td>
+												<td>{product?.calories}</td>
+												<td>{product?.isSurprise ? 'true' : 'false'}</td>
+												<td>{product?.rating}</td>
+												<td>{product?.accumulatedPoint}</td>
+												<td>{product?.exchangedPoint}</td>
+												<td>0$</td>
+												<td>{product?.productStatus ? 'true' : 'false'}</td>
+												<td>
+													<a className="edit">
+														<FaPenSquare />
+													</a>{' '}
+													&nbsp;&nbsp;&nbsp;
+													<button className="delete" onClick={() => handleDeleteProduct(product._id)}>
+														<FaTrash />
+													</button>
+												</td>
+											</tr>
+										);
+									})}
 								</tbody>
 							</table>
 						</div>
