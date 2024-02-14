@@ -47,6 +47,10 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 		handleGetAllCombos();
 	};
 
+	const handleImage = (e) => {
+		setImage(URL.createObjectURL(e.target.files[0]));
+	};
+
 	const onSubmit = async (data) => {
 		const calories =
 			mainCourse.product.calories +
@@ -59,7 +63,7 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 			calories,
 			isSurprise: false,
 			price: 200,
-			image,
+			image: image,
 		};
 
 		await dispatch(createProduct(addData));
@@ -346,8 +350,9 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 											className="py-1"
 											type="file"
 											name="image"
-											onChange={(e) => setImage(e.target.files[0])}
+											onChange={handleImage}
 										/>
+										<img src={image}/>
 									</td>
 								</tr>
 								<tr>
