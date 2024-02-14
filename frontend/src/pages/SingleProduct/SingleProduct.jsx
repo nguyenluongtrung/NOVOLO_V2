@@ -343,7 +343,7 @@ export const SingleProduct = () => {
 					<div className="row">
 						<div className="col-md-5">
 							<div className="single-product-img">
-								<img src={`/${product?.image}`} alt="" />
+								{product?.categoryID != '65bf55ce65e2e3ced184149a' ? <img src={`/${product?.image}`} alt="" /> : <img src={product?.image} alt="" />}
 							</div>
 						</div>
 						<div className="col-md-7">

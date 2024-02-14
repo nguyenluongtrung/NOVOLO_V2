@@ -352,7 +352,6 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 											name="image"
 											onChange={handleImage}
 										/>
-										<img src={image}/>
 									</td>
 								</tr>
 								<tr>
