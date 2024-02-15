@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { getAllNewestPrices } from '../../../../../features/prices/pricesSlice';
 
 export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
+	const [isSurprise, setIsSurprise] = useState(false);
 	const [image, setImage] = useState('');
 	const [discount, setDiscount] = useState(0);
 	const [mainCourse, setMainCourse] = useState({
@@ -59,38 +60,46 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 	};
 
 	const onSubmit = async (data) => {
-		const mainCoursePrice = prices.find((price) => price.productId == mainCourse.product._id).price * mainCourse.quantity;
-		const sideDishPrice = prices.find((price) => price.productId == sideDish.product._id).price * sideDish.quantity;
-		const beveragePrice = prices.find((price) => price.productId == beverage.product._id).price * beverage.quantity;
+		const mainCoursePrice =
+			prices.find((price) => price.productId == mainCourse.product._id).price *
+			mainCourse.quantity;
+		const sideDishPrice =
+			prices.find((price) => price.productId == sideDish.product._id).price *
+			sideDish.quantity;
+		const beveragePrice =
+			prices.find((price) => price.productId == beverage.product._id).price *
+			beverage.quantity;
 
 		const calories =
 			mainCourse.product.calories * mainCourse.quantity +
 			sideDish.product.calories * sideDish.quantity +
 			beverage.product.calories * beverage.quantity;
 
-		const comboIngredients = [ 
+		const comboIngredients = [
 			{
 				productId: mainCourse.product._id,
-				quantity: mainCourse.quantity
+				quantity: mainCourse.quantity,
 			},
 			{
 				productId: sideDish.product._id,
-				quantity: sideDish.quantity
+				quantity: sideDish.quantity,
 			},
 			{
 				productId: beverage.product._id,
-				quantity: beverage.quantity
+				quantity: beverage.quantity,
 			},
-		]
+		];
 
 		const addData = {
 			...data,
 			categoryID: '65bf55ce65e2e3ced184149a',
 			calories,
-			isSurprise: false,
-			price: parseFloat((beveragePrice + sideDishPrice + mainCoursePrice) * (1 - discount)).toFixed(1),
+			isSurprise: isSurprise,
+			price: parseFloat(
+				(beveragePrice + sideDishPrice + mainCoursePrice) * (1 - discount)
+			).toFixed(1),
 			image: image,
-			comboIngredients
+			comboIngredients,
 		};
 
 		await dispatch(createProduct(addData));
@@ -116,8 +125,8 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 	};
 
 	useEffect(() => {
-		dispatch(getAllNewestPrices())
-	}, [dispatch])
+		dispatch(getAllNewestPrices());
+	}, [dispatch]);
 
 	return (
 		<div className="popup active" id="popup-2">
@@ -311,6 +320,64 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 											}
 										/>
 									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<table className="table bg-white rounded shadow-sm table-hover">
+							<thead>
+								<tr>
+									<th scope="col" style={{ fontSize: '90%' }}>
+										Is surprise
+									</th>
+									{isSurprise && (
+										<>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Start day
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												End day
+											</th>
+										</>
+									)}
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<input
+											type="radio"
+											name="isSurprise"
+											onChange={() => setIsSurprise(true)}
+										/>{' '}
+										True &nbsp;
+										<input
+											type="radio"
+											name="isSurprise"
+											onChange={() => setIsSurprise(false)}
+										/>{' '}
+										False
+									</td>
+									{isSurprise && (
+										<>
+											<td>
+												<input
+													type="date"
+													required
+													{...register('startDate')}
+													min={new Date().toISOString().split('T')[0]}
+												/>
+											</td>
+											<td>
+												<input
+													type="date"
+													required
+													{...register('endDate')}
+													min={new Date().toISOString().split('T')[0]}
+												/>
+											</td>
+										</>
+									)}
 								</tr>
 							</tbody>
 						</table>
