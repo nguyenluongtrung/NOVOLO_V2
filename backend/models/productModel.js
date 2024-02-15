@@ -8,7 +8,7 @@ const productSchema = mongoose.Schema({
 	},
 	image: {
 		type: String,
-		// required: [true, 'Product image is mandatory'],
+		required: [true, 'Product image is mandatory'],
 	},
 	categoryID: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -61,6 +61,20 @@ const productSchema = mongoose.Schema({
 	},
 	endDate: {
 		type: Date,
+	},
+	comboIngredients: {
+		type: [
+			{
+				quantity: {
+					type: Number,
+				},
+				productId: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: 'Product',
+				},
+			},
+		],
+		default: [],
 	},
 });
 

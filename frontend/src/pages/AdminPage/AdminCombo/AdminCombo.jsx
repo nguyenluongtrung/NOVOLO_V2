@@ -3,9 +3,13 @@ import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
 import './AdminCombo.css';
 import { AddCombo } from './components/AddCombo/AddCombo';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteProduct, getAllProducts } from '../../../features/products/productsSlice';
+import {
+	deleteProduct,
+	getAllProducts,
+} from '../../../features/products/productsSlice';
 import { FaTrash, FaPenSquare } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { getAllNewestPrices } from '../../../features/prices/pricesSlice';
 
 export const AdminCombo = () => {
 	const [isOpenAddForm, setIsOpenAddForm] = useState(false);
@@ -16,6 +20,12 @@ export const AdminCombo = () => {
 		isError: productError,
 		message: productMessage,
 	} = useSelector((state) => state.products);
+	const {
+		prices,
+		isError: priceError,
+		isLoading: priceLoading,
+		message: priceMessage,
+	} = useSelector((state) => state.prices);
 
 	const dispatch = useDispatch();
 
@@ -24,25 +34,30 @@ export const AdminCombo = () => {
 			await dispatch(deleteProduct(productId));
 			if (productSuccess) {
 				dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a'));
-				toast.success('Delete combo successfully!')
+				toast.success('Delete combo successfully!');
 			}
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
-
 	const handleGetAllCombos = () => {
 		Promise.all([
-			dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a'))
+			dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a')),
+			dispatch(getAllNewestPrices()),
 		]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
 	};
 
 	useEffect(() => {
-		dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a'));
-	}, []);
+		Promise.all([
+			dispatch(getAllNewestPrices()),
+			dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a'))
+		]).catch((error) => {
+			console.error('Error during dispatch:', error);
+		});
+	}, [dispatch]);
 
 	return (
 		<div className="d-flex" id="wrapper">
@@ -108,35 +123,51 @@ export const AdminCombo = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{products && products.map((product) => {
-										return (
-											<tr>
-												<td>{product?.name}</td>
-												<td>
-													<img
-														src={product?.image}
-														style={{ width: '40px', height: '40px' }}
-													/>
-												</td>
-												<td>{product?.calories}</td>
-												<td>{product?.isSurprise ? 'true' : 'false'}</td>
-												<td>{product?.rating}</td>
-												<td>{product?.accumulatedPoint}</td>
-												<td>{product?.exchangedPoint}</td>
-												<td>0$</td>
-												<td>{product?.productStatus ? 'true' : 'false'}</td>
-												<td>
-													<a className="edit">
-														<FaPenSquare />
-													</a>{' '}
-													&nbsp;&nbsp;&nbsp;
-													<button className="delete" onClick={() => handleDeleteProduct(product._id)}>
-														<FaTrash />
-													</button>
-												</td>
-											</tr>
-										);
-									})}
+									{products &&
+										products.map((product) => {
+											return (
+												<tr>
+													<td>{product?.name}</td>
+													<td>
+														<img
+															src={product?.image}
+															style={{ width: '40px', height: '40px' }}
+														/>
+													</td>
+													<td>{product?.calories}</td>
+													<td>{product?.isSurprise ? 'true' : 'false'}</td>
+													<td>{product?.rating}</td>
+													<td>{product?.accumulatedPoint}</td>
+													<td>{product?.exchangedPoint}</td>
+													<td>
+														{
+															prices[
+																prices?.findIndex((price) => {
+																	return (
+																		price.productId === product._id &&
+																		price.endDate === null
+																	);
+																})
+															]?.price
+														}{' '}
+														$
+													</td>
+													<td>{product?.productStatus ? 'true' : 'false'}</td>
+													<td>
+														<a className="edit">
+															<FaPenSquare />
+														</a>{' '}
+														&nbsp;&nbsp;&nbsp;
+														<button
+															className="delete"
+															onClick={() => handleDeleteProduct(product._id)}
+														>
+															<FaTrash />
+														</button>
+													</td>
+												</tr>
+											);
+										})}
 								</tbody>
 							</table>
 						</div>

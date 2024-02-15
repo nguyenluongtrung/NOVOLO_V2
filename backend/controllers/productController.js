@@ -76,17 +76,34 @@ const createProduct = asyncHandler(async (req, res) => {
 		endDate,
 	} = req.body;
 
-	const product = await Product.create({
-		name,
-		image,
-		categoryID,
-		calories,
-		isSurprise,
-		accumulatedPoint,
-		exchangedPoint,
-		startDate,
-		endDate,
-	});
+	let product;
+
+	if (req.body.comboIngredients) {
+		product = await Product.create({
+			name,
+			image,
+			categoryID,
+			calories,
+			isSurprise,
+			accumulatedPoint,
+			exchangedPoint,
+			startDate,
+			endDate,
+			comboIngredients: req.body.comboIngredients,
+		});
+	} else {
+		product = await Product.create({
+			name,
+			image,
+			categoryID,
+			calories,
+			isSurprise,
+			accumulatedPoint,
+			exchangedPoint,
+			startDate,
+			endDate,
+		});
+	}
 
 	const price = await Price.create({
 		productId: product._id,

@@ -8,6 +8,7 @@ import {
 	reset,
 } from '../../../../../features/products/productsSlice';
 import { toast } from 'react-toastify';
+import { getAllNewestPrices } from '../../../../../features/prices/pricesSlice';
 
 export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 	const [image, setImage] = useState('');
@@ -33,6 +34,12 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 		isError: productError,
 		message: productMessage,
 	} = useSelector((state) => state.products);
+	const {
+		prices,
+		isError: priceError,
+		isLoading: priceLoading,
+		message: priceMessage,
+	} = useSelector((state) => state.prices);
 
 	const dispatch = useDispatch();
 
@@ -52,18 +59,38 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 	};
 
 	const onSubmit = async (data) => {
+		const mainCoursePrice = prices.find((price) => price.productId == mainCourse.product._id).price * mainCourse.quantity;
+		const sideDishPrice = prices.find((price) => price.productId == sideDish.product._id).price * sideDish.quantity;
+		const beveragePrice = prices.find((price) => price.productId == beverage.product._id).price * beverage.quantity;
+
 		const calories =
-			mainCourse.product.calories +
-			sideDish.product.calories +
-			beverage.product.calories;
+			mainCourse.product.calories * mainCourse.quantity +
+			sideDish.product.calories * sideDish.quantity +
+			beverage.product.calories * beverage.quantity;
+
+		const comboIngredients = [ 
+			{
+				productId: mainCourse.product._id,
+				quantity: mainCourse.quantity
+			},
+			{
+				productId: sideDish.product._id,
+				quantity: sideDish.quantity
+			},
+			{
+				productId: beverage.product._id,
+				quantity: beverage.quantity
+			},
+		]
 
 		const addData = {
 			...data,
 			categoryID: '65bf55ce65e2e3ced184149a',
 			calories,
 			isSurprise: false,
-			price: 200,
+			price: parseFloat((beveragePrice + sideDishPrice + mainCoursePrice) * (1 - discount)).toFixed(1),
 			image: image,
+			comboIngredients
 		};
 
 		await dispatch(createProduct(addData));
@@ -87,6 +114,10 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 	const getAllSideDishProducts = (sideDish) => {
 		dispatch(getProductsByCategory({ data: sideDish, type: 'sideDish' }));
 	};
+
+	useEffect(() => {
+		dispatch(getAllNewestPrices())
+	}, [dispatch])
 
 	return (
 		<div className="popup active" id="popup-2">
