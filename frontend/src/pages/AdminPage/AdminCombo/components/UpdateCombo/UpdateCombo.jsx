@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { getAllNewestPrices } from '../../../../../features/prices/pricesSlice';
 
 export const UpdateCombo = ({ setIsOpenUpdateForm, handleGetAllCombos, chosenComboId }) => {
+	const [isSurprise, setIsSurprise] = useState(false);
 	const [image, setImage] = useState('');
 	const [discount, setDiscount] = useState(0);
 	const [mainCourse, setMainCourse] = useState({
@@ -86,7 +87,7 @@ export const UpdateCombo = ({ setIsOpenUpdateForm, handleGetAllCombos, chosenCom
 			...data,
 			categoryID: '65bf55ce65e2e3ced184149a',
 			calories,
-			isSurprise: false,
+			isSurprise: isSurprise,
 			price: parseFloat((beveragePrice + sideDishPrice + mainCoursePrice) * (1 - discount)).toFixed(1),
 			image: image,
 			comboIngredients
@@ -310,6 +311,64 @@ export const UpdateCombo = ({ setIsOpenUpdateForm, handleGetAllCombos, chosenCom
 											}
 										/>
 									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<table className="table bg-white rounded shadow-sm table-hover">
+							<thead>
+								<tr>
+									<th scope="col" style={{ fontSize: '90%' }}>
+										Is surprise
+									</th>
+									{isSurprise && (
+										<>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												Start day
+											</th>
+											<th scope="col" style={{ fontSize: '90%' }}>
+												End day
+											</th>
+										</>
+									)}
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<input
+											type="radio"
+											name="isSurprise"
+											onChange={() => setIsSurprise(true)}
+										/>{' '}
+										True &nbsp;
+										<input
+											type="radio"
+											name="isSurprise"
+											onChange={() => setIsSurprise(false)}
+										/>{' '}
+										False
+									</td>
+									{isSurprise && (
+										<>
+											<td>
+												<input
+													type="date"
+													required
+													{...register('startDate')}
+													min={new Date().toISOString().split('T')[0]}
+												/>
+											</td>
+											<td>
+												<input
+													type="date"
+													required
+													{...register('endDate')}
+													min={new Date().toISOString().split('T')[0]}
+												/>
+											</td>
+										</>
+									)}
 								</tr>
 							</tbody>
 						</table>
