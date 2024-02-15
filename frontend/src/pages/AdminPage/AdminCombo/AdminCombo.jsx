@@ -10,9 +10,12 @@ import {
 import { FaTrash, FaPenSquare } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { getAllNewestPrices } from '../../../features/prices/pricesSlice';
+import { UpdateCombo } from './components/UpdateCombo/UpdateCombo';
 
 export const AdminCombo = () => {
 	const [isOpenAddForm, setIsOpenAddForm] = useState(false);
+	const [isOpenUpdateForm, setIsOpenUpdateForm] = useState(false);
+	const [chosenComboId, setChosenComboId] = useState('');
 	const {
 		products,
 		isLoading: productLoading,
@@ -53,7 +56,7 @@ export const AdminCombo = () => {
 	useEffect(() => {
 		Promise.all([
 			dispatch(getAllNewestPrices()),
-			dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a'))
+			dispatch(getAllProducts('categoryID=65bf55ce65e2e3ced184149a')),
 		]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
@@ -65,6 +68,14 @@ export const AdminCombo = () => {
 				<AddCombo
 					setIsOpenAddForm={setIsOpenAddForm}
 					handleGetAllCombos={handleGetAllCombos}
+				/>
+			)}
+
+			{isOpenUpdateForm && (
+				<UpdateCombo
+					setIsOpenUpdateForm={setIsOpenUpdateForm}
+					handleGetAllCombos={handleGetAllCombos}
+					chosenComboId={chosenComboId}
 				/>
 			)}
 
@@ -154,7 +165,7 @@ export const AdminCombo = () => {
 													</td>
 													<td>{product?.productStatus ? 'true' : 'false'}</td>
 													<td>
-														<a className="edit">
+														<a className="edit" onClick={() => {setIsOpenUpdateForm(true); setChosenComboId(product?._id);}}>
 															<FaPenSquare />
 														</a>{' '}
 														&nbsp;&nbsp;&nbsp;

@@ -142,24 +142,48 @@ const updateProduct = asyncHandler(async (req, res) => {
 		endDate,
 	} = req.body;
 
-	const updatedProduct = await Product.findByIdAndUpdate(
-		req.params.id,
-		{
-			name,
-			image,
-			categoryID,
-			calories,
-			isSurprise,
-			accumulatedPoint,
-			exchangedPoint,
-			productStatus,
-			startDate,
-			endDate,
-		},
-		{
-			new: true,
-		}
-	);
+	let updatedProduct;
+
+	if (req.body.comboIngredients) {
+		updatedProduct = await Product.findByIdAndUpdate(
+			req.params.id,
+			{
+				name,
+				image,
+				categoryID,
+				calories,
+				isSurprise,
+				accumulatedPoint,
+				exchangedPoint,
+				productStatus,
+				startDate,
+				endDate,
+				comboIngredients: req.body.comboIngredients,
+			},
+			{
+				new: true,
+			}
+		);
+	} else {
+		updatedProduct = await Product.findByIdAndUpdate(
+			req.params.id,
+			{
+				name,
+				image,
+				categoryID,
+				calories,
+				isSurprise,
+				accumulatedPoint,
+				exchangedPoint,
+				productStatus,
+				startDate,
+				endDate,
+			},
+			{
+				new: true,
+			}
+		);
+	}
 
 	// find the newest price
 	const price = await Price.findOne({
