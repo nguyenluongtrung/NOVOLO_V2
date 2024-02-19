@@ -7,7 +7,7 @@ import { Layout } from './Layout';
 import { AboutMe } from './pages/AboutMe';
 import { ShoppingPage } from './pages/ShoppingPage';
 import { SingleProduct } from './pages/SingleProduct';
-import { AdminProduct, AdminSale } from './pages/AdminPage';
+import { AdminProduct, AdminPromotion } from './pages/AdminPage';
 import { WishList } from './pages/WishListPage';
 import { CartPage } from './pages/CartPage/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
@@ -29,7 +29,7 @@ function App() {
 						<Route path="/shop" element={<ShoppingPage />} />
 						<Route path="/single-product/:id" element={<SingleProduct />} />
 						<Route path="/admin-product" element={<AdminProduct />} />
-						<Route path="/admin-sale" element={<AdminSale />} />
+						<Route path="/admin-sale" element={<AdminPromotion />} />
 						<Route path="/wishList" element={<WishList />} />
 						<Route path="/cart" element={<CartPage />} />
 						<Route path="/check-out" element={<CheckoutPage />} />
