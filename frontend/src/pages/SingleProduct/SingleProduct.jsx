@@ -38,6 +38,7 @@ import {
 	updateComment,
 	updateReply,
 } from '../../features/comments/commentsSlice';
+import { formatDate } from '../../utils/format';
 
 export const SingleProduct = () => {
 	const [rate, setRate] = useState(0);
@@ -79,15 +80,6 @@ export const SingleProduct = () => {
 	} = useSelector((state) => state.comments);
 
 	const { categories: category } = useSelector((state) => state.categories);
-
-	const formatDate = (dateString) => {
-		const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-		const formattedDate = new Date(dateString).toLocaleDateString(
-			undefined,
-			options
-		);
-		return formattedDate;
-	};
 
 	const addProductToCart = async (productId, quantity) => {
 		await dispatch(

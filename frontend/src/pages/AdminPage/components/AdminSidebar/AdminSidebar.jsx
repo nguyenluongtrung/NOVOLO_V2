@@ -34,10 +34,10 @@ export const AdminSidebar = () => {
 						<FaCommentDots />Feedbacks
 					</Link>
 					<Link
-                        to={'/admin-sale'}
+                        to={'/admin-promotion'}
 						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
 					>
-						<FaCreditCard />Sales
+						<FaCreditCard />Promotions
 					</Link>
 					<Link
                         to={'/admin-combo'}
