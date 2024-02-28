@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -9,10 +9,17 @@ import { FaEye, FaTrash, FaPenSquare } from 'react-icons/fa';
 import { formatDate } from '../../../utils/format';
 import { toast } from 'react-toastify';
 import { Spinner } from '../../../components';
-import './AdminPromotion.css'
+import './AdminPromotion.css';
+import { AddPromotion } from './components/AddPromotion/AddPromotion';
+import { UpdatePromotion } from './components/UpdatePromotion/UpdatePromotion';
+import { PromotionDetails } from './components/PromotionDetails/PromotionDetails';
 
 export const AdminPromotion = () => {
 	const dispatch = useDispatch();
+	const [isOpenAddForm, setIsOpenAddForm] = useState(false);
+	const [isOpenUpdateForm, setIsOpenUpdateForm] = useState(false);
+	const [isOpenPromotionDetails, setIsOpenPromotionDetails] = useState(false);
+	const [chosenPromotionId, setChosenPromotionId] = useState('');
 
 	const { promotions, isError, isSuccess, isLoading, message } = useSelector(
 		(state) => state.promotions
@@ -23,6 +30,16 @@ export const AdminPromotion = () => {
 		if (isSuccess) {
 			toast.success('Delete promotion successfully!');
 		}
+	};
+
+	const handleUpdatePromotion = (promotionId) => {
+		setIsOpenUpdateForm(true);
+		setChosenPromotionId(promotionId);
+	};
+
+	const handlePromotionDetails = (promotionId) => {
+		setIsOpenPromotionDetails(true);
+		setChosenPromotionId(promotionId);
 	};
 
 	useEffect(() => {
@@ -36,6 +53,20 @@ export const AdminPromotion = () => {
 	return (
 		<div>
 			<div className="d-flex" id="wrapper">
+				{isOpenAddForm && <AddPromotion setIsOpenAddForm={setIsOpenAddForm} />}
+				{isOpenUpdateForm && (
+					<UpdatePromotion
+						setIsOpenUpdateForm={setIsOpenUpdateForm}
+						chosenPromotionId={chosenPromotionId}
+					/>
+				)}
+				{isOpenPromotionDetails && (
+					<PromotionDetails
+						setIsOpenPromotionDetails={setIsOpenPromotionDetails}
+						chosenPromotionId={chosenPromotionId}
+					/>
+				)}
+
 				<AdminSidebar />
 
 				<div id="page-content-wrapper">
@@ -64,7 +95,10 @@ export const AdminPromotion = () => {
 					<div className="container-fluid px-4">
 						<div className="row my-5">
 							<h3 className="fs-4 mb-3 d-inline col-sm-10">Promotion list</h3>
-							<button className="btn btn-success px-3 py-1 my-3 col-sm-2">
+							<button
+								className="btn btn-success px-3 py-1 my-3 col-sm-2"
+								onClick={() => setIsOpenAddForm(true)}
+							>
 								<a className="view-modal text-decoration-none text-white">
 									<span>
 										<i className="fa-sharp fa-solid fa-plus"></i>
@@ -87,7 +121,7 @@ export const AdminPromotion = () => {
 										</tr>
 									</thead>
 									<tbody>
-										{promotions.map((promotion) => {
+										{Array.isArray(promotions) && promotions.map((promotion) => {
 											return (
 												<tr>
 													<td>{promotion.promotionName}</td>
@@ -96,16 +130,23 @@ export const AdminPromotion = () => {
 													<td>{formatDate(promotion.endDate)}</td>
 													<td>{promotion.promotionCode}</td>
 													<td>
-														<a>
-															<FaEye />
-														</a>
+														<FaEye
+															className="eye-icon"
+															onClick={() =>
+																handlePromotionDetails(promotion._id)
+															}
+														/>
 													</td>
 													<td>
-														<a className="edit">
-															<FaPenSquare />
-														</a>{' '}
+														<FaPenSquare
+															className="update-icon"
+															onClick={() =>
+																handleUpdatePromotion(promotion._id)
+															}
+														/>
 														&nbsp;&nbsp;&nbsp;
-														<FaTrash className='delete-icon'
+														<FaTrash
+															className="delete-icon"
 															onClick={() =>
 																handleDeletePromotion(promotion._id)
 															}
