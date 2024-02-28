@@ -6,27 +6,25 @@ import './UpdatePromotion.css';
 import { FaTimes } from 'react-icons/fa';
 import { getAllProducts } from '../../../../../features/products/productsSlice';
 import { useEffect, useState } from 'react';
-import { updatePromotion } from '../../../../../features/promotion/promotionsSlice';
+import { getAllPromotions, updatePromotion } from '../../../../../features/promotion/promotionsSlice';
+import { formatDate, formatDateInput } from '../../../../../utils/format';
 
 export const UpdatePromotion = ({ setIsOpenUpdateForm, chosenPromotionId }) => {
 	const dispatch = useDispatch();
 
-	const [selectedProducts, setSelectedProducts] = useState([]);
-
 	const {
 		products,
 		isError: productError,
-		isSuccess: productSuccess,
-		isLoading: productLoading,
 		message: productMessage,
 	} = useSelector((state) => state.products);
 
 	const {
+		promotions,
 		isLoading: promotionLoading,
 		isSuccess: promotionSuccess,
-		isError: promotionError,
-		message: promotionMessage,
 	} = useSelector((state) => state.promotions);
+
+	const [selectedProducts, setSelectedProducts] = useState(promotions[promotions.findIndex((promotion) => promotion._id == chosenPromotionId)].productIds);
 
 	const {
 		register,
@@ -55,14 +53,19 @@ export const UpdatePromotion = ({ setIsOpenUpdateForm, chosenPromotionId }) => {
 	};
 
 	useEffect(() => {
-		if (productError) {
-			toast.error(productMessage);
-		}
-
 		Promise.all([dispatch(getAllProducts(''))]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
 	}, [dispatch, productError, productMessage]);
+
+	useEffect(() => {
+		const asyncFn = async () => {
+			if (!promotions) {
+				await dispatch(getAllPromotions());
+			}
+		};
+		asyncFn();
+	}, [dispatch]);
 
 	const handleProductDeselect = (productId) => {
 		const updatedSelectedProducts = selectedProducts.filter(
@@ -157,7 +160,7 @@ export const UpdatePromotion = ({ setIsOpenUpdateForm, chosenPromotionId }) => {
 								<input
 									type="text"
 									{...register('promotionName')}
-									placeholder="Enter Sale name"
+									defaultValue={promotions[promotions.findIndex((promotion) => promotion._id == chosenPromotionId)].promotionName}
 									required
 								/>
 
@@ -167,7 +170,7 @@ export const UpdatePromotion = ({ setIsOpenUpdateForm, chosenPromotionId }) => {
 								<input
 									type="text"
 									{...register('promotionValue')}
-									placeholder="Enter value"
+									defaultValue={promotions[promotions.findIndex((promotion) => promotion._id == chosenPromotionId)].promotionValue}
 									required
 									min="0"
 								/>
@@ -182,6 +185,7 @@ export const UpdatePromotion = ({ setIsOpenUpdateForm, chosenPromotionId }) => {
 									type="date"
 									{...register('startDate')}
 									min={new Date().toISOString().split('T')[0]}
+									value={formatDateInput(promotions[promotions.findIndex((promotion) => promotion._id == chosenPromotionId)].startDate)}
 									required
 								/>
 								<label>
@@ -191,6 +195,7 @@ export const UpdatePromotion = ({ setIsOpenUpdateForm, chosenPromotionId }) => {
 									type="date"
 									{...register('endDate')}
 									min={new Date().toISOString().split('T')[0]}
+									value={formatDateInput(promotions[promotions.findIndex((promotion) => promotion._id == chosenPromotionId)].endDate)}
 									required
 								/>
 							</div>
@@ -204,7 +209,7 @@ export const UpdatePromotion = ({ setIsOpenUpdateForm, chosenPromotionId }) => {
 								<input
 									type="text"
 									{...register('promotionCode')}
-									placeholder="Enter promotion code"
+									defaultValue={promotions[promotions.findIndex((promotion) => promotion._id == chosenPromotionId)].promotionCode}
 									required
 								/>
 								<label>
@@ -214,7 +219,7 @@ export const UpdatePromotion = ({ setIsOpenUpdateForm, chosenPromotionId }) => {
 								<input
 									type="number"
 									{...register('promotionQuantity')}
-									placeholder="Enter promotion code"
+									defaultValue={promotions[promotions.findIndex((promotion) => promotion._id == chosenPromotionId)].promotionQuantity}
 									required
 								/>
 							</div>

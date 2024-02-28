@@ -25,8 +25,6 @@ export const PromotionDetails = ({
 	} = useSelector((state) => state.promotions);
 
 	useEffect(() => {
-		const promotionId = chosenPromotionId;
-
 		const asyncFn = async () => {
 			if (!promotions) {
 				await dispatch(getAllPromotions());
