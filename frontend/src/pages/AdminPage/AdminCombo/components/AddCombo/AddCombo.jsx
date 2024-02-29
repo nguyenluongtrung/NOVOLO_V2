@@ -3,11 +3,13 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	createProduct,
-	getAllProducts,
 	getProductsByCategory,
 	reset,
 } from '../../../../../features/products/productsSlice';
 import { toast } from 'react-toastify';
+import { storage } from './../../../../../config/firebase'
+import { ref, uploadBytes } from 'firebase/storage'
+import { v4 } from 'uuid'
 import { getAllNewestPrices } from '../../../../../features/prices/pricesSlice';
 
 export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
@@ -56,10 +58,14 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 	};
 
 	const handleImage = (e) => {
-		setImage(URL.createObjectURL(e.target.files[0]));
+		setImage(e.target.files[0]);
 	};
 
 	const onSubmit = async (data) => {
+		const imageRef = ref(storage, `combos/${image.name + v4()}`);
+		uploadBytes(imageRef, image).then(() => {
+			console.log('Upload image successfully')
+		})
 		const mainCoursePrice =
 			prices.find((price) => price.productId == mainCourse.product._id).price *
 			mainCourse.quantity;
@@ -98,7 +104,7 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 			price: parseFloat(
 				(beveragePrice + sideDishPrice + mainCoursePrice) * (1 - discount)
 			).toFixed(1),
-			image: image,
+			image: `${image.name}`,
 			comboIngredients,
 		};
 

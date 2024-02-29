@@ -1,5 +1,4 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import './HomePage.css';
 import './../../assets/css/main.css';
 import './../../assets/css/meanmenu.min.css';
@@ -7,9 +6,22 @@ import './../../assets/css/owl.carousel.css';
 import './../../assets/css/animate.css';
 import './../../assets/css/responsive.css';
 import { FaPhoneVolume, FaSync, FaShippingFast } from 'react-icons/fa';
-import ImageSlider from './components/ImageSlider'
+import ImageSlider from './components/ImageSlider';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPromotions } from '../../features/promotion/promotionsSlice';
+import 'react-slideshow-image/dist/styles.css';
+import { Fade } from 'react-slideshow-image';
+import { formatDateInput } from '../../utils/format';
 
 export const HomePage = () => {
+	const dispatch = useDispatch();
+
+	const { promotions } = useSelector((state) => state.promotions);
+
+	useEffect(() => {
+		dispatch(getAllPromotions());
+	}, [dispatch]);
+
 	return (
 		<div>
 			<div className="search-area">
@@ -34,9 +46,9 @@ export const HomePage = () => {
 					</div>
 				</div>
 			</div>
-			<div style={{marginTop: '-160px'}}>
-				<ImageSlider/>
-			</div> 
+			<div style={{ marginTop: '-160px' }}>
+				<ImageSlider />
+			</div>
 			<div className="list-section pt-80 pb-80">
 				<div className="container">
 					<div className="row">
@@ -77,81 +89,20 @@ export const HomePage = () => {
 				</div>
 			</div>
 
-			{/* <c:if test="${ok != null}">
-				<section className="shop-banner">
-					<div className="container">
-						<h3>
-							<span className="text-warning">${sale.saleName}</span> sale is on!{' '}
-							<br /> with big <span className="orange-text">Discount...</span>
-						</h3>
-						<div className="sale-percent">
-							<span>
-								Sale! <br /> Upto
-							</span>
-							${saleValue}%<span>off</span>
-						</div>
-						<div className="mb-3">
-							<span>
-								Sale code:{' '}
-								<span className="text-danger font-weight-bold">
-									${sale.saleCode}
-								</span>
-							</span>
-						</div>
-						<div className="mb-3">
-							<p
-								className="text-secondary"
-								style="font-style: italic; font-size: 80%"
-							>
-								(*) This sale event only applies for: ${wItems}
-							</p>
-						</div>
-						<div className="time-counter">
-							<div
-								className="time-countdown clearfix"
-								data-countdown="${sale.endDate}"
-							>
-								<div className="counter-column">
-									<div className="inner">
-										<span className="count">00</span>Days
-									</div>
-								</div>{' '}
-								<div className="counter-column">
-									<div className="inner">
-										<span className="count">00</span>Hours
-									</div>
-								</div>{' '}
-								<div className="counter-column">
-									<div className="inner">
-										<span className="count">00</span>Mins
-									</div>
-								</div>{' '}
-								<div className="counter-column">
-									<div className="inner">
-										<span className="count">00</span>Secs
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<a href="shopping" className="cart-btn btn-lg">
-							Shop Now
-						</a>
-					</div>
-				</section>
-			</c:if>
-
-			<c:if test="${okelala != null}">
-				<div className="testimonail-section mt-150">
-					<div className="container-fluid">
-						<div className="row">
-							<div className="col-sm-12 p-0">
-								<div className="testimonial-sliders">
-									<div className="single-testimonial-slider">
-										<section className="shop-banner">
-											<div className="container">
+			<div className="Slide-container">
+				<Fade autoplay={true} duration={3000}>
+					{promotions.map((promotion, index) => {
+						return (
+							<div className="testimonial-sliders">
+								<div className="single-testimonial-slider">
+									<section className="shop-banner">
+										<div className="container">
+											<div key={index} className="promotion-banner">
 												<h3>
-													<span className="text-warning">${sale.saleName}</span>{' '}
+													<span className="text-warning"></span>{' '}
+													<span className="text-uppercase">
+														{promotion.promotionName}
+													</span>{' '}
 													sale is on! <br /> with big{' '}
 													<span className="orange-text">Discount...</span>
 												</h3>
@@ -159,44 +110,44 @@ export const HomePage = () => {
 													<span>
 														Sale! <br /> Upto
 													</span>
-													${saleValue}%<span>off</span>
+													{promotion.promotionValue} %<span>off</span>
 												</div>
 												<div className="mb-3">
 													<span>
-														Sale code:{' '}
+														Promotion code:{' '}
 														<span className="text-danger font-weight-bold">
-															${sale.saleCode}
+															{promotion.promotionCode}
 														</span>
 													</span>
 												</div>
 												<div className="mb-3">
 													<p
 														className="text-secondary"
-														style="font-style: italic; font-size: 80%"
+														style={{ fontStyle: 'italic', fontSize: '80%' }}
 													>
-														(*) This sale event only applies for: ${wItems}
+														(*) This promotion event only applies for:
 													</p>
 												</div>
 												<div className="time-counter">
 													<div
 														className="time-countdown clearfix"
-														data-countdown="${sale.endDate}"
+														data-countdown='29-02-2024'
 													>
 														<div className="counter-column">
 															<div className="inner">
 																<span className="count">00</span>Days
 															</div>
-														</div>{' '}
+														</div>
 														<div className="counter-column">
 															<div className="inner">
 																<span className="count">00</span>Hours
 															</div>
-														</div>{' '}
+														</div>
 														<div className="counter-column">
 															<div className="inner">
 																<span className="count">00</span>Mins
 															</div>
-														</div>{' '}
+														</div>
 														<div className="counter-column">
 															<div className="inner">
 																<span className="count">00</span>Secs
@@ -204,85 +155,29 @@ export const HomePage = () => {
 														</div>
 													</div>
 												</div>
+
 												<a href="shopping" className="cart-btn btn-lg">
 													Shop Now
 												</a>
 											</div>
-										</section>
-									</div>
-									<div className="single-testimonial-slider1">
-										<section
-											className="w-100"
-											style="background-image: url('https://pbsapos.com.au/wp-content/uploads/2019/12/fastfood.jpg'); 
-                                             position: relative;
-                                             background-color: #f5f5f5;
-                                             background-size: cover;
-                                             padding: 110px 0px 115px;
-                                             height: 95vh"
-										>
-											<div className="container-fluid ml-5 pl-5">
-												<h1
-													className="text-white"
-													style="font-size: 320%; margin-bottom: 30px"
-												>
-													Surprise meal is on!
-												</h1>
-												<div className="mb-5">
-													<span className="text-white">
-														To satisfy your taste buds and cravings for the
-														homely cooked food, prepared by the <br />
-														women expert in their own areas, by offering an
-														opportunity to the household women in Bangalore &
-														Aligarh.
-													</span>
-												</div>
-												<br />
-												<div className="time-counter mb-5">
-													<div
-														className="time-countdown clearfix"
-														data-countdown="${surpriseProduct.p_endDate}"
-													>
-														<div className="counter-column">
-															<div className="inner">
-																<span className="count">00</span>
-																<p style="color: white">Days</p>
-															</div>
-														</div>{' '}
-														<div className="counter-column">
-															<div className="inner">
-																<span className="count">00</span>Hours
-															</div>
-														</div>{' '}
-														<div className="counter-column">
-															<div className="inner">
-																<span className="count">00</span>Mins
-															</div>
-														</div>{' '}
-														<div className="counter-column">
-															<div className="inner">
-																<span className="count">00</span>Secs
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<a
-													href="single-product?id=${surpriseProduct.productID}"
-													className="cart-btn btn-lg"
-												>
-													Shop Now
-												</a>
-											</div>
-										</section>
-									</div>
+										</div>
+									</section>
 								</div>
 							</div>
-						</div>
+						);
+					})}
+				</Fade>
+			</div>
+
+			<div className="testimonail-section mt-150">
+				<div className="container-fluid">
+					<div className="row">
+						<div className="col-sm-12 p-0"></div>
 					</div>
 				</div>
-			</c:if>
+			</div>
 
-			<c:if test="${okela != null}">
+			{/* <c:if test="${okela != null}">
 				<section
 					className="surprise-banner"
 					style="background-image: url('https://pbsapos.com.au/wp-content/uploads/2019/12/fastfood.jpg'); 
@@ -346,6 +241,7 @@ export const HomePage = () => {
 					</div>
 				</section>
 			</c:if> */}
+
 			<div className="product-section mt-150 mb-150">
 				<div className="container">
 					<div className="row">

@@ -11,8 +11,15 @@ import { FaTrash, FaPenSquare } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { getAllNewestPrices } from '../../../features/prices/pricesSlice';
 import { UpdateCombo } from './components/UpdateCombo/UpdateCombo';
+import {
+	ref,
+	getDownloadURL,
+	listAll,
+} from 'firebase/storage';
+import { storage } from './../../../config/firebase';
 
 export const AdminCombo = () => {
+	const [imageUrls, setImageUrls] = useState([]);
 	const [isOpenAddForm, setIsOpenAddForm] = useState(false);
 	const [isOpenUpdateForm, setIsOpenUpdateForm] = useState(false);
 	const [chosenComboId, setChosenComboId] = useState('');
@@ -29,6 +36,7 @@ export const AdminCombo = () => {
 		isLoading: priceLoading,
 		message: priceMessage,
 	} = useSelector((state) => state.prices);
+	const imagesListRef = ref(storage, 'combos/');
 
 	const dispatch = useDispatch();
 
@@ -52,6 +60,16 @@ export const AdminCombo = () => {
 			console.error('Error during dispatch:', error);
 		});
 	};
+
+	useEffect(() => {
+		listAll(imagesListRef).then((response) => {
+			response.items.forEach((item) => {
+				getDownloadURL(item).then((url) => {
+					setImageUrls((prev) => [...prev, url]);
+				});
+			});
+		});
+	}, []);
 
 	useEffect(() => {
 		Promise.all([
@@ -80,6 +98,10 @@ export const AdminCombo = () => {
 			)}
 
 			<AdminSidebar />
+
+			{/* {imageUrls.map((url) => {
+				return <span>{url}</span>
+			})} */}
 
 			<div id="page-content-wrapper">
 				<nav className="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
@@ -141,7 +163,7 @@ export const AdminCombo = () => {
 													<td>{product?.name}</td>
 													<td>
 														<img
-															src={product?.image}
+															src={imageUrls[imageUrls.findIndex((url) => url.includes(product?.image) == true)]}
 															style={{ width: '40px', height: '40px' }}
 														/>
 													</td>
@@ -165,7 +187,13 @@ export const AdminCombo = () => {
 													</td>
 													<td>{product?.productStatus ? 'true' : 'false'}</td>
 													<td>
-														<a className="edit" onClick={() => {setIsOpenUpdateForm(true); setChosenComboId(product?._id);}}>
+														<a
+															className="edit"
+															onClick={() => {
+																setIsOpenUpdateForm(true);
+																setChosenComboId(product?._id);
+															}}
+														>
 															<FaPenSquare />
 														</a>{' '}
 														&nbsp;&nbsp;&nbsp;
