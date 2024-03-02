@@ -114,6 +114,32 @@ const updateRatings = async (ratingData, productId, token) => {
 	return response.data.data.product;
 };
 
+// Get highest rating products
+const get5HighestRatingProducts = async (token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.get(API_URL + 'highestRating', config);
+
+	return response.data.data.stats;
+};
+
+// Get lowest rating products
+const get5LowestRatingProducts = async (token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.get(API_URL + 'lowestRating', config);
+
+	return response.data.data.stats;
+};
+
 const productsService = {
 	getAllProducts,
 	getProductById,
@@ -124,6 +150,8 @@ const productsService = {
 	getProductsFromCart,
 	updateRatings,
 	getProductsByCategory,
+	get5HighestRatingProducts,
+	get5LowestRatingProducts,
 };
 
 export default productsService;

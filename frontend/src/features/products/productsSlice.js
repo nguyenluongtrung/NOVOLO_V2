@@ -9,6 +9,8 @@ const initialState = {
 	mainCourses: [],
 	sideDishes: [],
 	beverages: [],
+	highestRatingProducts: [],
+	lowestRatingProducts: [],
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
@@ -21,6 +23,46 @@ export const getAllProducts = createAsyncThunk(
 	async (searchData, thunkAPI) => {
 		try {
 			return await productsService.getAllProducts(searchData);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+// Get highest rating products
+export const get5HighestRatingProducts = createAsyncThunk(
+	'products/get5HighestRatingProducts',
+	async (_, thunkAPI) => {
+		try {
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
+			return await productsService.get5HighestRatingProducts(token);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+// Get lowest rating products
+export const get5LowestRatingProducts = createAsyncThunk(
+	'products/get5LowestRatingProducts',
+	async (_, thunkAPI) => {
+		try {
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
+			return await productsService.get5LowestRatingProducts(token);
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -218,6 +260,34 @@ export const productSlice = createSlice({
 				state.isError = true;
 				state.message = action.payload;
 				state.products = [];
+			})
+			.addCase(get5HighestRatingProducts.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(get5HighestRatingProducts.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.highestRatingProducts = action.payload;
+			})
+			.addCase(get5HighestRatingProducts.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				state.highestRatingProducts = [];
+			})
+			.addCase(get5LowestRatingProducts.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(get5LowestRatingProducts.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.lowestRatingProducts = action.payload;
+			})
+			.addCase(get5LowestRatingProducts.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				state.lowestRatingProducts = [];
 			})
 			.addCase(getProductById.pending, (state) => {
 				state.isLoading = true;

@@ -7,7 +7,12 @@ import { Layout } from './Layout';
 import { AboutMe } from './pages/AboutMe';
 import { ShoppingPage } from './pages/ShoppingPage';
 import { SingleProduct } from './pages/SingleProduct';
-import { AdminCombo, AdminProduct, AdminPromotion } from './pages/AdminPage';
+import {
+	AdminCombo,
+	AdminDashboard,
+	AdminProduct,
+	AdminPromotion,
+} from './pages/AdminPage';
 import { WishList } from './pages/WishListPage';
 import { CartPage } from './pages/CartPage/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
@@ -30,6 +35,7 @@ function App() {
 						<Route path="/single-product/:id" element={<SingleProduct />} />
 						<Route path="/admin-product" element={<AdminProduct />} />
 						<Route path="/admin-promotion" element={<AdminPromotion />} />
+						<Route path="/admin-dashboard" element={<AdminDashboard />} />
 						<Route path="/admin-combo" element={<AdminCombo />} />
 						<Route path="/wishList" element={<WishList />} />
 						<Route path="/cart" element={<CartPage />} />

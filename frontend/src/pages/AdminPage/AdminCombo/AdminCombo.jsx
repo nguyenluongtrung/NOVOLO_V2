@@ -99,10 +99,6 @@ export const AdminCombo = () => {
 
 			<AdminSidebar />
 
-			{/* {imageUrls.map((url) => {
-				return <span>{url}</span>
-			})} */}
-
 			<div id="page-content-wrapper">
 				<nav className="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
 					<div className="d-flex align-items-center">

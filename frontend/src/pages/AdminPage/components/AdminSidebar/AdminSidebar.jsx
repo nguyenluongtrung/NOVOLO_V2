@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FaUserSecret, FaTachometerAlt, FaGift, FaCommentDots, FaPowerOff, FaCreditCard, FaUtensils } from 'react-icons/fa'
+import { FaUserSecret, FaTachometerAlt, FaGift, FaPowerOff, FaCreditCard, FaUtensils } from 'react-icons/fa'
 
 export const AdminSidebar = () => {
 	return (
@@ -26,12 +26,6 @@ export const AdminSidebar = () => {
 						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
 					>
 						<FaGift />Orders
-					</Link>
-					<Link
-                        to={'/admin-feedback'}
-						className="list-group-item list-group-item-action bg-transparent second-text fw-bold"
-					>
-						<FaCommentDots />Feedbacks
 					</Link>
 					<Link
                         to={'/admin-promotion'}

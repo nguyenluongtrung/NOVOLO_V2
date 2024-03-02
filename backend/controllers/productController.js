@@ -300,6 +300,34 @@ const updateRatings = asyncHandler(async (req, res) => {
 	});
 });
 
+const get5HighestRatingProducts = asyncHandler(async (req, res) => {
+	const stats = await Product.aggregate([
+		{ $sort: { rating: -1 } },
+		{ $limit: 5 },
+	]);
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			stats,
+		},
+	});
+});
+
+const get5LowestRatingProducts = asyncHandler(async (req, res) => {
+	const stats = await Product.aggregate([
+		{ $sort: { rating: 1 } },
+		{ $limit: 5 },
+	]);
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			stats,
+		},
+	});
+});
+
 module.exports = {
 	getAllProducts,
 	getProductById,
@@ -310,4 +338,6 @@ module.exports = {
 	getProductsFromCart,
 	updateRatings,
 	getProductsByCategory,
+	get5HighestRatingProducts,
+	get5LowestRatingProducts,
 };
