@@ -10,28 +10,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../../features/products/productsSlice';
 import { getAllCategories } from '../../features/categories/categoriesSlice';
 import { Spinner } from './../../components';
-import { toast } from 'react-toastify';
 
 export const ShoppingPage = () => {
 	const [searchName, setSearchName] = useState('');
+	const [searchData, setSearchData] = useState({});
 	const dispatch = useDispatch();
 	const {
 		products,
+		productSize,
 		isError: productErr,
 		isLoading: productLoad,
-		isSuccess: productSucc,
 		message: productMess,
 	} = useSelector((state) => state.products);
 
 	const {
 		categories,
-		isError: categoriesErr,
 		isLoading: categoriesLoad,
-		isSuccess: categoriesSucc,
-		message: categoriesMess,
 	} = useSelector((state) => state.categories);
 
 	const onSubmit = (data) => {
+		setSearchData(data);
 		let searchData = '';
 		let i = 0;
 		Object.keys(data).forEach((key) => {
@@ -58,9 +56,6 @@ export const ShoppingPage = () => {
 		]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
-		// if(productErr){
-		// 	toast.error(productMess)
-		// }
 	}, [dispatch, productErr, productMess]);
 
 	if (
@@ -225,7 +220,7 @@ export const ShoppingPage = () => {
 										</div>
 									</div>
 								</div>
-								<ProductList products={products} searchName={searchName} />
+								<ProductList products={products} searchName={searchName}/>
 								{/* <div className="row product-lists">
 									<c:if test="${ms != null}">
 										<p className="w-100 text-center text-secondary">${ms}</p>
@@ -279,75 +274,29 @@ export const ShoppingPage = () => {
 										</c:if>
 									</c:if> */}
 
-								{/* <c:if test="${price == null && s_name == null && calo == null && category == null}">
-									<div className="row">
-										<div className="col-lg-12 text-center">
-											<div className="pagination-wrap">
-												<ul>
-													<c:forEach begin="1" end="${pageNumber}" var="i">
-														<li><a href="shopping?index=${i}">${i}</a></li>
-														</c:forEach>
-												</ul>
-											</div>
+								<div className="row">
+									<div className="col-lg-12 text-center">
+										<div className="pagination-wrap">
+											<ul>
+												{Array.from(
+													{
+														length:
+														productSize % 9 == 0
+																? productSize / 9
+																: productSize / 9 + 1,
+													},
+													(_, index) => index + 1
+												).map((page) => (
+													<li>
+														<a onClick={() => onSubmit({...searchData, page})}>
+															{page}
+														</a>
+													</li>
+												))}
+											</ul>
 										</div>
 									</div>
-								</c:if> */}
-
-								{/* <c:if test="${price != null && s_name == null && calo == null && category == null}">
-									<div className="row">
-										<div className="col-lg-12 text-center">
-											<div className="pagination-wrap">
-												<ul>
-													<c:forEach begin="1" end="${pageNumber}" var="i">
-														<li><a href="search-price?from=${from}&to=${to}&index=${i}">${i}</a></li>
-														</c:forEach>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</c:if> */}
-
-								{/* <c:if test="${price == null && s_name != null && calo == null && category == null}">
-									<div className="row">
-										<div className="col-lg-12 text-center">
-											<div className="pagination-wrap">
-												<ul>
-													<c:forEach begin="1" end="${pageNumber}" var="i">
-														<li><a href="search-name?name=${name}&index=${i}">${i}</a></li>
-														</c:forEach>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</c:if> */}
-
-								{/* <c:if test="${price == null && s_name == null && calo != null && category == null}">
-									<div className="row">
-										<div className="col-lg-12 text-center">
-											<div className="pagination-wrap">
-												<ul>
-													<c:forEach begin="1" end="${pageNumber}" var="i">
-														<li><a href="search-by-calories?from=${from}&to=${to}&index=${i}">${i}</a></li>
-														</c:forEach>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</c:if> */}
-
-								{/* <c:if test="${price == null && s_name == null && calo == null && category != null}">
-									<div className="row">
-										<div className="col-lg-12 text-center">
-											<div className="pagination-wrap">
-												<ul>
-													<c:forEach begin="1" end="${pageNumber}" var="i">
-														<li><a href="search-category?id=${id}&index=${i}">${i}</a></li>
-														</c:forEach>
-												</ul>
-											</div>
-										</div>
-									</div>
-								</c:if> */}
+								</div>
 							</div>
 						</div>
 					</div>

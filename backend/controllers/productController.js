@@ -7,7 +7,13 @@ const Category = require('./../models/categoryModel');
 const ApiFeatures = require('../utils/apiFeatures');
 
 const getAllProducts = asyncHandler(async (req, res) => {
-	const features = new ApiFeatures(Product.find(), req.query).filter();
+	const beforePaginateList = await new ApiFeatures(
+		Product.find(),
+		req.query
+	).filter().query;
+	const features = new ApiFeatures(Product.find(), req.query)
+		.filter()
+		.paginate();
 
 	const products = await features.query;
 	let results = [];
@@ -30,7 +36,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
 
 	res.status(200).json({
 		status: 'success',
-		length: results.length,
+		length: beforePaginateList.length,
 		data: {
 			products: results,
 		},

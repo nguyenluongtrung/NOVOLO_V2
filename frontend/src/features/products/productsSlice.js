@@ -11,6 +11,7 @@ const initialState = {
 	beverages: [],
 	highestRatingProducts: [],
 	lowestRatingProducts: [],
+	productSize: 0,
 	isError: false,
 	isSuccess: false,
 	isLoading: false,
@@ -253,7 +254,8 @@ export const productSlice = createSlice({
 			.addCase(getAllProducts.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.products = action.payload;
+				state.products = action.payload.products;
+				state.productSize = action.payload.productSize;
 			})
 			.addCase(getAllProducts.rejected, (state, action) => {
 				state.isLoading = false;

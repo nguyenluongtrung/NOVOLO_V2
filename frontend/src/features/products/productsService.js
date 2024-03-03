@@ -11,7 +11,10 @@ const getAllProducts = async (searchData) => {
 		response = await axios.get(API_URL);
 	}
 
-	return response.data.data.products;
+	return {
+		products: response.data.data.products,
+		productSize: response.data.length,
+	};
 };
 
 // Get product

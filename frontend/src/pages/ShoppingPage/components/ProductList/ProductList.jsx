@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { getAllNewestPrices } from '../../../../features/prices/pricesSlice';
 import { FaShoppingCart } from 'react-icons/fa';
 
-export const ProductList = ({ products, searchName }) => {
+export const ProductList = ({ products, searchName, pageNumber }) => {
 	const dispatch = useDispatch();
 
 	const {
