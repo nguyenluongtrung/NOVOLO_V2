@@ -8,24 +8,23 @@ import { Spinner } from '../../components';
 import { FaWindowClose } from 'react-icons/fa';
 import { deleteProductsFromCart } from '../../features/auth/authSlice';
 import { getAllNewestPrices } from '../../features/prices/pricesSlice';
+import { getAllPromotions } from '../../features/promotion/promotionsSlice';
 
 export const CartPage = () => {
 	const [totalPrice, setTotalPrice] = useState(0);
+	const [promotionCode, setPromotionCode] = useState('');
+	const [promotionValue, setPromotionValue] = useState(null);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const {
-		products,
-		isError: productError,
-		isLoading: productLoading,
-		isSuccess: productSuccess,
-		message: productMessage,
-	} = useSelector((state) => state.products);
-	const {
-		prices,
-		isError: priceError,
-		isLoading: priceLoading,
-		message: priceMessage,
-	} = useSelector((state) => state.prices);
+	const { products, isLoading: productLoading } = useSelector(
+		(state) => state.products
+	);
+	const { promotions, isLoading: promotionLoading } = useSelector(
+		(state) => state.promotions
+	);
+	const { prices, isLoading: priceLoading } = useSelector(
+		(state) => state.prices
+	);
 
 	const {
 		isSuccess: authSuccess,
@@ -38,30 +37,29 @@ export const CartPage = () => {
 		Promise.all([
 			dispatch(getProductsFromCart()),
 			dispatch(getAllNewestPrices()),
+			dispatch(getAllPromotions()),
 		]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
 	}, [dispatch]);
 
 	useEffect(() => {
-		if(Array.isArray(products)){
+		if (Array.isArray(products)) {
 			const calculatedTotal = products.reduce((accumulator, currentValue) => {
 				return (
 					accumulator +
 					currentValue?.quantity *
 						prices[
 							prices.findIndex(
-								(price) =>
-									price.productId ==
-									currentValue?.productId?._id
+								(price) => price.productId == currentValue?.productId?._id
 							)
 						]?.price
 				);
 			}, 0);
-	
-			setTotalPrice(calculatedTotal)
+
+			setTotalPrice(calculatedTotal);
 		}
-	}, [products, prices])
+	}, [products, prices]);
 
 	const handleDeleteProductFromCart = async (productId) => {
 		await dispatch(deleteProductsFromCart(productId));
@@ -74,8 +72,32 @@ export const CartPage = () => {
 	};
 
 	const handleCheckOut = (totalPrice) => {
-		navigate('/check-out', {state: {totalPrice: totalPrice, cart: {products: products}}})
-	}
+		if (Number(promotionValue)) {
+			const newPrice = parseFloat(
+				totalPrice * (1 - Number(promotionValue))
+			).toFixed(1);
+			setTotalPrice(newPrice);
+			navigate('/check-out', {
+				state: { totalPrice: newPrice, cart: { products } },
+			});
+		} else {
+			navigate('/check-out', { state: { totalPrice, cart: { products } } });
+		}
+	};
+
+	const handleCheckPromotion = (e) => {
+		e.preventDefault();
+		let promotion;
+		const promotionIndex = promotions.findIndex(
+			(promotion) => promotion.promotionCode === promotionCode
+		);
+		if (promotionIndex !== -1) {
+			promotion = promotions[promotionIndex];
+			setPromotionValue(promotion.promotionValue);
+		} else{
+			setPromotionValue(null);
+		}
+	};
 
 	if (
 		productLoading ||
@@ -260,8 +282,24 @@ export const CartPage = () => {
 												<strong>Total: </strong>
 											</td>
 											<td>
-												{totalPrice}
-												$
+												<span
+													style={{
+														color: Number(promotionValue) ? 'red' : '',
+														textDecoration: Number(promotionValue)
+															? 'line-through'
+															: '',
+													}}
+												>
+													{totalPrice}$
+												</span>
+												&nbsp;
+												<span>
+													{Number(promotionValue)
+														? `${parseFloat(
+																totalPrice * (1 - Number(promotionValue))
+														  ).toFixed(1)}$`
+														: ''}
+												</span>
 											</td>
 											{/* <td id="subtotalCell">${subtotal}$</td> */}
 											{/* <c:if test="${sessionScope.acc.role != null}">
@@ -280,7 +318,10 @@ export const CartPage = () => {
 												</p>
 											</c:if> */}
 
-									<button onClick={() => handleCheckOut(totalPrice)} className="btn-orange">
+									<button
+										onClick={() => handleCheckOut(totalPrice)}
+										className="btn-orange"
+									>
 										Check Out
 									</button>
 								</div>
@@ -289,20 +330,28 @@ export const CartPage = () => {
 							<div className="coupon-section">
 								<h3>Apply Coupon</h3>
 								<div className="coupon-form-wrap">
-									<form action="add-to-cart" method="post">
-										<input
-											type="hidden"
-											name="productID"
-											value="${productID}"
-										/>
+									<form onSubmit={handleCheckPromotion}>
 										<p>
-											<input type="text" name="code" placeholder="Coupon" />
+											<input
+												type="text"
+												placeholder="Coupon"
+												value={promotionCode}
+												onChange={(e) => setPromotionCode(e.target.value)}
+											/>
 										</p>
+										{Number(promotionValue) ? (
+											<p style={{ color: 'red' }}>
+												Apply promotion code successfully!
+											</p>
+										) : (
+											''
+										)}
 										<p>
-											<input type="submit" value="Apply" />
+											<button type="submit" className="btn-orange px-4">
+												Apply
+											</button>
 										</p>
 									</form>
-									{/* <p className="text-danger">${ms != null ? ms : ''}</p> */}
 								</div>
 							</div>
 						</div>
