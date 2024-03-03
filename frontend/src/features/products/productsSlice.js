@@ -11,6 +11,8 @@ const initialState = {
 	beverages: [],
 	highestRatingProducts: [],
 	lowestRatingProducts: [],
+	bestSellingProducts: [],
+	revenueByCategories: [],
 	productSize: 0,
 	isError: false,
 	isSuccess: false,
@@ -56,6 +58,26 @@ export const get5HighestRatingProducts = createAsyncThunk(
 	}
 );
 
+// Get revenue by category
+export const getRevenueByCategory = createAsyncThunk(
+	'products/getRevenueByCategory',
+	async (_, thunkAPI) => {
+		try {
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
+			return await productsService.getRevenueByCategory(token);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
 // Get lowest rating products
 export const get5LowestRatingProducts = createAsyncThunk(
 	'products/get5LowestRatingProducts',
@@ -64,6 +86,26 @@ export const get5LowestRatingProducts = createAsyncThunk(
 			const storedUser = JSON.parse(localStorage.getItem('user'));
 			const token = storedUser.data.token;
 			return await productsService.get5LowestRatingProducts(token);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
+// Get 5 best selling products
+export const get5BestSellingProducts = createAsyncThunk(
+	'products/get5BestSellingProducts',
+	async (_, thunkAPI) => {
+		try {
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
+			return await productsService.get5BestSellingProducts(token);
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -276,6 +318,34 @@ export const productSlice = createSlice({
 				state.isError = true;
 				state.message = action.payload;
 				state.highestRatingProducts = [];
+			})
+			.addCase(getRevenueByCategory.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getRevenueByCategory.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.revenueByCategories = action.payload;
+			})
+			.addCase(getRevenueByCategory.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				state.revenueByCategories = [];
+			})
+			.addCase(get5BestSellingProducts.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(get5BestSellingProducts.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.bestSellingProducts = action.payload;
+			})
+			.addCase(get5BestSellingProducts.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				state.bestSellingProducts = [];
 			})
 			.addCase(get5LowestRatingProducts.pending, (state) => {
 				state.isLoading = true;

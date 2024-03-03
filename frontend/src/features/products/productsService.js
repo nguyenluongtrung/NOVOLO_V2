@@ -143,7 +143,40 @@ const get5LowestRatingProducts = async (token) => {
 	return response.data.data.stats;
 };
 
+// Get 5 best selling products
+const get5BestSellingProducts = async (token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.get(
+		'/novolo/api/orders/' + '5BestSellingProducts',
+		config
+	);
+
+	return response.data.data.result;
+};
+
+// Get revenue by category
+const getRevenueByCategory = async (token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+
+	const response = await axios.get(
+		'/novolo/api/orders/' + 'getRevenueByCategory',
+		config
+	);
+
+	return response.data.data.result;
+};
+
 const productsService = {
+	get5BestSellingProducts,
 	getAllProducts,
 	getProductById,
 	createProduct,
@@ -155,6 +188,7 @@ const productsService = {
 	getProductsByCategory,
 	get5HighestRatingProducts,
 	get5LowestRatingProducts,
+	getRevenueByCategory,
 };
 
 export default productsService;

@@ -1,24 +1,45 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
 import './AdminDashboard.css';
 import { FaGift, FaHandHoldingUsd, FaTruck, FaChartLine } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+	get5BestSellingProducts,
 	get5HighestRatingProducts,
 	get5LowestRatingProducts,
+	getRevenueByCategory,
 } from '../../../features/products/productsSlice';
+import Chart from 'react-apexcharts';
 
 export const AdminDashboard = () => {
-	const dispatch = useDispatch();
+	const { highestRatingProducts, lowestRatingProducts, bestSellingProducts, revenueByCategories } =
+		useSelector((state) => state.products);
 
-	const { highestRatingProducts, lowestRatingProducts } = useSelector(
-		(state) => state.products
-	);
+	const [state, setState] = useState({
+		options: {
+			colors: ['#E91E63', '#FF9800'],
+			chart: {
+				id: 'basic-bar',
+			},
+			xaxis: {
+				categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+			},
+		},
+		series: [
+			{
+			  name: "Revenue",
+			  data: [revenueByCategories[0].total, revenueByCategories[1].total, revenueByCategories[2].total, revenueByCategories[3].total, revenueByCategories[4].total, revenueByCategories[5].total],
+			}
+		  ],
+	});
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		Promise.all([
 			dispatch(get5HighestRatingProducts()),
 			dispatch(get5LowestRatingProducts()),
+			dispatch(get5BestSellingProducts()),
+			dispatch(getRevenueByCategory()),
 		]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
@@ -52,48 +73,17 @@ export const AdminDashboard = () => {
 				</nav>
 
 				<div class="container-fluid px-4">
-					<div class="row g-3 my-2">
-						<div class="col-md-3">
-							<div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-								<div>
-									<h3 class="fs-2"></h3>
-									<p class="fs-5">Products</p>
-								</div>
-								<FaGift />
-							</div>
-						</div>
-
-						<div class="col-md-3">
-							<div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-								<div>
-									<h3 class="fs-2"></h3>
-									<p class="fs-5">Orders</p>
-								</div>
-								<FaHandHoldingUsd />
-							</div>
-						</div>
-
-						<div class="col-md-3">
-							<div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-								<div>
-									<h3 class="fs-2"></h3>
-									<p class="fs-5">Sellers</p>
-								</div>
-								<FaTruck />
-							</div>
-						</div>
-
-						<div class="col-md-3">
-							<div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
-								<div>
-									<h3 class="fs-2"></h3>
-									<p class="fs-5">Accounts</p>
-								</div>
-								<FaChartLine />
-							</div>
+					<div class="row my-5">
+						<h3 class="fs-4 mb-3">Revenue</h3>
+						<div class="charts-card" style={{ width: 700 }}>
+							<Chart
+								options={state.options}
+								series={state.series}
+								type="bar"
+								width="750"
+							/>
 						</div>
 					</div>
-
 					<div class="row my-5">
 						<div class="col-sm-6">
 							<h3 class="fs-4 mb-3">Top 5 hot products</h3>
@@ -105,13 +95,14 @@ export const AdminDashboard = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{/* <c:forEach items="${hList}" var="c">
-										<tr>
-											<td>${c.productID}</td>
-											<td>${c.name}</td>
-											<td>${c.totalQuantity}</td>
-										</tr>
-									</c:forEach> */}
+									{bestSellingProducts.map((product) => {
+										return (
+											<tr>
+												<td>{product.product.name}</td>
+												<td>{product.totalQuantity}</td>
+											</tr>
+										);
+									})}
 								</tbody>
 							</table>
 						</div>
@@ -179,13 +170,6 @@ export const AdminDashboard = () => {
 									})}
 								</tbody>
 							</table>
-						</div>
-					</div>
-
-					<div class="row my-5">
-						<h3 class="fs-4 mb-3">Revenue</h3>
-						<div class="charts-card">
-							<div id="bar-chart"></div>
 						</div>
 					</div>
 				</div>
