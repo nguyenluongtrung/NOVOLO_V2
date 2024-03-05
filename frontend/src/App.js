@@ -10,6 +10,7 @@ import { SingleProduct } from './pages/SingleProduct';
 import {
 	AdminCombo,
 	AdminDashboard,
+	AdminOrder,
 	AdminProduct,
 	AdminPromotion,
 } from './pages/AdminPage';
@@ -36,6 +37,7 @@ function App() {
 						<Route path="/admin-product" element={<AdminProduct />} />
 						<Route path="/admin-promotion" element={<AdminPromotion />} />
 						<Route path="/admin-dashboard" element={<AdminDashboard />} />
+						<Route path="/admin-order" element={<AdminOrder />} />
 						<Route path="/admin-combo" element={<AdminCombo />} />
 						<Route path="/wishList" element={<WishList />} />
 						<Route path="/cart" element={<CartPage />} />

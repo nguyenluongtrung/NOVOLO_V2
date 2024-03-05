@@ -21,46 +21,7 @@ export const AdminDashboard = () => {
 		isLoading,
 	} = useSelector((state) => state.products);
 	const { categories } = useSelector((state) => state.categories);
-
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		Promise.all([
-			dispatch(get5BestSellingProducts()),
-			dispatch(getRevenueByCategory()),
-			dispatch(getAllCategories()),
-		]).catch((error) => {
-			console.error('Error during dispatch:', error);
-		});
-	}, [dispatch]);
-
-	useEffect(() => {
-		Promise.all([
-			dispatch(get5HighestRatingProducts()),
-			dispatch(get5LowestRatingProducts()),
-		]).catch((error) => {
-			console.error('Error during dispatch:', error);
-		});
-	}, [dispatch]);
-
-	let revenueTotal = [];
-	let revenueName = [];
-
-	revenueByCategories.forEach((revenue) => {
-		revenueTotal.push(revenue.total);
-		revenueName.push(
-			categories[categories.findIndex((cat) => cat._id == revenue._id)].name
-		);
-	});
-
-	let bestSellingTotal = [];
-	let bestSellingName = [];
-
-	bestSellingProducts.forEach((product) => {
-		bestSellingName.push(product.product.name);
-		bestSellingTotal.push(product.totalQuantity);
-	});
-
+	const [isDataLoaded, setIsDataLoaded] = useState(false);
 	const [state, setState] = useState({
 		options: {
 			colors: ['#E91E63', '#FF9800'],
@@ -68,25 +29,24 @@ export const AdminDashboard = () => {
 				id: 'basic-bar',
 			},
 			xaxis: {
-				categories: revenueName,
+				categories: [],
 			},
 		},
 		series: [
 			{
 				name: 'Revenue',
-				data: revenueTotal,
+				data: [],
 			},
 		],
 	});
-
 	const [pieState, setPieState] = useState({
-		series: bestSellingTotal,
+		series: [],
 		options: {
 			chart: {
 				width: 380,
 				type: 'pie',
 			},
-			labels: bestSellingName,
+			labels: [],
 			responsive: [
 				{
 					breakpoint: 480,
@@ -103,7 +63,97 @@ export const AdminDashboard = () => {
 		},
 	});
 
-	console.log(pieState)
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		Promise.all([
+			dispatch(get5BestSellingProducts()),
+			dispatch(getRevenueByCategory()),
+			dispatch(getAllCategories()),
+		])
+			.then(() => {
+				setIsDataLoaded(true);
+			})
+			.catch((error) => {
+				console.error('Error during dispatch:', error);
+			});
+	}, [dispatch]);
+
+	useEffect(() => {
+		Promise.all([
+			dispatch(get5HighestRatingProducts()),
+			dispatch(get5LowestRatingProducts()),
+		]).catch((error) => {
+			console.error('Error during dispatch:', error);
+		});
+	}, [dispatch]);
+
+	useEffect(() => {
+		if (isDataLoaded) {
+			let revenueTotal = [];
+			let revenueName = [];
+
+			revenueByCategories.forEach((revenue) => {
+				revenueTotal.push(revenue.total);
+				revenueName.push(
+					categories[categories.findIndex((cat) => cat._id === revenue._id)]
+						.name
+				);
+			});
+
+			let bestSellingTotal = [];
+			let bestSellingName = [];
+
+			bestSellingProducts.forEach((product) => {
+				bestSellingName.push(product.product.name);
+				bestSellingTotal.push(product.totalQuantity);
+			});
+
+			setState({
+				options: {
+					colors: ['#E91E63', '#FF9800'],
+					chart: {
+						id: 'basic-bar',
+					},
+					xaxis: {
+						categories: revenueName,
+					},
+				},
+				series: [
+					{
+						name: 'Revenue',
+						data: revenueTotal,
+					},
+				],
+			});
+
+			setPieState({
+				series: bestSellingTotal,
+				options: {
+					chart: {
+						width: 380,
+						type: 'pie',
+					},
+					labels: bestSellingName,
+					responsive: [
+						{
+							breakpoint: 480,
+							options: {
+								chart: {
+									width: 200,
+								},
+								legend: {
+									position: 'bottom',
+								},
+							},
+						},
+					],
+				},
+			});
+		}
+	}, [categories, revenueByCategories, bestSellingProducts, isDataLoaded]);
+
+	console.log(pieState);
 
 	if (
 		isLoading ||
