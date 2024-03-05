@@ -8,9 +8,7 @@ import {
 } from './../../../features/products/productsSlice';
 import { Spinner } from '../../../components';
 import { FaTrash, FaPenSquare } from 'react-icons/fa';
-import {
-	getAllCategories,
-} from '../../../features/categories/categoriesSlice';
+import { getAllCategories } from '../../../features/categories/categoriesSlice';
 import { AddProduct } from './components/AddProduct/AddProduct';
 import { UpdateProduct } from './components/UpdateProduct/UpdateProduct';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
@@ -23,6 +21,7 @@ export const AdminProduct = () => {
 	const [chosenProductId, setChosenProductId] = useState('');
 	const {
 		products,
+		productSize,
 		isError: productError,
 		isSuccess: productSuccess,
 		isLoading: productLoading,
@@ -41,6 +40,10 @@ export const AdminProduct = () => {
 		isLoading: priceLoading,
 		message: priceMessage,
 	} = useSelector((state) => state.prices);
+
+	const navigateToAnotherPage = (page) => {
+		dispatch(getAllProducts('page='+page));
+	}
 
 	const handleDeleteProduct = async (productId) => {
 		try {
@@ -128,7 +131,7 @@ export const AdminProduct = () => {
 
 				<div className="container-fluid px-4">
 					<div className="row">
-						<h3 className="fs-4 mb-3 col-sm-8">List of products </h3>
+						<h3 className="fs-4 mb-2 col-sm-8">List of products </h3>
 						<button
 							className="view-modal text-decoration-none text-white btn btn-success px-3 py-1 col-sm-2 mb-4"
 							onClick={() => setIsOpenAddForm(true)}
@@ -241,19 +244,25 @@ export const AdminProduct = () => {
 								</table>
 							</div>
 						</div>
-
-						<div className="row">
-							<div className="col-lg-12 text-center">
-								<div className="pagination-wrap text-center">
-									<ul
-										className="d-flex text-center justify-content-center"
-										style={{ marginTop: '10px' }}
-									>
-										{/* <c:forEach begin="1" end="${pageNumber}" var="i">
-                                            <li style="list-style: none"><a style="border: 1px solid black; border-radius: 50%" className="m-3 text-dark text-decoration-none px-2 py-1" href="product-admin?index=${i}">${i}</a></li>
-                                            </c:forEach> */}
-									</ul>
-								</div>
+					</div>
+					<div className="row">
+						<div className="col-lg-12 text-center">
+							<div className="pagination-wrap">
+								<ul>
+									{Array.from(
+										{
+											length:
+												productSize % 9 == 0
+													? productSize / 9
+													: productSize / 9 + 1,
+										},
+										(_, index) => index + 1
+									).map((page) => (
+										<li>
+											<a onClick={() => navigateToAnotherPage(page)}>{page}</a>
+										</li>
+									))}
+								</ul>
 							</div>
 						</div>
 					</div>

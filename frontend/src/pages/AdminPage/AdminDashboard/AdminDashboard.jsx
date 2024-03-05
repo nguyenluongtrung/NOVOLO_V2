@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
 import './AdminDashboard.css';
-import { FaGift, FaHandHoldingUsd, FaTruck, FaChartLine } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	get5BestSellingProducts,
@@ -10,10 +9,57 @@ import {
 	getRevenueByCategory,
 } from '../../../features/products/productsSlice';
 import Chart from 'react-apexcharts';
+import { getAllCategories } from '../../../features/categories/categoriesSlice';
+import { Spinner } from '../../../components';
 
 export const AdminDashboard = () => {
-	const { highestRatingProducts, lowestRatingProducts, bestSellingProducts, revenueByCategories } =
-		useSelector((state) => state.products);
+	const {
+		highestRatingProducts,
+		lowestRatingProducts,
+		bestSellingProducts,
+		revenueByCategories,
+		isLoading,
+	} = useSelector((state) => state.products);
+	const { categories } = useSelector((state) => state.categories);
+
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		Promise.all([
+			dispatch(get5BestSellingProducts()),
+			dispatch(getRevenueByCategory()),
+			dispatch(getAllCategories()),
+		]).catch((error) => {
+			console.error('Error during dispatch:', error);
+		});
+	}, [dispatch]);
+
+	useEffect(() => {
+		Promise.all([
+			dispatch(get5HighestRatingProducts()),
+			dispatch(get5LowestRatingProducts()),
+		]).catch((error) => {
+			console.error('Error during dispatch:', error);
+		});
+	}, [dispatch]);
+
+	let revenueTotal = [];
+	let revenueName = [];
+
+	revenueByCategories.forEach((revenue) => {
+		revenueTotal.push(revenue.total);
+		revenueName.push(
+			categories[categories.findIndex((cat) => cat._id == revenue._id)].name
+		);
+	});
+
+	let bestSellingTotal = [];
+	let bestSellingName = [];
+
+	bestSellingProducts.forEach((product) => {
+		bestSellingName.push(product.product.name);
+		bestSellingTotal.push(product.totalQuantity);
+	});
 
 	const [state, setState] = useState({
 		options: {
@@ -22,45 +68,69 @@ export const AdminDashboard = () => {
 				id: 'basic-bar',
 			},
 			xaxis: {
-				categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+				categories: revenueName,
 			},
 		},
 		series: [
 			{
-			  name: "Revenue",
-			  data: [revenueByCategories[0].total, revenueByCategories[1].total, revenueByCategories[2].total, revenueByCategories[3].total, revenueByCategories[4].total, revenueByCategories[5].total],
-			}
-		  ],
+				name: 'Revenue',
+				data: revenueTotal,
+			},
+		],
 	});
-	const dispatch = useDispatch();
 
-	useEffect(() => {
-		Promise.all([
-			dispatch(get5HighestRatingProducts()),
-			dispatch(get5LowestRatingProducts()),
-			dispatch(get5BestSellingProducts()),
-			dispatch(getRevenueByCategory()),
-		]).catch((error) => {
-			console.error('Error during dispatch:', error);
-		});
-	}, [dispatch]);
+	const [pieState, setPieState] = useState({
+		series: bestSellingTotal,
+		options: {
+			chart: {
+				width: 380,
+				type: 'pie',
+			},
+			labels: bestSellingName,
+			responsive: [
+				{
+					breakpoint: 480,
+					options: {
+						chart: {
+							width: 200,
+						},
+						legend: {
+							position: 'bottom',
+						},
+					},
+				},
+			],
+		},
+	});
+
+	console.log(pieState)
+
+	if (
+		isLoading ||
+		!Array.isArray(highestRatingProducts) ||
+		!Array.isArray(lowestRatingProducts) ||
+		!Array.isArray(bestSellingProducts) ||
+		!Array.isArray(revenueByCategories)
+	) {
+		return <Spinner />;
+	}
 
 	return (
-		<div class="d-flex" id="wrapper">
+		<div className="d-flex" id="wrapper">
 			<AdminSidebar />
 
 			<div id="page-content-wrapper">
-				<nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-					<div class="d-flex align-items-center">
+				<nav className="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+					<div className="d-flex align-items-center">
 						<i
-							class="fas fa-align-left primary-text fs-4 me-3"
+							className="fas fa-align-left primary-text fs-4 me-3"
 							id="menu-toggle"
 						></i>
-						<h2 class="fs-2 m-0">Dashboard</h2>
+						<h2 className="fs-2 m-0">Dashboard</h2>
 					</div>
 
 					<button
-						class="navbar-toggler"
+						className="navbar-toggler"
 						type="button"
 						data-bs-toggle="collapse"
 						data-bs-target="#navbarSupportedContent"
@@ -68,14 +138,14 @@ export const AdminDashboard = () => {
 						aria-expanded="false"
 						aria-label="Toggle navigation"
 					>
-						<span class="navbar-toggler-icon"></span>
+						<span className="navbar-toggler-icon"></span>
 					</button>
 				</nav>
 
-				<div class="container-fluid px-4">
-					<div class="row my-5">
-						<h3 class="fs-4 mb-3">Revenue</h3>
-						<div class="charts-card" style={{ width: 700 }}>
+				<div className="container-fluid px-4">
+					<div className="row my-5">
+						<h3 className="fs-4 mb-3">Revenue</h3>
+						<div className="charts-card" style={{ width: 700 }}>
 							<Chart
 								options={state.options}
 								series={state.series}
@@ -84,54 +154,11 @@ export const AdminDashboard = () => {
 							/>
 						</div>
 					</div>
-					<div class="row my-5">
-						<div class="col-sm-6">
-							<h3 class="fs-4 mb-3">Top 5 hot products</h3>
-							<table class="table bg-white rounded shadow-sm  table-hover">
-								<thead>
-									<tr>
-										<th scope="col">Product Name</th>
-										<th scope="col">Total Sold Quantity</th>
-									</tr>
-								</thead>
-								<tbody>
-									{bestSellingProducts.map((product) => {
-										return (
-											<tr>
-												<td>{product.product.name}</td>
-												<td>{product.totalQuantity}</td>
-											</tr>
-										);
-									})}
-								</tbody>
-							</table>
-						</div>
-						<div class="col-sm-6">
-							<h3 class="fs-4 mb-3">The 5 worst products</h3>
-							<table class="table bg-white rounded shadow-sm  table-hover">
-								<thead>
-									<tr>
-										<th scope="col">Product Name</th>
-										<th scope="col">Total Sold Quantity</th>
-									</tr>
-								</thead>
-								<tbody>
-									{/* <c:forEach items="${wList}" var="c">
-										<tr>
-											<td>${c.productID}</td>
-											<td>${c.name}</td>
-											<td>${c.totalQuantity}</td>
-										</tr>
-									</c:forEach> */}
-								</tbody>
-							</table>
-						</div>
-					</div>
 
-					<div class="row my-5">
-						<div class="col-sm-6">
-							<h3 class="fs-4 mb-3">5 highest rating products</h3>
-							<table class="table bg-white rounded shadow-sm  table-hover">
+					<div className="row my-5">
+						<div className="col-sm-6">
+							<h3 className="fs-4 mb-3">5 highest rating products</h3>
+							<table className="table bg-white rounded shadow-sm  table-hover">
 								<thead>
 									<tr>
 										<th scope="col">Product Name</th>
@@ -150,9 +177,9 @@ export const AdminDashboard = () => {
 								</tbody>
 							</table>
 						</div>
-						<div class="col-sm-6">
-							<h3 class="fs-4 mb-3">5 lowest rating products</h3>
-							<table class="table bg-white rounded shadow-sm  table-hover">
+						<div className="col-sm-6">
+							<h3 className="fs-4 mb-3">5 lowest rating products</h3>
+							<table className="table bg-white rounded shadow-sm  table-hover">
 								<thead>
 									<tr>
 										<th scope="col">Product Name</th>
@@ -170,6 +197,20 @@ export const AdminDashboard = () => {
 									})}
 								</tbody>
 							</table>
+						</div>
+					</div>
+
+					<div className="row my-5">
+						<h3 className="fs-4 mb-3">Top 5 hot products</h3>
+						<div className="charts-card" style={{ width: 700 }}>
+							<div className="donut">
+								<Chart
+									options={pieState.options}
+									series={pieState.series}
+									type="pie"
+									width={500}
+								/>
+							</div>
 						</div>
 					</div>
 				</div>

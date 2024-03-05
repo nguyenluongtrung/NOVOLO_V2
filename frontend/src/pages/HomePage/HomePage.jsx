@@ -90,7 +90,7 @@ export const HomePage = () => {
 			</div>
 
 			<div className="Slide-container">
-				<Fade autoplay={true} duration={3000}>
+				<Fade autoplay={true} duration={2000}>
 					{promotions.map((promotion, index) => {
 						return (
 							<div className="testimonial-sliders">

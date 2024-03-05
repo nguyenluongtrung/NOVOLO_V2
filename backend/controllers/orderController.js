@@ -13,7 +13,7 @@ const createOrder = asyncHandler(async (req, res) => {
 });
 
 const get5BestSellingProducts = asyncHandler(async (req, res) => {
-	const result = await Order.aggregate([
+	const tempResult = await Order.aggregate([
 		{
 			$unwind: '$statusHistory',
 		},
@@ -35,9 +35,6 @@ const get5BestSellingProducts = asyncHandler(async (req, res) => {
 			$sort: { totalQuantity: -1 },
 		},
 		{
-			$limit: 5,
-		},
-		{
 			$lookup: {
 				from: 'products',
 				localField: '_id',
@@ -49,6 +46,30 @@ const get5BestSellingProducts = asyncHandler(async (req, res) => {
 			$unwind: '$product',
 		},
 	]);
+
+	let result = [];
+	let others = {};
+	let otherQuantity = 0;
+
+	for (let i = 5; i < tempResult.length; i++) {
+		otherQuantity += Number(tempResult[i].totalQuantity);
+	}
+
+	others = {
+		totalQuantity: otherQuantity,
+		product: {
+			name: 'Others',
+		},
+	};
+
+	result.push(
+		tempResult[0],
+		tempResult[1],
+		tempResult[2],
+		tempResult[3],
+		tempResult[4],
+		others
+	);
 
 	res.status(200).json({
 		status: 'success',
