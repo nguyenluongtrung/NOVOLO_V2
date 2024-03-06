@@ -1,10 +1,35 @@
 const asyncHandler = require('express-async-handler');
 const Order = require('./../models/orderModel');
 
+const getOrders = asyncHandler(async (req, res) => {
+	const orders = await Order.find({});
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			orders,
+		},
+	});
+});
+
 const createOrder = asyncHandler(async (req, res) => {
 	const order = await Order.create(req.body);
 
 	res.status(201).json({
+		status: 'success',
+		data: {
+			order,
+		},
+	});
+});
+
+const updateOrder = asyncHandler(async (req, res) => {
+	const order = await Order.findById(req.params.orderId);
+
+	order.statusHistory.push(req.body);
+	order.save();
+
+	res.status(200).json({
 		status: 'success',
 		data: {
 			order,
@@ -120,7 +145,9 @@ const getRevenueByCategory = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+	getOrders,
 	createOrder,
 	get5BestSellingProducts,
 	getRevenueByCategory,
+	updateOrder,
 };

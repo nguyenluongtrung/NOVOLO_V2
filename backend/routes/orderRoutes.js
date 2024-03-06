@@ -3,11 +3,14 @@ const {
 	createOrder,
 	get5BestSellingProducts,
 	getRevenueByCategory,
+	getOrders,
+	updateOrder,
 } = require('../controllers/orderController');
 const { protect } = require('../middleware/userMiddleware');
 const router = express.Router();
 
-router.route('/').post(protect, createOrder);
+router.route('/').post(protect, createOrder).get(protect, getOrders);
+router.route('/:orderId').patch(protect, updateOrder);
 router.route('/5BestSellingProducts').get(protect, get5BestSellingProducts);
 router.route('/getRevenueByCategory').get(protect, getRevenueByCategory);
 

@@ -1,6 +1,15 @@
+import { useEffect } from 'react';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOrders } from '../../../features/orders/ordersSlice';
+import { formatDate } from '../../../utils/format';
 
 export const AdminOrder = () => {
+	const { orders, isLoading } = useSelector((state) => state.orders);
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(getOrders());
+	}, [dispatch]);
 	return (
 		<div className="d-flex" id="wrapper">
 			<AdminSidebar />
@@ -90,9 +99,6 @@ export const AdminOrder = () => {
 								<thead>
 									<tr>
 										<th scope="col" style={{ fontSize: '90%' }}>
-											Order ID
-										</th>
-										<th scope="col" style={{ fontSize: '90%' }}>
 											Date
 										</th>
 										<th scope="col" style={{ fontSize: '90%' }}>
@@ -110,26 +116,30 @@ export const AdminOrder = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{/* <c:if test="${listSize != 0}">
-                                            <c:forEach items="${list}" var="c" varStatus="status">
-                                                <tr>
-                                                    <td>${c.orderID}</td>
-                                                    <td>${c.date}</td>
-                                                    <td>${c.totalPrice}</td>
-                                                    <td>${c.note}</td>
-                                                    <td>
-                                                        <input type="radio" name="status_${c.orderID}" value="PEND" ${c.status == 'PEND' ? 'checked' : ''}>Pending
-                                                        <input type="radio" name="status_${c.orderID}" value="SUCC" ${c.status == 'SUCC' ? 'checked' : ''}>Success
-                                                        <input type="radio" name="status_${c.orderID}" value="FAIL" ${c.status == 'FAIL' ? 'checked' : ''}>Fail
-                                                    </td>
-                                                    <td><a href="#"><button className="btn btn-success px-4 py-1">View Details</button></a></td>
-                                                </tr>
-                                            </c:forEach>
-                                        </c:if>
-                                        <c:if test="${listSize == 0}">
-                                            <tr><p className="text-center text-danger">The list is empty!</p></tr>
-
-                                    </c:if> */}
+									{orders.map((order) => {
+										return (
+											<tr>
+												<td>{formatDate(order.date)}</td>
+												<td>{order.totalPrice}</td>
+												<td>{order.note}</td>
+												<td>
+													<input type="radio" value="PEND" />
+													Pending
+													<input type="radio" value="SUCC" />
+													Success
+													<input type="radio" value="FAIL" />
+													Fail
+												</td>
+												<td>
+													<a href="#">
+														<button className="btn btn-success px-4 py-1">
+															View Details
+														</button>
+													</a>
+												</td>
+											</tr>
+										);
+									})}
 								</tbody>
 							</table>
 							<button
