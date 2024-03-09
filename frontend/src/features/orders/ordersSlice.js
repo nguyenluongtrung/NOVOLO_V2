@@ -52,6 +52,26 @@ export const getOrders = createAsyncThunk(
 	}
 );
 
+// Update orders
+export const updateOrder = createAsyncThunk(
+	'orders/updateOrder',
+	async (_, thunkAPI) => {
+		try {
+			const storedUser = JSON.parse(localStorage.getItem('user'));
+			const token = storedUser.data.token;
+			return await ordersService.getOrders(token);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
 export const orderSlice = createSlice({
 	name: 'orders',
 	initialState,

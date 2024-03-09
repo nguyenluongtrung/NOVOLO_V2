@@ -1,12 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrders } from '../../../features/orders/ordersSlice';
 import { formatDate } from '../../../utils/format';
 
 export const AdminOrder = () => {
+	const [ status, setStatus ] = useState('');
 	const { orders, isLoading } = useSelector((state) => state.orders);
 	const dispatch = useDispatch();
+
+	const handleUpdateStatus = () => {
+		
+	}
+
 	useEffect(() => {
 		dispatch(getOrders());
 	}, [dispatch]);
@@ -93,7 +99,7 @@ export const AdminOrder = () => {
 							</div>
 						</div>
 					</div>
-					<form action="statusproduct" method="POST">
+					<form>
 						<div className="col">
 							<table className="table bg-white rounded shadow-sm  table-hover">
 								<thead>
@@ -123,11 +129,11 @@ export const AdminOrder = () => {
 												<td>{order.totalPrice}</td>
 												<td>{order.note}</td>
 												<td>
-													<input type="radio" value="PEND" />
+													<input type="radio" value="pending" name='status' onClick={(e) => setStatus(e.target.value)}/>
 													Pending
-													<input type="radio" value="SUCC" />
+													<input type="radio" value="fulfilled" name='status' onClick={(e) => setStatus(e.target.value)} />
 													Success
-													<input type="radio" value="FAIL" />
+													<input type="radio" value="rejected" name='status' onClick={(e) => setStatus(e.target.value)} />
 													Fail
 												</td>
 												<td>
@@ -145,10 +151,10 @@ export const AdminOrder = () => {
 							<button
 								style={{ float: 'right' }}
 								className="btn btn-success px-3 col-sm-2"
-								type="submit"
+								onClick={handleUpdateStatus}
 							>
 								<a className="view-modal text-decoration-none text-white">
-									&nbsp; Submit
+									&nbsp; Update status
 								</a>
 							</button>
 						</div>
