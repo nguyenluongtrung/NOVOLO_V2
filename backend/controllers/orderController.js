@@ -1,5 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Order = require('./../models/orderModel');
+const User = require('./../models/userModel');
+const Product = require('./../models/productModel');
 
 const getOrders = asyncHandler(async (req, res) => {
 	const orders = await Order.find({});
@@ -14,6 +16,26 @@ const getOrders = asyncHandler(async (req, res) => {
 
 const createOrder = asyncHandler(async (req, res) => {
 	const order = await Order.create(req.body);
+
+	let accumulatedPoint = 0;
+
+	await Promise.all(
+		req.body.purchasedItems.products.map(async (pro) => {
+			const product = await Product.findById(pro.productId);
+			accumulatedPoint +=
+				Number(product.accumulatedPoint) * Number(pro.quantity);
+		})
+	);
+
+	console.log(
+		'total: ',
+		Number(req.user.totalAccumulatedPoint) + Number(accumulatedPoint)
+	);
+
+	await User.findByIdAndUpdate(req.user._id, {
+		totalAccumulatedPoint:
+			Number(req.user.totalAccumulatedPoint) + Number(accumulatedPoint),
+	});
 
 	res.status(201).json({
 		status: 'success',
