@@ -6,14 +6,27 @@ import { useEffect, useState } from 'react';
 import { getProductsFromCart } from '../../features/products/productsSlice';
 import { Spinner } from '../../components';
 import { FaWindowClose } from 'react-icons/fa';
-import { deleteProductsFromCart } from '../../features/auth/authSlice';
+import {
+	deleteProductsFromCart,
+	getUserInformation,
+} from '../../features/auth/authSlice';
 import { getAllNewestPrices } from '../../features/prices/pricesSlice';
 import { getAllPromotions } from '../../features/promotion/promotionsSlice';
 
 export const CartPage = () => {
+	const {
+		user,
+		isSuccess: authSuccess,
+		isError: authError,
+		isLoading: authLoading,
+		message: authMessage,
+	} = useSelector((state) => state.auth);
 	const [totalPrice, setTotalPrice] = useState(0);
 	const [promotionCode, setPromotionCode] = useState('');
 	const [promotionValue, setPromotionValue] = useState(null);
+	const [productTicks, setProductTicks] = useState([]);
+	const [currentTotalAccumulatedPoints, setCurrentTotalAccumulatedPoints] =
+		useState(user.totalAccumulatedPoint);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { products, isLoading: productLoading } = useSelector(
@@ -26,18 +39,12 @@ export const CartPage = () => {
 		(state) => state.prices
 	);
 
-	const {
-		isSuccess: authSuccess,
-		isError: authError,
-		isLoading: authLoading,
-		message: authMessage,
-	} = useSelector((state) => state.auth);
-
 	useEffect(() => {
 		Promise.all([
 			dispatch(getProductsFromCart()),
 			dispatch(getAllNewestPrices()),
 			dispatch(getAllPromotions()),
+			dispatch(getUserInformation()),
 		]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
@@ -94,8 +101,30 @@ export const CartPage = () => {
 		if (promotionIndex !== -1) {
 			promotion = promotions[promotionIndex];
 			setPromotionValue(promotion.promotionValue);
-		} else{
+		} else {
 			setPromotionValue(null);
+		}
+	};
+
+	const handleUpdateExchangedPoints = (
+		productId,
+		exchangedPoint,
+		reducedPrice
+	) => {
+		if (productTicks.findIndex((id) => String(id) == String(productId)) == -1) {
+			setCurrentTotalAccumulatedPoints(
+				currentTotalAccumulatedPoints - exchangedPoint
+			);
+			setTotalPrice(totalPrice - reducedPrice);
+			setProductTicks([...productTicks, productId]);
+		} else {
+			setCurrentTotalAccumulatedPoints(
+				currentTotalAccumulatedPoints + exchangedPoint
+			);
+			setTotalPrice(totalPrice + reducedPrice);
+			setProductTicks(
+				productTicks.filter((id) => String(id) !== String(productId))
+			);
 		}
 	};
 
@@ -194,66 +223,6 @@ export const CartPage = () => {
 												</tr>
 											);
 										})}
-										{/* <c:forEach items="${items}" var="c">
-											<tr className="table-body-row">
-												<td className="product-remove">
-													<a href="remove-from-cart?id=${c.product.productID}">
-														<i className="far fa-window-close"></i>
-													</a>
-												</td>
-												<td className="product-image">
-													<img
-														src="${c.product.image}"
-														alt=""
-														style="height: 50px; width: 50px;"
-													/>
-												</td>
-												<td className="product-name">${c.product.name}</td>
-												<td className="product-price">${c.product.price}$</td>
-												<td className="product-quantity">
-													<input
-														type="number"
-														readonly
-														placeholder="${c.quantity}"
-													/>
-												</td>
-												<td className="product-total">
-													${c.quantity * c.product.price}$
-												</td>
-											</tr>
-										</c:forEach>
-										<c:forEach items="${comboItems}" var="c">
-											<tr className="table-body-row">
-												<td className="product-remove">
-													<a href="remove-from-cart?c_id=${c.combo.comboID}">
-														<i className="far fa-window-close"></i>
-													</a>
-												</td>
-												<td className="product-image">
-													<img
-														src="${c.combo.image}"
-														alt=""
-														style="height: 50px; width: 50px;"
-													/>
-												</td>
-												<td className="product-name">${c.combo.comboName}</td>
-												<td className="product-price">${c.combo.totalPrice}$</td>
-												<td className="product-quantity">
-													<input
-														type="number"
-														readonly
-														placeholder="${c.quantity}"
-													/>
-												</td>
-												<td className="product-total">
-													<fmt:formatNumber
-														value="${c.combo.totalPrice * c.quantity}"
-														pattern="#.##"
-													/>
-													$
-												</td>
-											</tr>
-										</c:forEach> */}
 									</tbody>
 								</table>
 							</div>
@@ -271,12 +240,58 @@ export const CartPage = () => {
 										<tr className="table-total-row">
 											<th></th>
 											<th>Price</th>
-											{/* <c:if test="${sessionScope.acc.role != null}">
-													<th>Exchanged points</th>
-												</c:if> */}
+											<th>Exchanged points</th>
 										</tr>
 									</thead>
 									<tbody>
+										{products.map((product) => {
+											return (
+												<tr className="total-data">
+													<td className="product-name">
+														{product?.productId?.name}
+													</td>
+													<td className="product-total">
+														{product?.quantity *
+															prices[
+																prices.findIndex(
+																	(price) =>
+																		price.productId == product?.productId?._id
+																)
+															]?.price}
+														$
+													</td>
+													<td>
+														{product?.productId?.exchangedPoint} points{' '}
+														<input
+															type="checkbox"
+															onClick={() =>
+																handleUpdateExchangedPoints(
+																	product?.productId._id,
+																	product?.productId?.exchangedPoint,
+																	product?.quantity *
+																		prices[
+																			prices.findIndex(
+																				(price) =>
+																					price.productId ==
+																					product?.productId?._id
+																			)
+																		]?.price
+																)
+															}
+															disabled={
+																productTicks.findIndex(
+																	(id) =>
+																		String(id) ==
+																		String(product?.productId?._id)
+																) == -1 &&
+																Number(product?.productId?.exchangedPoint) >
+																	Number(currentTotalAccumulatedPoints)
+															}
+														/>
+													</td>
+												</tr>
+											);
+										})}
 										<tr className="total-data">
 											<td>
 												<strong>Total: </strong>
@@ -301,23 +316,16 @@ export const CartPage = () => {
 														: ''}
 												</span>
 											</td>
-											{/* <td id="subtotalCell">${subtotal}$</td> */}
-											{/* <c:if test="${sessionScope.acc.role != null}">
-													<td></td>
-												</c:if> */}
 										</tr>
 									</tbody>
 								</table>
 								<div className="cart-buttons">
-									{/* <c:if test="${sessionScope.acc.role != null}">
-												<p>
-													Your points are:{' '}
-													<span id="my-point">
-														${sessionScope.acc.totalAccumulatedPoint} points
-													</span>
-												</p>
-											</c:if> */}
-
+									<p>
+										Your current accumulated points are:{' '}
+										<span id="my-point">
+											{currentTotalAccumulatedPoints} points
+										</span>
+									</p>
 									<button
 										onClick={() => handleCheckOut(totalPrice)}
 										className="btn-orange"

@@ -27,11 +27,6 @@ const createOrder = asyncHandler(async (req, res) => {
 		})
 	);
 
-	console.log(
-		'total: ',
-		Number(req.user.totalAccumulatedPoint) + Number(accumulatedPoint)
-	);
-
 	await User.findByIdAndUpdate(req.user._id, {
 		totalAccumulatedPoint:
 			Number(req.user.totalAccumulatedPoint) + Number(accumulatedPoint),
