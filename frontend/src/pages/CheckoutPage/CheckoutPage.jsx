@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import {
 	deleteAllProductsFromCart,
 	getUserInformation,
+	updateUserInformation,
 } from '../../features/auth/authSlice';
 import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -22,6 +23,7 @@ export const CheckoutPage = () => {
 	const data = location.state;
 	const totalPrice = data.totalPrice;
 	const products = data.cart.products;
+	const totalAccumulatedPoint = data.currentTotalAccumulatedPoints;
 
 	const {
 		register,
@@ -51,6 +53,10 @@ export const CheckoutPage = () => {
 				products: productList,
 			},
 		};
+
+		await Promise.all([
+			dispatch(updateUserInformation({totalAccumulatedPoint})),
+		]);
 
 		await Promise.all([
 			dispatch(createOrder(orderData)),

@@ -88,7 +88,13 @@ export const CartPage = () => {
 				state: { totalPrice: newPrice, cart: { products } },
 			});
 		} else {
-			navigate('/check-out', { state: { totalPrice, cart: { products } } });
+			navigate('/check-out', {
+				state: {
+					totalPrice,
+					currentTotalAccumulatedPoints,
+					cart: { products },
+				},
+			});
 		}
 	};
 
@@ -261,13 +267,13 @@ export const CartPage = () => {
 														$
 													</td>
 													<td>
-														{product?.productId?.exchangedPoint} points{' '}
+														{product?.quantity * product?.productId?.exchangedPoint} points{' '}
 														<input
 															type="checkbox"
 															onClick={() =>
 																handleUpdateExchangedPoints(
 																	product?.productId._id,
-																	product?.productId?.exchangedPoint,
+																	product?.quantity * product?.productId?.exchangedPoint,
 																	product?.quantity *
 																		prices[
 																			prices.findIndex(
@@ -284,7 +290,7 @@ export const CartPage = () => {
 																		String(id) ==
 																		String(product?.productId?._id)
 																) == -1 &&
-																Number(product?.productId?.exchangedPoint) >
+																Number(product?.quantity * product?.productId?.exchangedPoint) >
 																	Number(currentTotalAccumulatedPoints)
 															}
 														/>
