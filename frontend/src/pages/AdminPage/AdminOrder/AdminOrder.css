@@ -1,0 +1,8 @@
+.headerOrder, .ListOrder{
+    font-family:inherit;
+    font-weight: bold;
+}
+
+.blockitem{
+    display:flex
+}
