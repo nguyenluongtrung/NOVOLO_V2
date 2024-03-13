@@ -1,83 +1,88 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './HomePage.css';
-import './../../assets/css/main.css';
-import './../../assets/css/meanmenu.min.css';
-import './../../assets/css/owl.carousel.css';
-import './../../assets/css/animate.css';
-import './../../assets/css/responsive.css';
-import { FaPhoneVolume, FaSync, FaShippingFast } from 'react-icons/fa';
-import ImageSlider from './components/ImageSlider'
+import React from "react";
+import { Link } from "react-router-dom";
+import "./HomePage.css";
+import "./../../assets/css/main.css";
+import "./../../assets/css/meanmenu.min.css";
+import "./../../assets/css/owl.carousel.css";
+import "./../../assets/css/animate.css";
+import "./../../assets/css/responsive.css";
+import { FaPhoneVolume, FaSync, FaShippingFast } from "react-icons/fa";
+import ImageSlider from "./components/ImageSlider";
+import CommentSlider from "./components/CommentSlider";
 
 export const HomePage = () => {
-	return (
-		<div>
-			<div className="search-area">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-12">
-							<span className="close-btn">
-								<i className="fas fa-window-close"></i>
-							</span>
-							<div className="search-bar">
-								<div className="search-bar-tablecell">
-									<h3>Search For:</h3>
-									<form>
-										<input type="text" placeholder="Search by name..." />
-										<button type="submit">
-											Search <i className="fas fa-search"></i>
-										</button>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div style={{marginTop: '-160px'}}>
+  return (
+    <div>
+      <div className="search-area">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12">
+              <span className="close-btn">
+                <i className="fas fa-window-close"></i>
+              </span>
+              <div className="search-bar">
+                <div className="search-bar-tablecell">
+                  <h3>Search For:</h3>
+                  <form>
+                    <input type="text" placeholder="Search by name..." />
+                    <button type="submit">
+                      Search <i className="fas fa-search"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* <div style={{marginTop: '-160px'}}>
 				<ImageSlider/>
-			</div> 
-			<div className="list-section pt-80 pb-80">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
-							<div className="list-box d-flex align-items-center">
-								<div className="list-icon">
-									<FaShippingFast />
-								</div>
-								<div className="content">
-									<h3>Free Shipping</h3>
-									<p>When order over $75</p>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
-							<div className="list-box d-flex align-items-center">
-								<div className="list-icon">
-									<FaPhoneVolume />
-								</div>
-								<div className="content">
-									<h3>24/7 Support</h3>
-									<p>Get support all day</p>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-4 col-md-6">
-							<div className="list-box d-flex justify-content-start align-items-center">
-								<div className="list-icon">
-									<FaSync />
-								</div>
-								<div className="content">
-									<h3>Refund</h3>
-									<p>Get refund within 3 days!</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			</div>  */}
+      <div className="homepage-slider">
+        <ImageSlider />
+      </div>
 
-			{/* <c:if test="${ok != null}">
+      <div className="list-section pt-80 pb-80">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
+              <div className="list-box d-flex align-items-center">
+                <div className="list-icon">
+                  <FaShippingFast />
+                </div>
+                <div className="content">
+                  <h3>Free Shipping</h3>
+                  <p>When order over $75</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
+              <div className="list-box d-flex align-items-center">
+                <div className="list-icon">
+                  <FaPhoneVolume />
+                </div>
+                <div className="content">
+                  <h3>24/7 Support</h3>
+                  <p>Get support all day</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-4 col-md-6">
+              <div className="list-box d-flex justify-content-start align-items-center">
+                <div className="list-icon">
+                  <FaSync />
+                </div>
+                <div className="content">
+                  <h3>Refund</h3>
+                  <p>Get refund within 3 days!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <c:if test="${ok != null}">
 				<section className="shop-banner">
 					<div className="container">
 						<h3>
@@ -346,23 +351,25 @@ export const HomePage = () => {
 					</div>
 				</section>
 			</c:if> */}
-			<div className="product-section mt-150 mb-150">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-8 offset-lg-2 text-center">
-							<div className="section-title">
-								<h3>
-									<span className="orange-text">Our</span> Products
-								</h3>
-								<p>
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-									Aliquid, fuga quas itaque eveniet beatae optio.
-								</p>
-							</div>
-						</div>
-					</div>
+      <div className="product-section mt-150 mb-150">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-8 offset-lg-2 text-center">
+              <div className="section-title">
+                <h3>
+                  <span className="orange-text">Our</span> Products
+                </h3>
+                <p>
+                  Indulge your senses in the exquisite flavors of our
+                  handcrafted gourmet treats. Made with only the finest
+                  ingredients sourced from local farmers and artisans, each bite
+                  is a journey through taste paradise.
+                </p>
+              </div>
+            </div>
+          </div>
 
-					{/* <div className="row">
+          {/* <div className="row">
 							<c:forEach items="${someProducts}" var="c">
 								<div className="col-lg-4 col-md-6 text-center">
 									<div className="single-product-item">
@@ -401,115 +408,63 @@ export const HomePage = () => {
 								</div>
 							</c:forEach>
 						</div> */}
-				</div>
-			</div>
+        </div>
+      </div>
 
-			<div className="testimonail-section mt-150 mb-150">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-10 offset-lg-1 text-center">
-							<div className="testimonial-sliders">
-								<div className="single-testimonial-slider">
-									<div className="client-avater">
-										<img src="assets/img/avaters/avatar1.png" alt="" />
-									</div>
-									<div className="client-meta">
-										<h3>
-											Saira Hakim <span>Local shop owner</span>
-										</h3>
-										<p className="testimonial-body">
-											" Sed ut perspiciatis unde omnis iste natus error
-											veritatis et quasi architecto beatae vitae dict eaque ipsa
-											quae ab illo inventore Sed ut perspiciatis unde omnis iste
-											natus error sit voluptatem accusantium "
-										</p>
-										<div className="last-icon">
-											<i className="fas fa-quote-right"></i>
-										</div>
-									</div>
-								</div>
-								<div className="single-testimonial-slider">
-									<div className="client-avater">
-										<img src="assets/img/avaters/avatar2.png" alt="" />
-									</div>
-									<div className="client-meta">
-										<h3>
-											David Niph <span>Local shop owner</span>
-										</h3>
-										<p className="testimonial-body">
-											" Sed ut perspiciatis unde omnis iste natus error
-											veritatis et quasi architecto beatae vitae dict eaque ipsa
-											quae ab illo inventore Sed ut perspiciatis unde omnis iste
-											natus error sit voluptatem accusantium "
-										</p>
-										<div className="last-icon">
-											<i className="fas fa-quote-right"></i>
-										</div>
-									</div>
-								</div>
-								<div className="single-testimonial-slider">
-									<div className="client-avater">
-										<img src="assets/img/avaters/avatar3.png" alt="" />
-									</div>
-									<div className="client-meta">
-										<h3>
-											Jacob Sikim <span>Local shop owner</span>
-										</h3>
-										<p className="testimonial-body">
-											" Sed ut perspiciatis unde omnis iste natus error
-											veritatis et quasi architecto beatae vitae dict eaque ipsa
-											quae ab illo inventore Sed ut perspiciatis unde omnis iste
-											natus error sit voluptatem accusantium "
-										</p>
-										<div className="last-icon">
-											<i className="fas fa-quote-right"></i>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+      <div className="testimonail-section mt-150 mb-150">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-10 offset-lg-1 text-center">
+              <div className="testimonial-sliders">
+                <CommentSlider />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-			<div className="abt-section mb-150">
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-6 col-md-12">
-							<div className="abt-bg">
-								<a
-									href="https://www.youtube.com/watch?v=dA0VGEbbw4g"
-									className="video-play-btn popup-youtube"
-								>
-									<i className="fas fa-play"></i>
-								</a>
-							</div>
-						</div>
-						<div className="col-lg-6 col-md-12">
-							<div className="abt-text">
-								<p className="top-sub">Since Year 1999</p>
-								<h2>
-									We are <span className="orange-text">Fruitkha</span>
-								</h2>
-								<p>
-									Etiam vulputate ut augue vel sodales. In sollicitudin neque et
-									massa porttitor vestibulum ac vel nisi. Vestibulum placerat
-									eget dolor sit amet posuere. In ut dolor aliquet, aliquet
-									sapien sed, interdum velit. Nam eu molestie lorem.
-								</p>
-								<p>
-									Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-									Sapiente facilis illo repellat veritatis minus, et labore
-									minima mollitia qui ducimus.
-								</p>
-								<a href="about.html" className="boxed-btn mt-4">
-									know more
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+      <div className="abt-section mb-150">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-6 col-md-12">
+              <div className="abt-bg">
+                <a
+                  href="https://www.youtube.com/watch?v=dA0VGEbbw4g"
+                  className="video-play-btn popup-youtube"
+                >
+                  <i className="fas fa-play"></i>
+                </a>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-12">
+              <div className="abt-text">
+                <p className="top-sub">Since Year 2019</p>
+                <h2>
+                  We are <span className="orange-text">Fruitkha</span>
+                </h2>
+                <p>
+                  Introducing our sensational range of gourmet burgers, crispy
+                  fries, and irresistible sides that will satisfy even the most
+                  discerning of taste buds. At NOVOLO, we believe that fast food
+                  should never compromise on quality or flavor. Sink your teeth
+                  into our signature NOVOLO Burger – a juicy, flame-grilled
+                  patty topped with melted cheese, crispy lettuce, ripe
+                  tomatoes, and our secret sauce, all sandwiched between a
+                  toasted brioche bun. It's a flavor explosion in every bite!
+                </p>
+                {/* <p>
+                  Pair your burger with our golden, crispy fries, perfectly
+                  seasoned to perfection, and complete your meal with one of our
+                  refreshing beverages or decadent desserts.
+                </p> */}
+                <a href="#" className="boxed-btn mt-4">
+                  Show more
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };

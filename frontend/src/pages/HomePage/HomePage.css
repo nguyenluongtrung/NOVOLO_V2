@@ -2,6 +2,15 @@
     color: white;
 }
 
-/* .list-icon{
-    width: 300px;
-} */
+.list-box .list-icon  {
+    display: block;
+    font-size: 24px;
+    margin-right: 15px;
+    color: #F28123;
+    width: 65px;
+    height: 65px;
+    text-align: center;
+    line-height: 60px;
+    border: 2px #F28123 dotted;
+    border-radius: 999px;
+}
