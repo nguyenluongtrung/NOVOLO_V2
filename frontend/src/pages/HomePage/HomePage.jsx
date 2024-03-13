@@ -89,85 +89,79 @@ export const HomePage = () => {
 				</div>
 			</div>
 
-			<div className="Slide-container">
-				<Fade autoplay={true} duration={2000}>
-					{promotions.map((promotion, index) => {
-						return (
-							<div className="testimonial-sliders">
-								<div className="single-testimonial-slider">
-									<section className="shop-banner">
-										<div className="container">
-											<div key={index} className="promotion-banner">
-												<h3>
-													<span className="text-warning"></span>{' '}
-													<span className="text-uppercase">
-														{promotion.promotionName}
-													</span>{' '}
-													sale is on! <br /> with big{' '}
-													<span className="orange-text">Discount...</span>
-												</h3>
-												<div className="sale-percent">
-													<span>
-														Sale! <br /> Upto
-													</span>
-													{promotion.promotionValue} %<span>off</span>
-												</div>
-												<div className="mb-3">
-													<span>
-														Promotion code:{' '}
-														<span className="text-danger font-weight-bold">
-															{promotion.promotionCode}
+			{promotions?.length > 0 && (
+				<div className="Slide-container">
+					<Fade autoplay={promotions?.length == 1 ? false : true} duration={2000}>
+						{promotions.map((promotion, index) => {
+							return (
+								<div className="testimonial-sliders">
+									<div className="single-testimonial-slider">
+										<section className="shop-banner">
+											<div className="container">
+												<div key={index} className="promotion-banner">
+													<h3>
+														<span className="text-warning"></span>{' '}
+														<span className="text-uppercase">
+															{promotion.promotionName}
+														</span>{' '}
+														sale is on! <br /> with big{' '}
+														<span className="orange-text">Discount...</span>
+													</h3>
+													<div className="sale-percent">
+														<span>
+															Sale! <br /> Upto
 														</span>
-													</span>
-												</div>
-												<div className="mb-3">
-													<p
-														className="text-secondary"
-														style={{ fontStyle: 'italic', fontSize: '80%' }}
-													>
-														(*) This promotion event only applies for:
-													</p>
-												</div>
-												<div className="time-counter">
-													<div
-														className="time-countdown clearfix"
-														data-countdown='29-02-2024'
-													>
-														<div className="counter-column">
-															<div className="inner">
-																<span className="count">00</span>Days
+														{promotion.promotionValue * 100}%<span>off</span>
+													</div>
+													<div className="mb-3">
+														<span>
+															Promotion code:{' '}
+															<span className="text-danger font-weight-bold">
+																{promotion.promotionCode}
+															</span>
+														</span>
+													</div>
+													<div className="time-counter">
+														<div
+															className="time-countdown clearfix"
+															data-countdown="29-02-2024"
+														>
+															<div className="counter-column">
+																<div className="inner">
+																	<span className="count">00</span>Days
+																</div>
 															</div>
-														</div>
-														<div className="counter-column">
-															<div className="inner">
-																<span className="count">00</span>Hours
+															<div className="counter-column">
+																<div className="inner">
+																	<span className="count">00</span>Hours
+																</div>
 															</div>
-														</div>
-														<div className="counter-column">
-															<div className="inner">
-																<span className="count">00</span>Mins
+															<div className="counter-column">
+																<div className="inner">
+																	<span className="count">00</span>Mins
+																</div>
 															</div>
-														</div>
-														<div className="counter-column">
-															<div className="inner">
-																<span className="count">00</span>Secs
+															<div className="counter-column">
+																<div className="inner">
+																	<span className="count">00</span>Secs
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>
 
-												<a href="shopping" className="cart-btn btn-lg">
-													Shop Now
-												</a>
+													<a href="shopping" className="cart-btn btn-lg">
+														Shop Now
+													</a>
+												</div>
 											</div>
-										</div>
-									</section>
+										</section>
+									</div>
 								</div>
-							</div>
-						);
-					})}
-				</Fade>
-			</div>
+							);
+						})}
+					</Fade>
+				</div>
+			)}
 
 			<div className="testimonail-section mt-150">
 				<div className="container-fluid">
