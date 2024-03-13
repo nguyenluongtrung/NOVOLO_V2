@@ -111,7 +111,7 @@ export const AdminDashboard = () => {
 
 			setState({
 				options: {
-					colors: ['#E91E63', '#FF9800'],
+					colors: ['#5a6acf', '#e6e8ec'],
 					chart: {
 						id: 'basic-bar',
 					},
@@ -176,7 +176,6 @@ export const AdminDashboard = () => {
 							className="fas fa-align-left primary-text fs-4 me-3"
 							id="menu-toggle"
 						></i>
-						<h2 className="fs-2 m-0">Dashboard</h2>
 					</div>
 
 					<button
@@ -193,9 +192,11 @@ export const AdminDashboard = () => {
 				</nav>
 
 				<div className="container-fluid px-4">
-					<div className="row my-5">
-						<h3 className="fs-4 mb-3">Revenue</h3>
-						<div className="charts-card" style={{ width: 700 }}>
+					<div className="row my-5 col-md-10 dash-revenue" >
+						<div className="charts-card">
+							<h3 className="fs-4 mb-3 dash-text revenue-text">
+							Revenue
+							</h3>
 							<Chart
 								options={state.options}
 								series={state.series}
@@ -207,8 +208,8 @@ export const AdminDashboard = () => {
 
 					<div className="row my-5">
 						<div className="col-sm-6">
-							<h3 className="fs-4 mb-3">5 highest rating products</h3>
-							<table className="table bg-white rounded shadow-sm  table-hover">
+							<h3 className="fs-4 mb-3 dash-text">5 highest rating products</h3>
+							<table className="table bg-white shadow-sm  table-hover styled-table">
 								<thead>
 									<tr>
 										<th scope="col">Product Name</th>
@@ -218,7 +219,7 @@ export const AdminDashboard = () => {
 								<tbody>
 									{highestRatingProducts.map((product) => {
 										return (
-											<tr>
+											<tr class="active-row">
 												<td>{product.name}</td>
 												<td>{product.rating}</td>
 											</tr>
@@ -228,8 +229,8 @@ export const AdminDashboard = () => {
 							</table>
 						</div>
 						<div className="col-sm-6">
-							<h3 className="fs-4 mb-3">5 lowest rating products</h3>
-							<table className="table bg-white rounded shadow-sm  table-hover">
+							<h3 className="fs-4 mb-3 dash-text">5 lowest rating products</h3>
+							<table className="table bg-white rounded shadow-sm  table-hover styled-table">
 								<thead>
 									<tr>
 										<th scope="col">Product Name</th>
@@ -239,7 +240,7 @@ export const AdminDashboard = () => {
 								<tbody>
 									{lowestRatingProducts.map((product) => {
 										return (
-											<tr>
+											<tr class="active-row">
 												<td>{product.name}</td>
 												<td>{product.rating}</td>
 											</tr>
@@ -250,8 +251,8 @@ export const AdminDashboard = () => {
 						</div>
 					</div>
 
-					<div className="row my-5">
-						<h3 className="fs-4 mb-3">Top 5 hot products</h3>
+					<div className="row my-5 col-md-6 dash-top-5">
+						<h3 className="fs-4 mb-3 dash-text">Top 5 hot products</h3>
 						<div className="charts-card" style={{ width: 700 }}>
 							<div className="donut">
 								<Chart

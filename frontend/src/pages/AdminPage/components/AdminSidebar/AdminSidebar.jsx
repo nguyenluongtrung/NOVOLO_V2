@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FaUserSecret, FaTachometerAlt, FaGift, FaPowerOff, FaCreditCard, FaUtensils } from 'react-icons/fa'
+import './AdminSidebar.css';
 
 export const AdminSidebar = () => {
 	return (

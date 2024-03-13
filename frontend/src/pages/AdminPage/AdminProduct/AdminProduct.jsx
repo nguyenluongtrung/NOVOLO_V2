@@ -42,7 +42,7 @@ export const AdminProduct = () => {
 	} = useSelector((state) => state.prices);
 
 	const navigateToAnotherPage = (page) => {
-		dispatch(getAllProducts('page='+page));
+		dispatch(getAllProducts('page=' + page));
 	}
 
 	const handleDeleteProduct = async (productId) => {
@@ -120,20 +120,21 @@ export const AdminProduct = () => {
 
 			<div id="page-content-wrapper">
 				<nav className="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-					<div className="d-flex align-items-center">
+					{/* <div className="d-flex align-items-center">
 						<i
 							className="fas fa-align-left primary-text fs-4 me-3"
 							id="menu-toggle"
 						></i>
 						<h2 className="fs-2 m-0">Product Management</h2>
-					</div>
+					</div> */}
 				</nav>
 
 				<div className="container-fluid px-4">
 					<div className="row">
-						<h3 className="fs-4 mb-2 col-sm-8">List of products </h3>
+						<h3 className="fs-4 mb-2 col-sm-8" style={{ fontWeight: "bold", fontFamily: "inherit" }}>List of products </h3>
+
 						<button
-							className="view-modal text-decoration-none text-white btn btn-success px-3 py-1 col-sm-2 mb-4"
+							className="view-modal text-decoration-none text-white btn btn-success px-3 py-1 col-sm-2 mb-4 buttons btn-hover color-1"
 							onClick={() => setIsOpenAddForm(true)}
 						>
 							<span>
@@ -142,9 +143,9 @@ export const AdminProduct = () => {
 							&nbsp; Add new product
 						</button>
 
-						<div className="row">
+						<div className="row" style={{ margin: "auto" }}>
 							<div className="col">
-								<table className="table bg-white rounded shadow-sm  table-hover">
+								<table className="table bg-white rounded shadow-sm  table-hover styled-table">
 									<thead>
 										<tr>
 											<th scope="col" style={{ fontSize: '90%' }}>

@@ -3,6 +3,7 @@ import { AdminSidebar } from '../components/AdminSidebar/AdminSidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrders } from '../../../features/orders/ordersSlice';
 import { formatDate } from '../../../utils/format';
+import './AdminOrder.css';
 
 export const AdminOrder = () => {
 	const [ status, setStatus ] = useState('');
@@ -16,6 +17,7 @@ export const AdminOrder = () => {
 	useEffect(() => {
 		dispatch(getOrders());
 	}, [dispatch]);
+	
 	return (
 		<div className="d-flex" id="wrapper">
 			<AdminSidebar />
@@ -45,39 +47,42 @@ export const AdminOrder = () => {
 
 				<div className="container-fluid px-4">
 					<div className="row my-5">
-						<div className="row mb-3">
+						<div className="row mb-3" style={{margin:"auto"}}>
 							<h3 className="fs-4 mb-3 d-inline col-sm-3">List of orders </h3>
 							<div className="col-sm-7">
 								<form action="search-by-time">
-									<input
-										className="py-1 w-25"
-										type="number"
-										min="2000"
-										step="1"
-										name="year"
-										placeholder="Enter year..."
-									/>
-									<input
-										className="py-1 w-25"
-										type="number"
-										min="1"
-										max="12"
-										step="1"
-										name="month"
-										placeholder="Enter month..."
-									/>
-									<input
-										className="py-1 w-25"
-										type="number"
-										min="1"
-										max="31"
-										step="1"
-										name="date"
-										placeholder="Enter date..."
-									/>
-									<button type="submit" className="btn btn-success">
-										Search
-									</button>
+									<div className='style-search'>
+										<input
+											className="py-1 w-25 style-input"
+											type="number"
+											min="2000"
+											step="1"
+											name="year"
+											placeholder="Enter year..."
+										/>
+										<input
+											className="py-1 w-25 ml-2 style-input"
+											type="number"
+											min="1"
+											max="12"
+											step="1"
+											name="month"
+											placeholder="Enter month..."
+										/>
+										<input 
+											className="py-1 w-25 ml-2 style-input"
+											type="number"
+											min="1"
+											max="31"
+											step="1"
+											name="date"
+											placeholder="Enter date..."
+										/>
+
+										<button type="submit" className="btn btn-success ml-2">
+											Search
+										</button>
+									</div>
 								</form>
 							</div>
 							<div className="dropdown col-sm-2">
@@ -101,7 +106,7 @@ export const AdminOrder = () => {
 					</div>
 					<form>
 						<div className="col">
-							<table className="table bg-white rounded shadow-sm  table-hover">
+							<table className="table bg-white rounded shadow-sm  table-hover styled-table">
 								<thead>
 									<tr>
 										<th scope="col" style={{ fontSize: '90%' }}>
