@@ -510,13 +510,13 @@ html {
     color: #051922;
   }
   
-  .top-header-area {
+  /* .top-header-area {
     position: sticky;
     z-index: 999;
     top:0;
     width: 100%;
     padding: 25px 0;
-  }
+  } */
   
   .top-header-area.white ul.navbar-nav li.nav-item a.nav-link, .top-header-area.white ul.navbar-nav li.nav-item.active a.nav-link {
     color: #fff;

@@ -43,8 +43,8 @@ const ourTeamsData = [
     linkFacebook: "",
     linkInstagram: "",
     linkTwitter: "",
-    image: "",
-    description: ""
+    image: "https://scontent.fdad3-5.fna.fbcdn.net/v/t39.30808-6/391627726_2229687603896740_6420573741491573149_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=1_0Zwt7lWucAX8IUPv8&_nc_ht=scontent.fdad3-5.fna&oh=00_AfCINYdd_7X5cNKcEIDlZszhK_N3bygqATTU4XEjD3SXZw&oe=65F3105D",
+    description: "",
   },
   {
     name: "Luong Trung",
@@ -53,7 +53,7 @@ const ourTeamsData = [
     linkInstagram: "",
     linkTwitter: "",
     image: "",
-    description: ""
+    description: "",
   },
   {
     name: "Quang Duy",
@@ -62,7 +62,7 @@ const ourTeamsData = [
     linkInstagram: "",
     linkTwitter: "",
     image: "",
-    description: ""
+    description: "",
   },
 ];
 
@@ -83,7 +83,7 @@ const moreTeamsData = [
     linkInstagram: "",
     linkTwitter: "",
     image: "",
-    description: "Love FreeFire"
+    description: "Love FreeFire",
   },
 ];
 export const AboutUs = () => {
@@ -168,8 +168,10 @@ export const AboutUs = () => {
           <div className="row">
             {ourTeamsData.map((infor, index) => (
               <div key={index} className="col-lg-4 col-md-6">
-                <div className="single-team-item">
-                  <div className="team-bg team-bg-1">{infor.image}</div>
+                <div className="single-team-item">  
+                  <div className="team-bg team-bg-1">
+                    <img src={infor.image} />
+                  </div>
                   <h4>
                     {infor.name} <span>{infor.role}</span>
                   </h4>
@@ -215,7 +217,8 @@ export const AboutUs = () => {
                     </div>
                     <div className="client-meta">
                       <h3>
-                        {infor.name}<span>{infor.role}</span>
+                        {infor.name}
+                        <span>{infor.role}</span>
                       </h3>
                       <p className="testimonial-body">{infor.description}</p>
                       <div className="last-icon">
