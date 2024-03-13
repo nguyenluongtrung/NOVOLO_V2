@@ -252,8 +252,8 @@ export const AdminDashboard = () => {
 					</div>
 
 					<div className="row my-5 col-md-6 dash-top-5">
-						<h3 className="fs-4 mb-3 dash-text">Top 5 hot products</h3>
 						<div className="charts-card" style={{ width: 700 }}>
+						<h3 className="fs-4 mb-3 dash-text">Top 5 hot products</h3>
 							<div className="donut">
 								<Chart
 									options={pieState.options}
