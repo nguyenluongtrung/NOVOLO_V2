@@ -1,3 +1,21 @@
 #sidebar-wrapper{
     height: 100%;
 }
+
+.item-navigate:hover{
+    background-color: #b8d8c0 !important;
+}
+
+.item-navigate{
+    color: #000 !important;
+}
+
+.item-active{
+    color: #217a37 !important;
+    font-weight: bold;
+}
+
+.text-sidebar{
+    color: #25461e !important;
+    font-weight: bold;
+}
