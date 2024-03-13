@@ -13,3 +13,12 @@
 .style-input{
     border: rgb(210, 205, 205) solid 1px !important;
 }
+
+.headerOrder, .ListOrder{
+    font-family:inherit;
+    font-weight: bold;
+}
+
+.blockitem{
+    display:flex
+}

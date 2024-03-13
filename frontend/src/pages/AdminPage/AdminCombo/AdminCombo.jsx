@@ -106,7 +106,7 @@ export const AdminCombo = () => {
 							className="fas fa-align-left primary-text fs-4 me-3"
 							id="menu-toggle"
 						></i>
-						<h2 className="fs-2 m-0">Combo Management</h2>
+						<h2 className="fs-2 m-0">List of combos</h2>
 					</div>
 
 					<button
@@ -124,23 +124,13 @@ export const AdminCombo = () => {
 
 				<div className="container-fluid px-4">
 					<div className="row my-5">
-						<h3 className="fs-4 mb-3 d-inline col-sm-10">List of combos</h3>
-						<button
-							className="view-modal text-decoration-none text-white btn btn-success px-2 py-1 col-sm-2 mb-4"
-							onClick={() => setIsOpenAddForm(true)}
-						>
-							<span>
-								<i className="fa-sharp fa-solid fa-plus"></i>
-							</span>
-							&nbsp; Add new combo
-						</button>
-
+					
 						<div className="col">
-							<table className="table bg-white rounded shadow-sm  table-hover">
-								<thead>
+							<table style={{ backgroundColor: "rgba(255, 255, 255, 0.5)" }} className="table rounded shadow-sm  table-hover">
+								<thead style={{backgroundColor:"#009879",color:"white"}}>
 									<tr>
-										<th scope="col">Combo Name</th>
-										<th scope="col">Combo Image</th>
+										<th scope="col">Name</th>
+										<th scope="col">Image</th>
 										<th scope="col">Total Calories</th>
 										<th scope="col">Is Surprise</th>
 										<th scope="col">Rating</th>
@@ -163,7 +153,7 @@ export const AdminCombo = () => {
 															style={{ width: '40px', height: '40px' }}
 														/>
 													</td>
-													<td>{product?.calories}</td>
+													<td style={{marginLeft: "50px"}}>{product?.calories}</td>
 													<td>{product?.isSurprise ? 'true' : 'false'}</td>
 													<td>{product?.rating}</td>
 													<td>{product?.accumulatedPoint}</td>
@@ -193,7 +183,7 @@ export const AdminCombo = () => {
 															<FaPenSquare />
 														</a>{' '}
 														&nbsp;&nbsp;&nbsp;
-														<button
+														<button style={{backgroundColor:"#009879",color:"white",borderRadius:"5px",borderWidth:0,paddingBottom:"5px"}}
 															className="delete"
 															onClick={() => handleDeleteProduct(product._id)}
 														>
@@ -205,6 +195,15 @@ export const AdminCombo = () => {
 										})}
 								</tbody>
 							</table>
+							<button style={{backgroundColor:"#009879",color:"white",borderWidth:0}}
+							className="view-modal text-decoration-none text-white btn btn-success px-2 py-1 col-sm-2 mb-4"
+							onClick={() => setIsOpenAddForm(true)}
+						>
+							<span>
+								<i className="fa-sharp fa-solid fa-plus"></i>
+							</span>
+							&nbsp; Add new combo
+						</button>
 						</div>
 					</div>
 				</div>

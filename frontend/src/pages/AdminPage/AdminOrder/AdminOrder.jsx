@@ -29,7 +29,7 @@ export const AdminOrder = () => {
 							className="fas fa-align-left primary-text fs-4 me-3"
 							id="menu-toggle"
 						></i>
-						<h2 className="fs-2 m-0">Order Management</h2>
+						<h2 className="headerOrder fs-2 m-0">Order Management</h2>
 					</div>
 
 					<button
@@ -47,8 +47,8 @@ export const AdminOrder = () => {
 
 				<div className="container-fluid px-4">
 					<div className="row my-5">
-						<div className="row mb-3" style={{margin:"auto"}}>
-							<h3 className="fs-4 mb-3 d-inline col-sm-3">List of orders </h3>
+						<div className="row mb-3 blockitem">
+							<h3 className="fs-4 mb-3 d-inline col-sm-3 ListOrder">List of orders </h3>
 							<div className="col-sm-7">
 								<form action="search-by-time">
 									<div className='style-search'>
