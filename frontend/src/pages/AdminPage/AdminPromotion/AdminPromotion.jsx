@@ -70,27 +70,38 @@ export const AdminPromotion = () => {
 				<AdminSidebar />
 
 				<div id="page-content-wrapper">
+					<nav className="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+						<div className="d-flex align-items-center">
+							<i
+								className="fas fa-align-left primary-text fs-4 me-3"
+								id="menu-toggle"
+							></i>
+							<h2 className="fs-2 m-0">Promotion list</h2>
+						</div>
+
+						<button
+							className="navbar-toggler"
+							type="button"
+							data-bs-toggle="collapse"
+							data-bs-target="#navbarSupportedContent"
+							aria-controls="navbarSupportedContent"
+							aria-expanded="false"
+							aria-label="Toggle navigation"
+						>
+							<span className="navbar-toggler-icon"></span>
+						</button>
+					</nav>
+
 					<div className="container-fluid px-4">
 						<div className="row my-5">
-							<h3 className="fs-4 mb-3 d-inline col-sm-10">Promotion list</h3>
-							<button
-								className="btn btn-success px-3 py-1 my-3 col-sm-2"
-								onClick={() => setIsOpenAddForm(true)}
-							>
-								<a className="view-modal text-decoration-none text-white">
-									<span>
-										<i className="fa-sharp fa-solid fa-plus"></i>
-									</span>
-									&nbsp; Add a promotion
-								</a>
-							</button>
+							
 
 							<div className="col">
-								<table className="table bg-white rounded shadow-sm  table-hover">
-									<thead>
+								<table style={{ backgroundColor: "rgba(255, 255, 255, 0.5)" }} className="table bg-white rounded shadow-sm  table-hover">
+									<thead style={{backgroundColor:"#009879",color:"white"}}>
 										<tr>
-											<th scope="col">Promotion Name</th>
-											<th scope="col">Promotion Value</th>
+											<th scope="col">Name</th>
+											<th scope="col">Value</th>
 											<th scope="col">Start Date</th>
 											<th scope="col">End Date</th>
 											<th scope="col">Promotion Code</th>
@@ -115,7 +126,7 @@ export const AdminPromotion = () => {
 															}
 														/>
 													</td>
-													<td>
+													<td> 
 														<FaPenSquare
 															className="update-icon"
 															onClick={() =>
@@ -123,7 +134,7 @@ export const AdminPromotion = () => {
 															}
 														/>
 														&nbsp;&nbsp;&nbsp;
-														<FaTrash
+														<FaTrash 
 															className="delete-icon"
 															onClick={() =>
 																handleDeletePromotion(promotion._id)
@@ -135,6 +146,17 @@ export const AdminPromotion = () => {
 										})}
 									</tbody>
 								</table>
+								<button style={{backgroundColor:"#009879",color:"white",borderWidth:0}}
+								className="btn btn-success px-3 py-1 my-3 col-sm-2"
+								onClick={() => setIsOpenAddForm(true)}
+							>
+								<a className="view-modal text-decoration-none text-white">
+									<span>
+										<i className="fa-sharp fa-solid fa-plus"></i>
+									</span>
+									&nbsp; Add a promotion
+								</a>
+							</button>
 							</div>
 						</div>
 
