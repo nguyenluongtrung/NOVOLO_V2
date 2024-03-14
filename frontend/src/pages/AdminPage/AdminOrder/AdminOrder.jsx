@@ -22,7 +22,7 @@ export const AdminOrder = () => {
 		<div className="d-flex" id="wrapper">
 			<AdminSidebar />
 
-			<div id="page-content-wrapper">
+			<div id="page-content-wrapper" style={{paddingTop: '80px'}}>
 				<div className="container-fluid px-4">
 					<div className="row my-5">
 						<div className="row mb-3 blockitem">

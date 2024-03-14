@@ -12,8 +12,8 @@ export const AdminSidebar = () => {
 	const isComboActive = location.pathname === '/admin-combo';
 
 	return (
-		<div>
-			<div className="bg-sidebar" id="sidebar-wrapper" style={{backgroundColor: '#c4e4cb'}}>
+		<div> 
+			<div className="bg-sidebar" id="sidebar-wrapper" style={{backgroundColor: '#c4e4cb', paddingTop: '80px'}}>
 				<div className="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom text-sidebar">
 					<FaUserSecret /> MANAGER PAGE
 				</div>

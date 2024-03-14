@@ -99,7 +99,7 @@ export const AdminCombo = () => {
 
 			<AdminSidebar />
 
-			<div id="page-content-wrapper">
+			<div id="page-content-wrapper" style={{paddingTop: '80px'}}>
 				<nav className="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
 					<div className="d-flex align-items-center">
 						<i

@@ -76,7 +76,7 @@ export const AdminPromotion = () => {
 								className="fas fa-align-left primary-text fs-4 me-3"
 								id="menu-toggle"
 							></i>
-							<h2 className="fs-2 m-0">Promotion list</h2>
+							<h2 style={{paddingTop: '80px'}} className="fs-2 m-0">Promotion list</h2>
 						</div>
 
 						<button

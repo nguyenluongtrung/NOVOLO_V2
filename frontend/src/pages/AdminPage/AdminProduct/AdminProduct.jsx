@@ -119,19 +119,9 @@ export const AdminProduct = () => {
 			<AdminSidebar />
 
 			<div id="page-content-wrapper">
-				<nav className="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-					{/* <div className="d-flex align-items-center">
-						<i
-							className="fas fa-align-left primary-text fs-4 me-3"
-							id="menu-toggle"
-						></i>
-						<h2 className="fs-2 m-0">Product Management</h2>
-					</div> */}
-				</nav>
-
-				<div className="container-fluid px-4">
+				<div className="container-fluid px-4" style={{paddingTop: '90px'}} >
 					<div className="row">
-						<h3 className="fs-4 mb-2 col-sm-8" style={{ fontWeight: "bold", fontFamily: "inherit" }}>List of products </h3>
+						<h3 className="fs-4 mb-2 pt-1 col-sm-8" style={{ fontWeight: "bold", fontFamily: "inherit" }}>List of products </h3>
 
 						<button
 							className="view-modal text-decoration-none text-white btn btn-success px-3 py-1 col-sm-2 mb-4 buttons btn-hover color-1"

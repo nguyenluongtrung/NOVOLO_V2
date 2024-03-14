@@ -169,28 +169,7 @@ export const AdminDashboard = () => {
 		<div className="d-flex" id="wrapper">
 			<AdminSidebar />
 
-			<div id="page-content-wrapper">
-				<nav className="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
-					<div className="d-flex align-items-center">
-						<i
-							className="fas fa-align-left primary-text fs-4 me-3"
-							id="menu-toggle"
-						></i>
-					</div>
-
-					<button
-						className="navbar-toggler"
-						type="button"
-						data-bs-toggle="collapse"
-						data-bs-target="#navbarSupportedContent"
-						aria-controls="navbarSupportedContent"
-						aria-expanded="false"
-						aria-label="Toggle navigation"
-					>
-						<span className="navbar-toggler-icon"></span>
-					</button>
-				</nav>
-
+			<div id="page-content-wrapper" style={{paddingTop: '80px'}}>
 				<div className="container-fluid px-4">
 					<div className="row my-5 col-md-10 dash-revenue" >
 						<div className="charts-card">
