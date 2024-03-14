@@ -41,15 +41,14 @@ export const WishList = () => {
 					<div className="row">
 						<div className="col-lg-8 offset-lg-2 text-center">
 							<div className="breadcrumb-text">
-								<p>Fresh and Organic</p>
 								<h1>Wish List</h1>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<div className="cart-section mt-150 mb-150">
+<div className='boby-table'>
+			<div className="cart-section pt-150 pb-150">
 				<div className="container">
 					<div className="row">
 						<div className="col-md-12">
@@ -114,6 +113,7 @@ export const WishList = () => {
 						</div>
 					</div>
 				</div>
+			</div>
 			</div>
 		</div>
 	);
