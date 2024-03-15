@@ -1,6 +1,4 @@
-import React from 'react'
-import 'react-slideshow-image/dist/styles.css'
-import {Fade,Zoom,Slide} from 'react-slideshow-image'
+import {Fade} from 'react-slideshow-image'
 
 const slideImage =[
     {
@@ -22,18 +20,13 @@ const slideImage =[
 
 const divStyle ={
     zindex: "1",
-    // marginTop:"-50px",
-    // display:'flex',
-    // alignItems:"center",
-    // justifyContent: "center",
-    height:"550px",
-    // backgroundSize:'cover'
+    height:"100vh",
 }
 
 function ImageSlider() {
   return (
     <div className ='Slide-container'>
-        <Fade autoplay={true} duration={3000} className="react-slideshow-arrow">
+        <Fade autoplay={true} duration={3000}>
             {slideImage.map((image,index) =>(
                 <div key={index} className="single-homepage-slider homepage-bg-3" style={{...divStyle,backgroundImage:`url(${image.url})`}}>
                 <div className="container">
