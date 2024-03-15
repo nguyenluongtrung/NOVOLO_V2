@@ -1,4 +1,6 @@
+import 'react-slideshow-image/dist/styles.css'
 import {Fade} from 'react-slideshow-image'
+import { Link } from 'react-router-dom';
 
 const slideImage =[
     {
@@ -37,8 +39,8 @@ function ImageSlider() {
                                     <p className="subtitle">{image.title}</p>
                                     <h1>{image.ads}</h1>
                                     <div className="hero-btns">
-                                        <a href="shop.html" className="boxed-btn">Visit Shop</a>
-                                        <a href="contact.html" className="bordered-btn">Contact Us</a>
+										<Link className="boxed-btn" to={'/shop'}>Visit Shop</Link>
+										<Link className="bordered-btn" to={'/contact'}>Contact Us</Link>
                                     </div>
                                 </div>
                             </div>
