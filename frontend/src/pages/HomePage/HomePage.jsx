@@ -176,10 +176,7 @@ export const HomePage = () => {
 															</div>
 														</div>
 													</div>
-
-													<a href="shopping" className="cart-btn btn-lg">
-														Shop Now
-													</a>
+													<Link className="boxed-btn" to={'/shop'}>Shop Now</Link>
 												</div>
 											</div>
 										</section>

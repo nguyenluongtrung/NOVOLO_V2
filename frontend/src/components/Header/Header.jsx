@@ -54,7 +54,7 @@ export const Header = () => {
 					<div className="col-lg-12 col-sm-12 text-center">
 						<div className="main-menu-wrap">
 							<div className="site-logo">
-								<a href="">
+								<Link to={'/home'}>
 									<img
 										src={avt}
 										style={{
@@ -65,7 +65,7 @@ export const Header = () => {
 											width: '70%',
 										}}
 									/>
-								</a>
+								</Link>
 							</div>
 
 							<nav className="main-menu" style={{ paddingTop: '20px' }}>
