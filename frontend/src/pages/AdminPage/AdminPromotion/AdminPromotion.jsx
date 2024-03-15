@@ -76,29 +76,20 @@ export const AdminPromotion = () => {
 								className="fas fa-align-left primary-text fs-4 me-3"
 								id="menu-toggle"
 							></i>
-							<h2 style={{paddingTop: '80px'}} className="fs-2 m-0">Promotion list</h2>
+							<h2 style={{ paddingTop: '80px' }} className="fs-2 m-0">
+								Promotion list
+							</h2>
 						</div>
-
-						<button
-							className="navbar-toggler"
-							type="button"
-							data-bs-toggle="collapse"
-							data-bs-target="#navbarSupportedContent"
-							aria-controls="navbarSupportedContent"
-							aria-expanded="false"
-							aria-label="Toggle navigation"
-						>
-							<span className="navbar-toggler-icon"></span>
-						</button>
 					</nav>
 
 					<div className="container-fluid px-4">
 						<div className="row my-5">
-							
-
 							<div className="col">
-								<table style={{ backgroundColor: "rgba(255, 255, 255, 0.5)" }} className="table bg-white rounded shadow-sm  table-hover">
-									<thead style={{backgroundColor:"#009879",color:"white"}}>
+								<table
+									style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}
+									className="table bg-white rounded shadow-sm  table-hover"
+								>
+									<thead style={{ backgroundColor: '#009879', color: 'white' }}>
 										<tr>
 											<th scope="col">Name</th>
 											<th scope="col">Value</th>
@@ -110,53 +101,60 @@ export const AdminPromotion = () => {
 										</tr>
 									</thead>
 									<tbody>
-										{Array.isArray(promotions) && promotions.map((promotion) => {
-											return (
-												<tr>
-													<td>{promotion.promotionName}</td>
-													<td>{promotion.promotionValue * 100}%</td>
-													<td>{formatDate(promotion.startDate)}</td>
-													<td>{formatDate(promotion.endDate)}</td>
-													<td>{promotion.promotionCode}</td>
-													<td>
-														<FaEye
-															className="eye-icon"
-															onClick={() =>
-																handlePromotionDetails(promotion._id)
-															}
-														/>
-													</td>
-													<td> 
-														<FaPenSquare
-															className="update-icon"
-															onClick={() =>
-																handleUpdatePromotion(promotion._id)
-															}
-														/>
-														&nbsp;&nbsp;&nbsp;
-														<FaTrash 
-															className="delete-icon"
-															onClick={() =>
-																handleDeletePromotion(promotion._id)
-															}
-														/>
-													</td>
-												</tr>
-											);
-										})}
+										{Array.isArray(promotions) &&
+											promotions.map((promotion) => {
+												return (
+													<tr>
+														<td>{promotion.promotionName}</td>
+														<td>{promotion.promotionValue * 100}%</td>
+														<td>{formatDate(promotion.startDate)}</td>
+														<td>{formatDate(promotion.endDate)}</td>
+														<td>{promotion.promotionCode}</td>
+														<td>
+															<FaEye
+																className="eye-icon"
+																onClick={() =>
+																	handlePromotionDetails(promotion._id)
+																}
+															/>
+														</td>
+														<td>
+															<FaPenSquare
+																className="update-icon"
+																onClick={() =>
+																	handleUpdatePromotion(promotion._id)
+																}
+															/>
+															&nbsp;&nbsp;&nbsp;
+															<FaTrash
+																className="delete-icon"
+																onClick={() =>
+																	handleDeletePromotion(promotion._id)
+																}
+															/>
+														</td>
+													</tr>
+												);
+											})}
 									</tbody>
 								</table>
-								<button style={{backgroundColor:"#009879",color:"white",borderWidth:0}}
-								className="btn btn-success px-3 py-1 my-3 col-sm-2"
-								onClick={() => setIsOpenAddForm(true)}
-							>
-								<a className="view-modal text-decoration-none text-white">
-									<span>
-										<i className="fa-sharp fa-solid fa-plus"></i>
-									</span>
-									&nbsp; Add a promotion
-								</a>
-							</button>
+								<button
+									style={{
+										backgroundColor: '#009879',
+										color: 'white',
+										borderWidth: 0,
+									}}
+									className="btn btn-success px-3 py-1 my-3 col-sm-2"
+									onClick={() => setIsOpenAddForm(true)}
+									disabled={promotions.length > 0 ? true : false}
+								>
+									<a className="view-modal text-decoration-none text-white">
+										<span>
+											<i className="fa-sharp fa-solid fa-plus"></i>
+										</span>
+										&nbsp; Add a promotion
+									</a>
+								</button>
 							</div>
 						</div>
 

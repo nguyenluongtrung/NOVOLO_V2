@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 import './../../assets/css/main.css';
 import './../../assets/css/meanmenu.min.css';
@@ -12,91 +12,102 @@ import { getAllPromotions } from '../../features/promotion/promotionsSlice';
 import 'react-slideshow-image/dist/styles.css';
 import { Fade } from 'react-slideshow-image';
 import { formatDateInput } from '../../utils/format';
-import { Link } from "react-router-dom";
-import CommentSlider from "./components/CommentSlider";
+import { Link } from 'react-router-dom';
+import CommentSlider from './components/CommentSlider';
 
 export const HomePage = () => {
+	const [days, setDays] = useState(0);
+	const [hours, setHours] = useState(0);
+	const [minutes, setMinutes] = useState(0);
+	const [seconds, setSeconds] = useState(0);
 	const dispatch = useDispatch();
 
-	const { promotions } = useSelector((state) => state.promotions);
 
+	const { promotions } = useSelector((state) => state.promotions);
 	useEffect(() => {
 		dispatch(getAllPromotions());
 	}, [dispatch]);
-  return (
-    <div>
-      <div className="search-area">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-              <span className="close-btn">
-                <i className="fas fa-window-close"></i>
-              </span>
-              <div className="search-bar">
-                <div className="search-bar-tablecell">
-                  <h3>Search For:</h3>
-                  <form>
-                    <input type="text" placeholder="Search by name..." />
-                    <button type="submit">
-                      Search <i className="fas fa-search"></i>
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* <div style={{marginTop: '-160px'}}>
-				<ImageSlider/>
-			</div>  */}
-      <div className="homepage-slider">
-        <ImageSlider />
-      </div>
 
-      <div className="list-section pt-80 pb-80">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
-              <div className="list-box d-flex align-items-center">
-                <div className="list-icon">
-                  <FaShippingFast />
-                </div>
-                <div className="content">
-                  <h3>Free Shipping</h3>
-                  <p>When order over $75</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
-              <div className="list-box d-flex align-items-center">
-                <div className="list-icon">
-                  <FaPhoneVolume />
-                </div>
-                <div className="content">
-                  <h3>24/7 Support</h3>
-                  <p>Get support all day</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-4 col-md-6">
-              <div className="list-box d-flex justify-content-start align-items-center">
-                <div className="list-icon">
-                  <FaSync />
-                </div>
-                <div className="content">
-                  <h3>Refund</h3>
-                  <p>Get refund within 3 days!</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+	useEffect(() => {
+		const countdownDate = new Date(promotions[0]?.endDate).getTime();
+
+		const countdown = setInterval(() => {
+			const now = new Date().getTime();
+
+			const distance = countdownDate - now;
+
+			const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			const hours = Math.floor(
+				(distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+			);
+			const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+			setDays(days);
+			setHours(hours);
+			setMinutes(minutes);
+			setSeconds(seconds);
+
+			if (distance < 0) {
+				clearInterval(countdown);
+			}
+		}, 1000);
+
+		return () => clearInterval(countdown);
+	}, [promotions]);
+
+	return (
+		<div>
+			<div className="homepage-slider">
+				<ImageSlider />
+			</div>
+
+			<div className="list-section pt-80 pb-80">
+				<div className="container">
+					<div className="row">
+						<div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
+							<div className="list-box d-flex align-items-center">
+								<div className="list-icon">
+									<FaShippingFast />
+								</div>
+								<div className="content">
+									<h3>Free Shipping</h3>
+									<p>When order over $75</p>
+								</div>
+							</div>
+						</div>
+						<div className="col-lg-4 col-md-6 mb-4 mb-lg-0">
+							<div className="list-box d-flex align-items-center">
+								<div className="list-icon">
+									<FaPhoneVolume />
+								</div>
+								<div className="content">
+									<h3>24/7 Support</h3>
+									<p>Get support all day</p>
+								</div>
+							</div>
+						</div>
+						<div className="col-lg-4 col-md-6">
+							<div className="list-box d-flex justify-content-start align-items-center">
+								<div className="list-icon">
+									<FaSync />
+								</div>
+								<div className="content">
+									<h3>Refund</h3>
+									<p>Get refund within 3 days!</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
 			{promotions?.length > 0 && (
 				<div className="Slide-container">
-					<Fade autoplay={promotions?.length == 1 ? false : true} duration={2000}>
+					<Fade
+						autoplay={promotions?.length == 1 ? false : true}
+						duration={2000}
+					>
 						{promotions.map((promotion, index) => {
 							return (
 								<div className="testimonial-sliders">
@@ -133,22 +144,34 @@ export const HomePage = () => {
 														>
 															<div className="counter-column">
 																<div className="inner">
-																	<span className="count">00</span>Days
+																	<span className="count">
+																		{days.toString().padStart(2, '0')}
+																	</span>
+																	Days
 																</div>
 															</div>
 															<div className="counter-column">
 																<div className="inner">
-																	<span className="count">00</span>Hours
+																	<span className="count">
+																		{hours.toString().padStart(2, '0')}
+																	</span>
+																	Hours
 																</div>
 															</div>
 															<div className="counter-column">
 																<div className="inner">
-																	<span className="count">00</span>Mins
+																	<span className="count">
+																		{minutes.toString().padStart(2, '0')}
+																	</span>
+																	Mins
 																</div>
 															</div>
 															<div className="counter-column">
 																<div className="inner">
-																	<span className="count">00</span>Secs
+																	<span className="count">
+																		{seconds.toString().padStart(2, '0')}
+																	</span>
+																	Secs
 																</div>
 															</div>
 														</div>
@@ -240,25 +263,25 @@ export const HomePage = () => {
 					</div>
 				</section>
 			</c:if> */}
-      <div className="product-section mt-150 mb-150">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-8 offset-lg-2 text-center">
-              <div className="section-title">
-                <h3>
-                  <span className="orange-text">Our</span> Products
-                </h3>
-                <p>
-                  Indulge your senses in the exquisite flavors of our
-                  handcrafted gourmet treats. Made with only the finest
-                  ingredients sourced from local farmers and artisans, each bite
-                  is a journey through taste paradise.
-                </p>
-              </div>
-            </div>
-          </div>
+			<div className="product-section mt-150 mb-150">
+				<div className="container">
+					<div className="row">
+						<div className="col-lg-8 offset-lg-2 text-center">
+							<div className="section-title">
+								<h3>
+									<span className="orange-text">Our</span> Products
+								</h3>
+								<p>
+									Indulge your senses in the exquisite flavors of our
+									handcrafted gourmet treats. Made with only the finest
+									ingredients sourced from local farmers and artisans, each bite
+									is a journey through taste paradise.
+								</p>
+							</div>
+						</div>
+					</div>
 
-          {/* <div className="row">
+					{/* <div className="row">
 							<c:forEach items="${someProducts}" var="c">
 								<div className="col-lg-4 col-md-6 text-center">
 									<div className="single-product-item">
@@ -297,63 +320,63 @@ export const HomePage = () => {
 								</div>
 							</c:forEach>
 						</div> */}
-        </div>
-      </div>
+				</div>
+			</div>
 
-      <div className="testimonail-section mt-150 mb-150">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-10 offset-lg-1 text-center">
-              <div className="testimonial-sliders">
-                <CommentSlider />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+			<div className="testimonail-section mt-150 mb-150">
+				<div className="container">
+					<div className="row">
+						<div className="col-lg-10 offset-lg-1 text-center">
+							<div className="testimonial-sliders">
+								<CommentSlider />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-      <div className="abt-section mb-150">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-6 col-md-12">
-              <div className="abt-bg">
-                <a
-                  href="https://www.youtube.com/watch?v=dA0VGEbbw4g"
-                  className="video-play-btn popup-youtube"
-                >
-                  <i className="fas fa-play"></i>
-                </a>
-              </div>
-            </div>
-            <div className="col-lg-6 col-md-12">
-              <div className="abt-text">
-                <p className="top-sub">Since Year 2019</p>
-                <h2>
-                  We are <span className="orange-text">Fruitkha</span>
-                </h2>
-                <p>
-                  Introducing our sensational range of gourmet burgers, crispy
-                  fries, and irresistible sides that will satisfy even the most
-                  discerning of taste buds. At NOVOLO, we believe that fast food
-                  should never compromise on quality or flavor. Sink your teeth
-                  into our signature NOVOLO Burger – a juicy, flame-grilled
-                  patty topped with melted cheese, crispy lettuce, ripe
-                  tomatoes, and our secret sauce, all sandwiched between a
-                  toasted brioche bun. It's a flavor explosion in every bite!
-                </p>
-                {/* <p>
+			<div className="abt-section mb-150">
+				<div className="container">
+					<div className="row">
+						<div className="col-lg-6 col-md-12">
+							<div className="abt-bg">
+								<a
+									href="https://www.youtube.com/watch?v=dA0VGEbbw4g"
+									className="video-play-btn popup-youtube"
+								>
+									<i className="fas fa-play"></i>
+								</a>
+							</div>
+						</div>
+						<div className="col-lg-6 col-md-12">
+							<div className="abt-text">
+								<p className="top-sub">Since Year 2019</p>
+								<h2>
+									We are <span className="orange-text">Fruitkha</span>
+								</h2>
+								<p>
+									Introducing our sensational range of gourmet burgers, crispy
+									fries, and irresistible sides that will satisfy even the most
+									discerning of taste buds. At NOVOLO, we believe that fast food
+									should never compromise on quality or flavor. Sink your teeth
+									into our signature NOVOLO Burger – a juicy, flame-grilled
+									patty topped with melted cheese, crispy lettuce, ripe
+									tomatoes, and our secret sauce, all sandwiched between a
+									toasted brioche bun. It's a flavor explosion in every bite!
+								</p>
+								{/* <p>
                   Pair your burger with our golden, crispy fries, perfectly
                   seasoned to perfection, and complete your meal with one of our
                   refreshing beverages or decadent desserts.
                 </p> */}
-                <a href="#" className="boxed-btn mt-4">
-                  Show more
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+								<a href="#" className="boxed-btn mt-4">
+									Show more
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 };
