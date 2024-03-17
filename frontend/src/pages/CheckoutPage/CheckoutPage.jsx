@@ -94,7 +94,7 @@ export const CheckoutPage = () => {
 				</div>
 			</div>
 
-			<div className="checkout-section mt-150 mb-150">
+			<div className="checkout-section pt-150 pb-150" style={{backgroundColor: 'white'}}>
 				<div className="container">
 					<div className="row">
 						<div className="col-lg-8">
@@ -190,12 +190,10 @@ export const CheckoutPage = () => {
 																placeholder="Note Something"
 															></textarea>
 														</p>
-														Choose payment methods:
-														<select name="type">
+														{/* <select name="type">
 															<option value="cash">By cash</option>
 															<option value="vnpay">By VNPay</option>
-														</select>
-														<br />
+														</select> */}
 														<button
 															type="submit"
 															className="boxed-btn place-btn px-4 py-2"
@@ -225,63 +223,7 @@ export const CheckoutPage = () => {
 											<th>Price</th>
 										</tr>
 									</thead>
-									<tbody className="order-details-body">
-										<tr>
-											<td>Product</td>
-											<td>Total</td>
-										</tr>
-										{/* <c:if test="${ok != null}">
-                                        <c:forEach items="${items}" var="c">
-                                            <tr className="total-data">
-                                                <td><strong>${c.product.name}</strong></td>
-                                                <c:forEach items="${saleList}" var="e">
-                                                    <c:if test="${(e.productID == c.product.productID) && (e.saleQuantity > 0)}">
-                                                        <c:if test="${c.quantity > e.saleQuantity}">
-                                                            <td><del className="text-danger">${c.product.price * c.quantity}$</del> &nbsp; <fmt:formatNumber value="${c.product.price * e.saleQuantity * (1 - saleValue) + c.product.price * (c.quantity - e.saleQuantity)}" pattern="#.##" />$</td>
-                                                        </c:if>
-                                                        <c:if test="${c.quantity <= e.saleQuantity}">
-                                                            <td><del className="text-danger">${c.product.price * c.quantity}$</del> &nbsp; <fmt:formatNumber value="${c.product.price * c.quantity * (1 - saleValue)}" pattern="#.##" />$</td>
-                                                        </c:if>
-                                                        <c:set var="k" value="1"></c:set>
-                                                    </c:if>
-                                                </c:forEach>
-                                                <c:if test="${k != 1}">
-                                                    <td>${c.product.price * c.quantity}$</td>
-                                                </c:if>
-                                                <c:set var="k" value="0"></c:set>
-                                                </tr>
-                                        </c:forEach>
-                                        <c:forEach items="${comboItems}" var="c">
-                                            <tr className="total-data">
-                                                <td><strong>${c.combo.comboName}</strong></td>
-                                                <td>
-                                                <fmt:formatNumber value="${c.combo.totalPrice * c.quantity}" pattern="#.##" />$
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </c:if>
-                                    <c:if test="${ok == null}">
-                                        <c:forEach items="${items}" var="c">                             
-                                            <tr>
-                                                <td>${c.product.name}</td>
-                                                <td>${c.product.price * c.quantity}$</td>
-                                            </tr>
-                                        </c:forEach>
-                                        <c:forEach items="${comboItems}" var="c">
-                                            <tr className="total-data">
-                                                <td>${c.combo.comboName}</td>
-                                                <td>
-                                                <fmt:formatNumber value="${c.combo.totalPrice * c.quantity}" pattern="#.##" />$
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </c:if> */}
-									</tbody>
 									<tbody className="checkout-details">
-										<tr>
-											<td>Subtotal</td>
-											<td>$</td>
-										</tr>
 										<tr>
 											<td>
 												<strong>TOTAL</strong>
