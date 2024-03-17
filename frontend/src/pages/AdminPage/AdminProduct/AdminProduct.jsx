@@ -121,10 +121,11 @@ export const AdminProduct = () => {
 			<div id="page-content-wrapper">
 				<div className="container-fluid px-4" style={{paddingTop: '90px'}} >
 					<div className="row">
-						<h3 className="fs-4 mb-2 pt-1 col-sm-8" style={{ fontWeight: "bold", fontFamily: "inherit" }}>List of products </h3>
+						<h3 className="fs-4 mb-2 pt-1 col-sm-8" style={{ fontWeight: "bold", fontFamily: "inherit", marginLeft: '100px', marginTop: '20px' }}>List of products </h3>
 
 						<button
 							className="view-modal text-decoration-none text-white btn btn-success px-3 py-1 col-sm-2 mb-4 buttons btn-hover color-1"
+							style={{marginRight: '30px'}}
 							onClick={() => setIsOpenAddForm(true)}
 						>
 							<span>
@@ -236,7 +237,7 @@ export const AdminProduct = () => {
 							</div>
 						</div>
 					</div>
-					<div className="row">
+					<div className="row mb-4" style={{marginTop: '-30px'}}>
 						<div className="col-lg-12 text-center">
 							<div className="pagination-wrap">
 								<ul>
