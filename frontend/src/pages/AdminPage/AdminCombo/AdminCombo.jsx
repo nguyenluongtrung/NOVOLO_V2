@@ -154,7 +154,7 @@ export const AdminCombo = () => {
 														/>
 													</td>
 													<td style={{marginLeft: "50px"}}>{product?.calories}</td>
-													<td>{product?.isSurprise ? 'true' : 'false'}</td>
+													<td>{product?.isSurprise ? <button className='button-special-success'>true</button> : <button className='button-special-warning'>false</button>}</td>
 													<td>{product?.rating}</td>
 													<td>{product?.accumulatedPoint}</td>
 													<td>{product?.exchangedPoint}</td>
@@ -171,7 +171,7 @@ export const AdminCombo = () => {
 														}{' '}
 														$
 													</td>
-													<td>{product?.productStatus ? 'true' : 'false'}</td>
+													<td>{product?.productStatus ? <button className='button-special-success'>true</button> : <button className='button-special-warning'>false</button>}</td>
 													<td>
 														<a
 															className="edit"

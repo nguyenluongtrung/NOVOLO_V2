@@ -116,7 +116,7 @@ export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 							/>
 						</div>
 					</div>
-					<div className="column">
+					<div className="column column-flex">
 						<div className="input-box">
 							<label className="mb-2">
 								Category <span className="text-danger">*</span>
@@ -144,7 +144,7 @@ export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 							/>
 						</div>
 					</div>
-					<div className="column">
+					<div className="column column-flex">
 						<div className="input-box">
 							<label>
 								Accumulated Point <span className="text-danger">*</span>
@@ -179,12 +179,15 @@ export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 								type="radio"
 								name="isSurprise"
 								onChange={() => setIsSurprise(true)}
+								style={{width: '12px', marginTop: '-10px'}}
 							/>{' '}
-							True
+							True 
+							&nbsp;
 							<input
 								type="radio"
 								name="isSurprise"
 								onChange={() => setIsSurprise(false)}
+								style={{width: '12px', marginTop: '-10px'}}
 							/>{' '}
 							False
 						</div>

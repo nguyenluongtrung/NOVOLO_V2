@@ -17,6 +17,22 @@
     background-color: var(--main-bg-color);
 }
 
+.button-special-warning{
+    border-radius: 13px;
+    background-color: #f7933c;
+    color: white;
+    border: none;
+    padding: 3px 10px;
+}
+
+.button-special-success{
+    border-radius: 13px;
+    background-color: #4bd34b;
+    color: white;
+    border: none;
+    padding: 3px 10px;
+}
+
 .secondary-bg {
     background-color : var(--second-bg-color);
 }

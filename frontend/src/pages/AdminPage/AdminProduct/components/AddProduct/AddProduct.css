@@ -1,7 +1,7 @@
 .addProductForm{
     position: fixed;
     z-index: 10;
-    top: 53%;
+    top: 56%;
     left: 50%;
     transform: translate(-50%,-50%);
     background-color:white;
@@ -19,7 +19,7 @@
 }
 .close-btn{
     position: absolute;
-    top: 10px;
+    top: 20px !important;
     right: 20px;
 }
 .close-btn:hover{
@@ -27,4 +27,8 @@
 }
 .addProductForm input[type='text'], input[type='number'], select{
     width: 75%;
+}
+
+.column-flex{
+    display: flex;
 }
