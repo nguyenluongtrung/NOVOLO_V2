@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getOrders } from '../../../features/orders/ordersSlice';
 import { formatDate } from '../../../utils/format';
 import './AdminOrder.css';
+import { FaPenSquare } from 'react-icons/fa';
 
 export const AdminOrder = () => {
 	const [ status, setStatus ] = useState('');
@@ -22,14 +23,16 @@ export const AdminOrder = () => {
 		<div className="d-flex" id="wrapper">
 			<AdminSidebar />
 
-			<div id="page-content-wrapper" style={{paddingTop: '80px'}}>
+			<div id="page-content-wrapper" style={{ paddingTop: '80px' }}>
 				<div className="container-fluid px-4">
 					<div className="row my-5">
 						<div className="row mb-3 blockitem">
-							<h3 className="fs-4 mb-3 d-inline col-sm-3 ListOrder">List of orders </h3>
+							<h3 className="fs-4 mb-3 d-inline col-sm-3 ListOrder">
+								List of orders{' '}
+							</h3>
 							<div className="col-sm-7">
 								<form action="search-by-time">
-									<div className='style-search'>
+									<div className="style-search">
 										<input
 											className="py-1 w-25 style-input"
 											type="number"
@@ -47,7 +50,7 @@ export const AdminOrder = () => {
 											name="month"
 											placeholder="Enter month..."
 										/>
-										<input 
+										<input
 											className="py-1 w-25 ml-2 style-input"
 											type="number"
 											min="1"
@@ -82,6 +85,15 @@ export const AdminOrder = () => {
 							</div>
 						</div>
 					</div>
+					{/* <button
+						style={{ float: 'right', marginTop: '-50px' }}
+						className="btn btn-success mb-3 col-sm-2"
+						onClick={handleUpdateStatus}
+					>
+						<a className="view-modal text-decoration-none text-white">
+							&nbsp; Update status
+						</a>
+					</button> */}
 					<form>
 						<div className="col">
 							<table className="table bg-white rounded shadow-sm  table-hover styled-table">
@@ -102,6 +114,9 @@ export const AdminOrder = () => {
 										<th scope="col" style={{ fontSize: '90%' }}>
 											View Detail
 										</th>
+										<th scope="col" style={{ fontSize: '90%' }}>
+											Update
+										</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -112,12 +127,9 @@ export const AdminOrder = () => {
 												<td>{order.totalPrice}</td>
 												<td>{order.note}</td>
 												<td>
-													<input type="radio" value="pending" name='status' onClick={(e) => setStatus(e.target.value)}/>
-													Pending
-													<input type="radio" value="fulfilled" name='status' onClick={(e) => setStatus(e.target.value)} />
-													Success
-													<input type="radio" value="rejected" name='status' onClick={(e) => setStatus(e.target.value)} />
-													Fail
+													{order.statusHistory[order.statusHistory.length - 1].status == 'fulfilled' && <button className='button-special-success'>fulfilled</button> } 
+													{order.statusHistory[order.statusHistory.length - 1].status == 'pending' && <button className='button-special-warning'>pending</button> } 
+													{order.statusHistory[order.statusHistory.length - 1].status == 'rejected' && <button className='button-special-error'>rejected</button> } 
 												</td>
 												<td>
 													<a href="#">
@@ -126,35 +138,20 @@ export const AdminOrder = () => {
 														</button>
 													</a>
 												</td>
+												<td>
+														<a
+															className="edit"
+														>
+															<FaPenSquare />
+														</a>{' '}
+													</td>
 											</tr>
 										);
 									})}
 								</tbody>
 							</table>
-							<button
-								style={{ float: 'right' }}
-								className="btn btn-success px-3 col-sm-2"
-								onClick={handleUpdateStatus}
-							>
-								<a className="view-modal text-decoration-none text-white">
-									&nbsp; Update status
-								</a>
-							</button>
 						</div>
 					</form>
-					{/* <c:if test="${sort != null && search == null}">
-                        <div className="row">
-                            <div className="col-lg-12 text-center">
-                                <div className="pagination-wrap text-center">
-                                    <ul className="d-flex text-center justify-content-center" style="margin-top: -30px">
-                                        <c:forEach begin="1" end="${numberPage}" var="i">
-                                            <li style="list-style: none"><a style="border: 1px solid black; border-radius: 50%" className="m-3 text-dark text-decoration-none px-2 py-1" href="sort-orders-admin?index=${i}&ok=${ok}">${i}</a></li>
-                                            </c:forEach>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </c:if> */}
 				</div>
 			</div>
 		</div>

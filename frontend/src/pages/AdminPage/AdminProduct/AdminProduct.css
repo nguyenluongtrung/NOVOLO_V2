@@ -25,6 +25,14 @@
     padding: 3px 10px;
 }
 
+.button-special-error{
+    border-radius: 13px;
+    background-color: #f72804;
+    color: white;
+    border: none;
+    padding: 3px 10px;
+}
+
 .button-special-success{
     border-radius: 13px;
     background-color: #4bd34b;

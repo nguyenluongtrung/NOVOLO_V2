@@ -147,7 +147,7 @@ const getRevenueByCategory = asyncHandler(async (req, res) => {
 			$group: {
 				_id: '$product.categoryID',
 				total: {
-					$sum: { $multiply: ['$totalQuantity', '$product.rating'] },
+					$sum: { $multiply: ['$totalQuantity', '$product.rating', 5] },
 				},
 			},
 		},
