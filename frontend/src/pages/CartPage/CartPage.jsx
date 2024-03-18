@@ -22,8 +22,10 @@ export const CartPage = () => {
 		message: authMessage,
 	} = useSelector((state) => state.auth);
 	const [totalPrice, setTotalPrice] = useState(0);
+	const [totalPriceUsingPromotion, setTotalPriceUsingPromotion] = useState(0);
 	const [promotionCode, setPromotionCode] = useState('');
 	const [promotionValue, setPromotionValue] = useState(null);
+	const [promotion, setPromotion] = useState(null);
 	const [productTicks, setProductTicks] = useState([]);
 	const [currentTotalAccumulatedPoints, setCurrentTotalAccumulatedPoints] =
 		useState(user.totalAccumulatedPoint);
@@ -68,6 +70,35 @@ export const CartPage = () => {
 		}
 	}, [products, prices]);
 
+	const calculateTotalAfterPromotion = () => {
+		if (Array.isArray(products)) {
+			const calculatedTotal = products.reduce((accumulator, currentValue) => {
+				return promotion &&
+					promotion?.productIds.findIndex(
+						(pId) => String(pId) == String(currentValue?.productId?._id)
+					) != -1
+					? accumulator +
+							(1 - Number(promotionValue)) *
+								currentValue?.quantity *
+								prices[
+									prices.findIndex(
+										(price) => price.productId == currentValue?.productId?._id
+									)
+								]?.price
+					: accumulator +
+							currentValue?.quantity *
+								prices[
+									prices.findIndex(
+										(price) => price.productId == currentValue?.productId?._id
+									)
+								]?.price;
+			}, 0);
+
+			// setTotalPriceUsingPromotion(calculatedTotal);
+			return calculatedTotal;
+		}
+	};
+
 	const handleDeleteProductFromCart = async (productId) => {
 		await dispatch(deleteProductsFromCart(productId));
 		if (authSuccess) {
@@ -80,9 +111,7 @@ export const CartPage = () => {
 
 	const handleCheckOut = (totalPrice) => {
 		if (Number(promotionValue)) {
-			const newPrice = parseFloat(
-				totalPrice * (1 - Number(promotionValue))
-			).toFixed(1);
+			const newPrice = parseFloat(calculateTotalAfterPromotion()).toFixed(1);
 			setTotalPrice(newPrice);
 			navigate('/check-out', {
 				state: { totalPrice: newPrice, cart: { products } },
@@ -107,6 +136,7 @@ export const CartPage = () => {
 		if (promotionIndex !== -1) {
 			promotion = promotions[promotionIndex];
 			setPromotionValue(promotion.promotionValue);
+			setPromotion(promotion);
 		} else {
 			setPromotionValue(null);
 		}
@@ -267,13 +297,16 @@ export const CartPage = () => {
 														$
 													</td>
 													<td>
-														{product?.quantity * product?.productId?.exchangedPoint} points{' '}
+														{product?.quantity *
+															product?.productId?.exchangedPoint}{' '}
+														points{' '}
 														<input
 															type="checkbox"
 															onClick={() =>
 																handleUpdateExchangedPoints(
 																	product?.productId._id,
-																	product?.quantity * product?.productId?.exchangedPoint,
+																	product?.quantity *
+																		product?.productId?.exchangedPoint,
 																	product?.quantity *
 																		prices[
 																			prices.findIndex(
@@ -290,8 +323,10 @@ export const CartPage = () => {
 																		String(id) ==
 																		String(product?.productId?._id)
 																) == -1 &&
-																Number(product?.quantity * product?.productId?.exchangedPoint) >
-																	Number(currentTotalAccumulatedPoints)
+																Number(
+																	product?.quantity *
+																		product?.productId?.exchangedPoint
+																) > Number(currentTotalAccumulatedPoints)
 															}
 														/>
 													</td>
@@ -315,10 +350,14 @@ export const CartPage = () => {
 												</span>
 												&nbsp;
 												<span>
-													{Number(promotionValue)
+													{/* {Number(promotionValue)
 														? `${parseFloat(
 																totalPrice * (1 - Number(promotionValue))
 														  ).toFixed(1)}$`
+														: ''} */}
+
+													{Number(promotionValue)
+														? `${calculateTotalAfterPromotion()}$`
 														: ''}
 												</span>
 											</td>
@@ -326,6 +365,21 @@ export const CartPage = () => {
 									</tbody>
 								</table>
 								<div className="cart-buttons">
+									{/* {Number(promotionValue) && (
+										<p className="text-danger" style={{ fontStyle: 'italic' }}>
+											Promotion event only applies for:{' '}
+											<span id="my-point">
+												{products.map((product) => {
+													if (
+														promotion?.productIds.findIndex(
+															(id) => id == product._id
+														) != -1
+													)
+														return <span>{product.name} &nbsp;</span>;
+												})}
+											</span>
+										</p>
+									)} */}
 									<p>
 										Your current accumulated points are:{' '}
 										<span id="my-point">
