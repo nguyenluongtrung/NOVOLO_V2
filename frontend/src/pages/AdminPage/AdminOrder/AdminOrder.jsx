@@ -120,7 +120,7 @@ export const AdminOrder = () => {
 									</tr>
 								</thead>
 								<tbody>
-									{orders.map((order) => {
+									{orders?.map((order) => {
 										return (
 											<tr>
 												<td>{formatDate(order.date)}</td>
