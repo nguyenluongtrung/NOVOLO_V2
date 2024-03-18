@@ -39,6 +39,12 @@ import {
 	updateReply,
 } from '../../features/comments/commentsSlice';
 import { formatDate } from '../../utils/format';
+import {
+	ref,
+	getDownloadURL,
+	listAll,
+} from 'firebase/storage';
+import { storage } from './../../config/firebase';
 
 export const SingleProduct = () => {
 	const [rate, setRate] = useState(0);
@@ -52,10 +58,13 @@ export const SingleProduct = () => {
 	const [showReplyOpenOptionsMap, setShowReplyOpenOptionsMap] = useState({});
 	const [showEditCommentMap, setShowEditCommentMap] = useState({});
 	const [showEditReplyMap, setShowEditReplyMap] = useState({});
+	const [imageUrls, setImageUrls] = useState([]);
 	const { id } = useParams();
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
+	const imagesListRef = ref(storage, 'combos/');
 
 	const {
 		products: product,
@@ -311,6 +320,16 @@ export const SingleProduct = () => {
 		fetchComments();
 	}, [dispatch, id]);
 
+	useEffect(() => {
+		listAll(imagesListRef).then((response) => {
+			response.items.forEach((item) => {
+				getDownloadURL(item).then((url) => {
+					setImageUrls((prev) => [...prev, url]);
+				});
+			});
+		});
+	}, []);
+
 	if (productLoading || authLoading) {
 		return <Spinner />;
 	}
@@ -335,7 +354,19 @@ export const SingleProduct = () => {
 					<div className="row">
 						<div className="col-md-5">
 							<div className="single-product-img">
-								{product?.categoryID != '65bf55ce65e2e3ced184149a' ? <img src={`/${product?.image}`} alt="" /> : <img src={product?.image} alt="" />}
+								{product?.categoryID != '65bf55ce65e2e3ced184149a' ? (
+									<img src={`/${product?.image}`} alt="" />
+								) : (
+									<img
+										src={
+											imageUrls[
+												imageUrls.findIndex(
+													(url) => url.includes(product?.image) == true
+												)
+											]
+										}
+									/>
+								)}
 							</div>
 						</div>
 						<div className="col-md-7">

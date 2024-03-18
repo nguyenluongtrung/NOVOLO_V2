@@ -2,14 +2,24 @@ import './ProductList.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaHeart } from 'react-icons/fa';
-import { addProductToWishList, addProductsToCart } from '../../../../features/auth/authSlice';
+import {
+	addProductToWishList,
+	addProductsToCart,
+} from '../../../../features/auth/authSlice';
 import { toast } from 'react-toastify';
 import { Spinner } from '../../../../components';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllNewestPrices } from '../../../../features/prices/pricesSlice';
 import { FaShoppingCart } from 'react-icons/fa';
+import {
+	ref,
+	getDownloadURL,
+	listAll,
+} from 'firebase/storage';
+import { storage } from './../../../../config/firebase';
 
 export const ProductList = ({ products, searchName, pageNumber }) => {
+	const [imageUrls, setImageUrls] = useState([]);
 	const dispatch = useDispatch();
 
 	const {
@@ -26,6 +36,8 @@ export const ProductList = ({ products, searchName, pageNumber }) => {
 		message: priceMessage,
 	} = useSelector((state) => state.prices);
 
+	const imagesListRef = ref(storage, 'combos/');
+
 	const addProductToWishlist = async (productId) => {
 		await dispatch(addProductToWishList(productId));
 		if (authError) {
@@ -36,13 +48,13 @@ export const ProductList = ({ products, searchName, pageNumber }) => {
 	};
 
 	const addProductToCart = async (productId) => {
-		await dispatch(addProductsToCart({productId: productId, quantity: 1}));
-		if(authSuccess) {
-			toast.success('Add to cart successfully!')
-		} else if(authError){
+		await dispatch(addProductsToCart({ productId: productId, quantity: 1 }));
+		if (authSuccess) {
+			toast.success('Add to cart successfully!');
+		} else if (authError) {
 			toast.error(authMessage);
 		}
-	}
+	};
 
 	useEffect(() => {
 		if (priceError) {
@@ -50,6 +62,16 @@ export const ProductList = ({ products, searchName, pageNumber }) => {
 		}
 		dispatch(getAllNewestPrices());
 	}, [dispatch, priceMessage, priceError]);
+
+	useEffect(() => {
+		listAll(imagesListRef).then((response) => {
+			response.items.forEach((item) => {
+				getDownloadURL(item).then((url) => {
+					setImageUrls((prev) => [...prev, url]);
+				});
+			});
+		});
+	}, []);
 
 	if (priceLoading || authLoading) {
 		return <Spinner />;
@@ -77,14 +99,32 @@ export const ProductList = ({ products, searchName, pageNumber }) => {
 											: 'single-product-item'
 									}
 								>
-									<div className="product-image">
-										<Link to={`/single-product/${product._id}`}>
-											<img
-												src={product?.image}
-												style={{ width: '100%', height: '250px' }}
-											/>
-										</Link>
-									</div>
+									{String(product?.categoryID) == '65bf55ce65e2e3ced184149a' ? (
+										<div className="product-image">
+											<Link to={`/single-product/${product._id}`}>
+												<img
+													src={
+														imageUrls[
+															imageUrls.findIndex(
+																(url) => url.includes(product?.image) == true
+															)
+														]
+													}
+													style={{ width: '100%', height: '250px' }}
+												/>
+											</Link>
+										</div>
+									) : (
+										<div className="product-image">
+											<Link to={`/single-product/${product._id}`}>
+												<img
+													src={product?.image}
+													style={{ width: '100%', height: '250px' }}
+												/>
+											</Link>
+										</div>
+									)}
+
 									<h3 style={{ color: product.isSurprise && 'grey' }}>
 										{product?.name}
 									</h3>
@@ -110,7 +150,10 @@ export const ProductList = ({ products, searchName, pageNumber }) => {
 									</p>
 
 									{product?.productStatus ? (
-										<a className="cart-btn" onClick={() => addProductToCart(product?._id)}>
+										<a
+											className="cart-btn"
+											onClick={() => addProductToCart(product?._id)}
+										>
 											<FaShoppingCart /> Add to Cart
 										</a>
 									) : (
