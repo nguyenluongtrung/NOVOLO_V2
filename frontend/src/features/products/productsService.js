@@ -17,6 +17,13 @@ const getAllProducts = async (searchData) => {
 	};
 };
 
+// Get all initial products
+const getAllInitialProducts = async (id) => {
+	const response = await axios.get(API_URL + 'initial');
+
+	return response.data.data.products;
+};
+
 // Get product
 const getProductById = async (id) => {
 	const response = await axios.get(API_URL + id);
@@ -189,6 +196,7 @@ const productsService = {
 	get5HighestRatingProducts,
 	get5LowestRatingProducts,
 	getRevenueByCategory,
+	getAllInitialProducts,
 };
 
 export default productsService;

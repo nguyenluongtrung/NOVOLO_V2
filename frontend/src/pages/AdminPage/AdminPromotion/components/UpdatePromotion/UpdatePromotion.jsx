@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { Spinner } from '../../../../../components';
 import './UpdatePromotion.css';
 import { FaTimes } from 'react-icons/fa';
-import { getAllProducts } from '../../../../../features/products/productsSlice';
+import { getAllInitialProducts, getAllProducts } from '../../../../../features/products/productsSlice';
 import { useEffect, useState } from 'react';
 import { getAllPromotions, updatePromotion } from '../../../../../features/promotion/promotionsSlice';
 import { formatDate, formatDateInput } from '../../../../../utils/format';
@@ -53,7 +53,7 @@ export const UpdatePromotion = ({ setIsOpenUpdateForm, chosenPromotionId }) => {
 	};
 
 	useEffect(() => {
-		Promise.all([dispatch(getAllProducts(''))]).catch((error) => {
+		Promise.all([dispatch(getAllInitialProducts())]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
 	}, [dispatch, productError, productMessage]);

@@ -7,7 +7,7 @@ import {
 	getAllPromotions,
 } from '../../../../../features/promotion/promotionsSlice';
 import { formatDate } from '../../../../../utils/format';
-import { getAllProducts } from '../../../../../features/products/productsSlice';
+import { getAllInitialProducts, getAllProducts } from '../../../../../features/products/productsSlice';
 
 export const PromotionDetails = ({
 	setIsOpenPromotionDetails,
@@ -30,7 +30,7 @@ export const PromotionDetails = ({
 				await dispatch(getAllPromotions());
 			}
 
-			await dispatch(getAllProducts(''));
+			await dispatch(getAllInitialProducts());
 		};
 		asyncFn();
 	}, [dispatch]);

@@ -38,6 +38,24 @@ export const getAllProducts = createAsyncThunk(
 	}
 );
 
+// Get all initial products
+export const getAllInitialProducts = createAsyncThunk(
+	'products/getAllInitialProducts',
+	async (_, thunkAPI) => {
+		try {
+			return await productsService.getAllInitialProducts();
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
 // Get highest rating products
 export const get5HighestRatingProducts = createAsyncThunk(
 	'products/get5HighestRatingProducts',
@@ -300,6 +318,20 @@ export const productSlice = createSlice({
 				state.productSize = action.payload.productSize;
 			})
 			.addCase(getAllProducts.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+				state.products = [];
+			})
+			.addCase(getAllInitialProducts.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getAllInitialProducts.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+				state.products = action.payload;
+			})
+			.addCase(getAllInitialProducts.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

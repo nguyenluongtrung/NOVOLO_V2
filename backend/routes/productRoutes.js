@@ -11,6 +11,7 @@ const {
 	getProductsByCategory,
 	get5HighestRatingProducts,
 	get5LowestRatingProducts,
+	getAllInitialProducts,
 } = require('../controllers/productController');
 const { protect, restrict } = require('./../middleware/userMiddleware');
 const router = express.Router();
@@ -21,6 +22,7 @@ router
 	.post(protect, restrict('admin', 'staff'), createProduct);
 router.route('/wishList').get(protect, getProductsFromWishList);
 router.route('/cart').get(protect, getProductsFromCart);
+router.route('/initial').get(getAllInitialProducts);
 router
 	.route('/highestRating')
 	.get(protect, restrict('admin'), get5HighestRatingProducts);

@@ -43,6 +43,17 @@ const getAllProducts = asyncHandler(async (req, res) => {
 	});
 });
 
+const getAllInitialProducts = asyncHandler(async (req, res) => {
+	const products = await Product.find({});
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			products,
+		},
+	});
+});
+
 const getProductById = asyncHandler(async (req, res) => {
 	const product = await Product.findById(req.params.id);
 
@@ -336,6 +347,7 @@ const get5LowestRatingProducts = asyncHandler(async (req, res) => {
 
 module.exports = {
 	getAllProducts,
+	getAllInitialProducts,
 	getProductById,
 	createProduct,
 	updateProduct,

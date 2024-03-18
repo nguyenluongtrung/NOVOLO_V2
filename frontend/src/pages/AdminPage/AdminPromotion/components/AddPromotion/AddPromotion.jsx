@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { Spinner } from '../../../../../components';
 import './AddPromotion.css';
 import { FaTimes } from 'react-icons/fa';
-import { getAllProducts } from '../../../../../features/products/productsSlice';
+import { getAllInitialProducts, getAllProducts } from '../../../../../features/products/productsSlice';
 import { useEffect, useState } from 'react';
 import { createPromotion } from '../../../../../features/promotion/promotionsSlice';
 
@@ -57,7 +57,7 @@ export const AddPromotion = ({ setIsOpenAddForm }) => {
 			toast.error(productMessage);
 		}
 
-		Promise.all([dispatch(getAllProducts(''))]).catch((error) => {
+		Promise.all([dispatch(getAllInitialProducts())]).catch((error) => {
 			console.error('Error during dispatch:', error);
 		});
 	}, [dispatch, productError, productMessage]);
