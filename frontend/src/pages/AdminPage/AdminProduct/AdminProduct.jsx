@@ -26,20 +26,20 @@ export const AdminProduct = () => {
 		isSuccess: productSuccess,
 		isLoading: productLoading,
 		message: productMessage,
-	} = useSelector((state) => state.products);
+	} = useSelector((state) => state?.products);
 	const {
 		categories,
 		isError: categoryError,
 		isLoading: categoryLoading,
 		message: categoryMessage,
-	} = useSelector((state) => state.categories);
+	} = useSelector((state) => state?.categories);
 
 	const {
 		prices,
 		isError: priceError,
 		isLoading: priceLoading,
 		message: priceMessage,
-	} = useSelector((state) => state.prices);
+	} = useSelector((state) => state?.prices);
 
 	const navigateToAnotherPage = (page) => {
 		dispatch(getAllProducts('page=' + page));
@@ -175,7 +175,7 @@ export const AdminProduct = () => {
 										</tr>
 									</thead>
 									<tbody>
-										{products.map((product) => {
+										{products?.map((product) => {
 											return (
 												<tr>
 													<td>{product?.name}</td>

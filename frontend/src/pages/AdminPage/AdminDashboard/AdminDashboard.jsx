@@ -105,8 +105,8 @@ export const AdminDashboard = () => {
 			let bestSellingName = [];
 
 			bestSellingProducts.forEach((product) => {
-				bestSellingName.push(product.product.name);
-				bestSellingTotal.push(product.totalQuantity);
+				bestSellingName.push(product?.product?.name);
+				bestSellingTotal.push(product?.totalQuantity);
 			});
 
 			setState({

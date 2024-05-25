@@ -105,41 +105,38 @@ export const ShoppingPage = () => {
 								<li className="mb-2">
 									<a
 										onClick={() =>
-											onSubmit({ price_gte__: '1', price_lte__: '10' })
+											onSubmit({ price_gte__: '20000', price_lte__: '30000' })
 										}
 									>
-										1 - 10$
+										20.000 VND - 30.000 VND
 									</a>
 								</li>
 								<li className="mb-2">
 									<a
 										onClick={() =>
-											onSubmit({ price_gte__: '11', price_lte__: '20' })
+											onSubmit({ price_gte__: '30000', price_lte__: '40000' })
 										}
 									>
-										11 - 20$
+										30.000 VND - 40.000 VND
 									</a>
 								</li>
 								<li className="mb-2">
 									<a
 										onClick={() =>
-											onSubmit({ price_gte__: '21', price_lte__: '30' })
+											onSubmit({ price_gte__: '40000', price_lte__: '50000' })
 										}
 									>
-										21 - 30$
+										40.000 VND - 50.000 VND
 									</a>
 								</li>
 								<li className="mb-2">
 									<a
 										onClick={() =>
-											onSubmit({ price_gte__: '31', price_lte__: '40' })
+											onSubmit({ price_gt__: '50000' })
 										}
 									>
-										31 - 40$
+										50.000 VND+ 
 									</a>
-								</li>
-								<li className="mb-2">
-									<a onClick={() => onSubmit({ price_gte__: '41' })}>41+$</a>
 								</li>
 							</ul>
 						</div>
@@ -153,42 +150,42 @@ export const ShoppingPage = () => {
 								<li className="mb-2">
 									<a
 										onClick={() =>
-											onSubmit({ calories_gte__: '0', calories_lte__: '100' })
+											onSubmit({ calories_gte__: '0', calories_lte__: '50' })
 										}
 									>
-										0 - 100 (calories)
+										0 - 50 (calories)
 									</a>
 								</li>
 								<li className="mb-2">
 									<a
 										onClick={() =>
-											onSubmit({ calories_gte__: '100', calories_lte__: '200' })
+											onSubmit({ calories_gte__: '50', calories_lte__: '100' })
 										}
 									>
-										100 - 200 (calories)
+										50 - 100 (calories)
 									</a>
 								</li>
 								<li className="mb-2">
 									<a
 										onClick={() =>
-											onSubmit({ calories_gte__: '200', calories_lte__: '300' })
+											onSubmit({ calories_gte__: '100', calories_lte__: '150' })
 										}
 									>
-										200 - 300 (calories)
+										100 - 150 (calories)
 									</a>
 								</li>
 								<li className="mb-2">
 									<a
 										onClick={() =>
-											onSubmit({ calories_gte__: '300', calories_lte__: '400' })
+											onSubmit({ calories_gte__: '150', calories_lte__: '200' })
 										}
 									>
-										300 - 400 (calories)
+										150 - 200 (calories)
 									</a>
 								</li>
 								<li className="mb-2">
-									<a onClick={() => onSubmit({ calories_gte__: '400' })}>
-										400+ (calories)
+									<a onClick={() => onSubmit({ calories_gt__: '200' })}>
+										200+ (calories)
 									</a>
 								</li>
 							</ul>
@@ -196,7 +193,7 @@ export const ShoppingPage = () => {
 					</div>
 
 					<div className="col-sm-9">
-						<div className="product-section mt-5  mb-150">
+						<div className="product-section mt-5 mb-150">
 							<div className="container">
 								<div className="row">
 									<div className="col-md-12">

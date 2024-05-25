@@ -139,7 +139,7 @@ export const ProductList = ({ products, searchName, pageNumber }) => {
 												)
 											]?.price
 										}{' '}
-										$
+										VND
 									</p>
 									<p
 										className={

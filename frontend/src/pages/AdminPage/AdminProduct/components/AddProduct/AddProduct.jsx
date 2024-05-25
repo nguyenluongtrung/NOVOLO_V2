@@ -5,12 +5,24 @@ import { createProduct } from '../../../../../features/products/productsSlice';
 import { Spinner } from '../../../../../components';
 import './AddProduct.css';
 import { FaTimes } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getAllCategories } from '../../../../../features/categories/categoriesSlice';
+import {
+	getDownloadURL,
+	getStorage,
+	ref,
+	uploadBytesResumable,
+} from 'firebase/storage';
+import { app } from '../../../../../firebase';
 
 export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 	const dispatch = useDispatch();
 	const [isSurprise, setIsSurprise] = useState(false);
+	const fileRef = useRef(null);
+	const [file, setFile] = useState(undefined);
+	const [filePerc, setFilePerc] = useState(0);
+	const [fileUploadError, setFileUploadError] = useState(false);
+	const [image, setImage] = useState('');
 
 	const {
 		isLoading: productLoading,
@@ -37,10 +49,41 @@ export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 		handleGetAllProducts();
 	};
 
+	useEffect(() => {
+		if (file) {
+			handleFileUpload(file);
+		}
+	}, [file]);
+
+	const handleFileUpload = (file) => {
+		const storage = getStorage(app);
+		const fileName = new Date().getTime() + file.name;
+		const storageRef = ref(storage, `products/${fileName}`);
+		const uploadTask = uploadBytesResumable(storageRef, file);
+
+		uploadTask.on(
+			'state_changed',
+			(snapshot) => {
+				const progress =
+					(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+				setFilePerc(Math.round(progress));
+			},
+			(error) => {
+				setFileUploadError(true);
+			},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+					setImage(downloadURL)
+				);
+			}
+		);
+	};
+
 	const onSubmit = async (data) => {
 		const addData = {
 			...data,
 			isSurprise: isSurprise,
+			image,
 		};
 
 		if (productError) {
@@ -108,12 +151,31 @@ export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 								Image <span className="text-danger">*</span> &nbsp; &nbsp;
 								<span className="text-danger" id="error-image"></span>
 							</label>
+							<button
+								className="rounded-md rounded-customized-gray p-1 hover:cursor-pointer"
+								onClick={() => fileRef.current.click()}
+							>
+								<span>Choose image</span>
+							</button>
 							<input
-								type="text"
-								{...register('image')}
-								placeholder="Enter image source"
-								required
+								type="file"
+								ref={fileRef}
+								hidden
+								onChange={(e) => setFile(e.target.files[0])}
 							/>
+							<p className="text-sm self-center pl-2">
+								{fileUploadError ? (
+									<span className="text-red">
+										Tải ảnh lên thất bại (dung lượng ảnh phải nhỏ hơn 2MB)
+									</span>
+								) : filePerc > 0 && filePerc < 100 ? (
+									<span className="text-gray">{`Đang tải lên ${filePerc}%`}</span>
+								) : filePerc === 100 ? (
+									<span className="text-green">Tải ảnh lên thành công!</span>
+								) : (
+									''
+								)}
+							</p>
 						</div>
 					</div>
 					<div className="column column-flex">
@@ -179,15 +241,14 @@ export const AddProduct = ({ setIsOpenAddForm, handleGetAllProducts }) => {
 								type="radio"
 								name="isSurprise"
 								onChange={() => setIsSurprise(true)}
-								style={{width: '12px', marginTop: '-10px'}}
+								style={{ width: '12px', marginTop: '-10px' }}
 							/>{' '}
-							True 
-							&nbsp;
+							True &nbsp;
 							<input
 								type="radio"
 								name="isSurprise"
 								onChange={() => setIsSurprise(false)}
-								style={{width: '12px', marginTop: '-10px'}}
+								style={{ width: '12px', marginTop: '-10px' }}
 							/>{' '}
 							False
 						</div>

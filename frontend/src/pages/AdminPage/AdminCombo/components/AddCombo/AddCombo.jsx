@@ -169,10 +169,8 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 											onChange={(e) => getAllMainCourseProducts(e.target.value)}
 										>
 											<option value="">Select</option>
-											<option value="Chicken">Chicken</option>
-											<option value="Burger">Burger</option>
-											<option value="Spaghetti">Spaghetti</option>
-											<option value="Taco">Taco</option>
+											<option value="Rice">Rice</option>
+											<option value="Noodle">Noodle</option>
 										</select>
 									</td>
 									<td>
@@ -226,9 +224,7 @@ export const AddCombo = ({ setIsOpenAddForm, handleGetAllCombos }) => {
 											onChange={(e) => getAllSideDishProducts(e.target.value)}
 										>
 											<option value="">Select</option>
-											<option value="Sandwich">Sandwich</option>
 											<option value="Salad">Salad</option>
-											<option value="French Fries">French Fries</option>
 										</select>
 									</td>
 									<td>
