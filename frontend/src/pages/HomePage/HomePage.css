@@ -6,11 +6,11 @@
     display: block;
     font-size: 24px;
     margin-right: 15px;
-    color: #F28123;
+    color: #28a745;
     width: 65px;
     height: 65px;
     text-align: center;
     line-height: 60px;
-    border: 2px #F28123 dotted;
+    border: 2px #28a745 dotted;
     border-radius: 999px;
 }

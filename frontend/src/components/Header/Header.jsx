@@ -10,7 +10,7 @@ import { FaHeart, FaShoppingCart } from 'react-icons/fa';
 import './../../assets/css/main.css';
 import './../../assets/css/responsive.css';
 import './../../assets/css/scss/common/_header.scss';
-import avt from '../../assets/img/products/avt.png';
+import avt from '../../assets/img/products/avt1.png';
 import './Header.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect } from 'react';

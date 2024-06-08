@@ -66,7 +66,7 @@ a {
 }
 
 a:hover {
-  color: #F28123;
+  color: #28a745;
   text-decoration: none;
 }
 
@@ -230,7 +230,7 @@ p:last-child {
   position: absolute;
   top: calc(50% - 3vmax);
   left: calc(50% - 3vmax);
-  border-left: 3px solid #F28123;
+  border-left: 3px solid #28a745;
   border-radius: 100%;
   -webkit-animation: spinLeft 800ms linear infinite;
   animation: spinLeft 800ms linear infinite;
@@ -244,7 +244,7 @@ p:last-child {
   position: absolute;
   top: calc(50% - 3vmax);
   left: calc(50% - 3vmax);
-  border-left: 3px solid #F28123;
+  border-left: 3px solid #28a745;
   border-radius: 100%;
   -webkit-animation: spinLeft 800ms linear infinite;
   animation: spinLeft 800ms linear infinite;
@@ -427,7 +427,7 @@ p:last-child {
 }
 
 .orange-text {
-  color: #F28123;
+  color: #28a745;
 }
 
 .blue-bg {
@@ -437,7 +437,7 @@ p:last-child {
 a.boxed-btn {
   font-family: 'Poppins', sans-serif;
   display: inline-block;
-  background-color: #F28123;
+  background-color: #28a745;
   color: #fff;
   padding: 10px 20px;
 }
@@ -446,7 +446,7 @@ a.bordered-btn {
   font-family: 'Poppins', sans-serif;
   display: inline-block;
   color: #fff;
-  border: 2px solid #F28123;
+  border: 2px solid #28a745;
   padding: 7px 20px;
 }
 
@@ -461,7 +461,7 @@ a.read-more-btn {
 }
 
 a.read-more-btn:hover {
-  color: #F28123;
+  color: #28a745;
 }
 
 a.boxed-btn, a.bordered-btn, a.cart-btn {
@@ -482,7 +482,7 @@ a.boxed-btn, a.bordered-btn, a.cart-btn {
   bottom: 0px;
   width: 50px;
   height: 2px;
-  background-color: #F28123;
+  background-color: #28a745;
   margin: 0 auto;
 }
 
@@ -504,7 +504,7 @@ a.boxed-btn, a.bordered-btn, a.cart-btn {
 }
 
 .breadcrumb-text p {
-  color: #F28123;
+  color: #28a745;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 7px;
@@ -651,7 +651,7 @@ ul.sub-menu li:last-child {
 }
 
 .mean-bar a.meanmenu-reveal {
-  background-color: #F28123;
+  background-color: #28a745;
 }
 
 .main-menu-wrap {
@@ -715,11 +715,11 @@ nav.main-menu ul ul.sub-menu li a {
 }
 
 nav.main-menu ul li.current-list-item > a {
-  color: #F28123;
+  color: #28a745;
 }
 
 nav.main-menu li:hover > a {
-  color: #F28123;
+  color: #28a745;
 }
 
 nav.main-menu li a {
@@ -735,7 +735,7 @@ nav.main-menu li a {
 }
 
 .top-header-area .header-icons a:hover {
-  color: #F28123;
+  color: #28a745;
 }
 
 .sticky-wrapper {
@@ -809,7 +809,7 @@ a.mobile-show {
   padding: 15px;
   width: 60%;
   background-color: transparent;
-  border-bottom: 1px solid #F28123;
+  border-bottom: 1px solid #28a745;
   display: block;
   margin: 0 auto;
   text-align: center;
@@ -821,7 +821,7 @@ a.mobile-show {
 
 .search-bar-tablecell button[type=submit] {
   border: none;
-  background-color: #F28123;
+  background-color: #28a745;
   padding: 15px 30px;
   cursor: pointer;
   display: inline-block;
@@ -906,7 +906,7 @@ h2.widget-title:after {
   bottom: 0;
   width: 20px;
   height: 2px;
-  background-color: #F28123;
+  background-color: #28a745;
   content: "";
 }
 
@@ -946,7 +946,7 @@ h2.widget-title:after {
   width: 20%;
   border: none;
   background-color: #012738;
-  color: #F28123;
+  color: #28a745;
   padding: 14px 0;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
@@ -971,7 +971,7 @@ h2.widget-title:after {
 }
 
 .copyright a {
-  color: #F28123;
+  color: #28a745;
   font-weight: 700;
 }
 
@@ -1013,7 +1013,7 @@ h2.widget-title:after {
   content: "\f105";
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
-  color: #F28123;
+  color: #28a745;
 }
 
 /* -----------------------------------------------------------------------------
@@ -1039,7 +1039,7 @@ a.boxed-btn {
 
 a.boxed-btn:hover {
   background-color: #051922;
-  color: #F28123;
+  color: #28a745;
 }
 
 a.bordered-btn {
@@ -1049,7 +1049,7 @@ a.bordered-btn {
 }
 
 a.bordered-btn:hover {
-  background-color: #F28123;
+  background-color: #28a745;
   color: #fff;
 }
 
@@ -1060,7 +1060,7 @@ ul.sub-menu a {
 }
 
 ul.sub-menu li:hover a {
-  color: #F28123;
+  color: #28a745;
 }
 
 .single-tof-box {
@@ -1082,7 +1082,7 @@ a.video-play-btn {
 
 a.video-play-btn:hover {
   background-color: #333;
-  color: #F28123;
+  color: #28a745;
 }
 
 .latest-news-bg {
@@ -1108,7 +1108,7 @@ a.tof-btn i {
 }
 
 a.tof-btn:hover {
-  color: #F28123;
+  color: #28a745;
 }
 
 a.tof-btn:hover i {
@@ -1147,7 +1147,7 @@ a.tof-btn:hover i {
 }
 
 .footer-box.pages ul li:hover a {
-  color: #F28123;
+  color: #28a745;
 }
 
 .footer-box.subscribe form button {
@@ -1157,12 +1157,12 @@ a.tof-btn:hover i {
 }
 
 .footer-box.subscribe form button:hover {
-  background-color: #F28123;
+  background-color: #28a745;
   color: #051922;
 }
 
 .social-icons ul li:hover a {
-  color: #F28123;
+  color: #28a745;
 }
 
 .social-icons ul li a {
@@ -1179,7 +1179,7 @@ ul.social-link-team li a {
 
 ul.social-link-team li a:hover {
   background-color: #051922;
-  color: #F28123;
+  color: #28a745;
 }
 
 .counter-box {
@@ -1202,7 +1202,7 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #051922;
-  color: #F28123;
+  color: #28a745;
 }
 
 div.owl-controls, .owl-controls div {
@@ -1222,7 +1222,7 @@ div.owl-controls div.owl-nav div:hover {
 }
 
 .pagination-wrap ul li:hover a {
-  background-color: #F28123;
+  background-color: #28a745;
 }
 
 .icons a i {
@@ -1232,7 +1232,7 @@ div.owl-controls div.owl-nav div:hover {
 }
 
 .icons a:hover i {
-  color: #F28123;
+  color: #28a745;
 }
 
 .tof-text a.tof-btn {
@@ -1270,7 +1270,7 @@ a.cart-btn {
 
 a.cart-btn:hover {
   background-color: #051922;
-  color: #F28123;
+  color: #28a745;
 }
 
 .recent-posts ul li {
@@ -1290,7 +1290,7 @@ ul.sub-menu li a {
 }
 
 ul.sub-menu li:hover a {
-  color: #F28123 !important;
+  color: #28a745 !important;
 }
 
 .sidebar-section ul li a {
@@ -1310,7 +1310,7 @@ ul.sub-menu li:hover a {
 }
 
 .comment-text-body h4 a:hover {
-  color: #F28123;
+  color: #28a745;
 }
 
 ul.product-share li a {
@@ -1320,7 +1320,7 @@ ul.product-share li a {
 }
 
 ul.product-share li:hover a {
-  color: #F28123;
+  color: #28a745;
 }
 
 .service-menu ul li a {
@@ -1377,7 +1377,7 @@ a.mobile-show.search-bar-icon {
 }
 
 a.mobile-show.search-bar-icon:hover {
-  color: #F28123;
+  color: #28a745;
 }
 
 /* -----------------------------------------------------------------------------
@@ -1424,7 +1424,7 @@ html, body {
 }
 
 .hero-text p.subtitle {
-  color: #F28123;
+  color: #28a745;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 7px;
@@ -1481,7 +1481,7 @@ html, body {
 }
 
 input[type="submit"] {
-  background-color: #F28123;
+  background-color: #28a745;
   color: #051922;
   font-weight: 700;
   text-transform: uppercase;
@@ -1550,7 +1550,7 @@ input[type="submit"] {
 div.owl-controls, .owl-controls div {
   height: auto;
   top: 50%;
-  color: #F28123;
+  color: #28a745;
   font-size: 48px;
 }
 
@@ -1600,12 +1600,12 @@ div.owl-controls, .owl-controls div {
   display: block;
   font-size: 24px;
   margin-right: 15px;
-  color: #F28123;
+  color: #28a745;
   width: 65px;
   height: 65px;
   text-align: center;
   line-height: 60px;
-  border: 2px #F28123 dotted;
+  border: 2px #28a745 dotted;
   border-radius: 999px;
 }
 
@@ -1691,7 +1691,7 @@ p.excerpt {
 }
 
 .pagination-wrap ul li a.active {
-  background-color: #F28123;
+  background-color: #28a745;
 }
 
 .single-artcile-bg {
@@ -1914,7 +1914,7 @@ span.comment-date {
   margin-top: 8px;
   text-align: center;
   border-radius: 50%;
-  background-color: #F28123;
+  background-color: #28a745;
 }
 
 .cart-banner .image-column .price-box .inner-price .price {
@@ -1972,7 +1972,7 @@ span.comment-date {
   padding: 8px 20px 14px;
   text-transform: capitalize;
   text-align: center;
-  border: 2px solid #F28123;
+  border: 2px solid #28a745;
 }
 
 .time-countdown .counter-column .count {
@@ -1981,7 +1981,7 @@ span.comment-date {
   font-size: 30px;
   line-height: 1.4em;
   padding: 0px 0px;
-  color: #F28123;
+  color: #28a745;
   font-weight: 700;
   letter-spacing: 1px;
 }
@@ -2038,7 +2038,7 @@ p.testimonial-body {
 ----------------------------------------------------------------------------- */
 a.video-play-btn {
   position: absolute;
-  background-color: #F28123;
+  background-color: #28a745;
   color: #051922;
   width: 90px;
   height: 90px;
@@ -2058,7 +2058,7 @@ a.video-play-btn {
 }
 
 .abt-bg {
-  background-image: url(../img/abt1.jpg);
+  background-image: url(../img/Salad.jpg);
   height: 100%;
   width: 100%;
   background-size: cover;
@@ -2077,8 +2077,8 @@ a.video-play-btn {
   width: 100%;
   height: 100%;
   content: "";
-  background-color: #051922;
-  opacity: 0.3;
+  /* background-color: #051922;
+  opacity: 0.3; */
 }
 
 .abt-section .abt-text {
@@ -2125,7 +2125,7 @@ a.video-play-btn {
   position: relative;
   font-size: 60px;
   font-weight: 700;
-  color: #F28123;
+  color: #28a745;
 }
 
 .shop-banner .sale-percent span {
@@ -2210,7 +2210,7 @@ ul.social-link-team li {
 
 ul.social-link-team li a {
   color: #fff;
-  background-color: #F28123;
+  background-color: #28a745;
   width: 32px;
   height: 32px;
   line-height: 32px;
@@ -2275,7 +2275,7 @@ ul.social-link-team li a {
 .contact-form-box h4 i {
   position: absolute;
   left: -13%;
-  color: #F28123;
+  color: #28a745;
   top: 2px;
 }
 
@@ -2298,7 +2298,7 @@ ul.social-link-team li a {
 
 .find-location p i {
   margin-right: 10px;
-  color: #F28123;
+  color: #28a745;
 }
 
 #form_status span {
@@ -2374,8 +2374,8 @@ ul.social-link-team li a {
 
 
 .product-filters ul li.active {
-  border: 2px solid #F28123;
-  background-color: #F28123;
+  border: 2px solid #28a745;
+  background-color: #28a745;
   color: #fff;
 }
 
@@ -2417,7 +2417,7 @@ p.product-price span {
 a.cart-btn {
   font-family: 'Poppins', sans-serif;
   display: inline-block;
-  background-color: #F28123;
+  background-color: #28a745;
   color: #fff;
   padding: 10px 20px;
 }
@@ -2663,7 +2663,7 @@ tr.total-data td strong {
   font-weight: 900;
   line-height: 22px;
   margin-top: -11px;
-  color: #F28123;
+  color: #28a745;
 }
 
 .billing-address-form form p:last-child {
