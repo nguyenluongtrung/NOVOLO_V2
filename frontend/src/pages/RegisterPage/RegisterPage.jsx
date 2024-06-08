@@ -14,16 +14,16 @@ export const RegisterPage = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	const {register, handleSubmit, formState: {errors}} = useForm();
+	const { register, handleSubmit, formState: { errors } } = useForm();
 
-	const {user, isLoading, isSuccess, isError, message} = useSelector((state) => state.auth) 
+	const { user, isLoading, isSuccess, isError, message } = useSelector((state) => state.auth)
 
 	useEffect(() => {
-		if(isError){
+		if (isError) {
 			toast.error(message);
 		}
 
-		if(isSuccess || user){
+		if (isSuccess || user) {
 			navigate('/home')
 		}
 
@@ -33,39 +33,48 @@ export const RegisterPage = () => {
 	const onSubmit = (data) => {
 		dispatch(registerUser(data));
 
-		if(isSuccess){
+		if (isSuccess) {
 			toast.success('Register successfully!')
 			navigate('/home')
 		}
 	};
 
-	if(isLoading){
+	if (isLoading) {
 		return <Spinner />
 	}
 
 	return (
 		<div
-		class="img js-fullheight"
-		style={{backgroundImage: 'url(/img/product/bglogin.jpg)' }}
+			class="img js-fullheight"
+			style={{ backgroundImage: 'url(/img/product/background.jpg)' }}
 		>
 			<section class="ftco-section">
-				<div class="sign-up-container pt-4">
+				<div class="sign-up-container pt-4" >
 					<div class="row justify-content-center">
 						<div class="col-md-6 text-center mb-5">
-							<h2 class="heading-section">SIGN UP</h2>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-md-6 col-lg-4">
 							<div class="login-wrap p-0">
 								<form class="signin-form" onSubmit={handleSubmit(onSubmit)}>
-									<div class="form-group">
-										<input
-											type="text"
-											class="form-control rounded-pill"
-											placeholder="Your Name"
-											{...register('name', rules.name)}
-										/>
+									<div class="form-group row">
+										<div class="col-md-6">
+											<input
+												type="text"
+												class="form-control rounded-pill"
+												placeholder="Your Name"
+												{...register('name', rules.name)}
+											/>
+										</div>
+										<div class="col-md-6">
+											<input
+												type="date"
+												class="form-control rounded-pill"
+										
+												{...register('dob')}
+											/>
+										</div>
 									</div>
 									<div class="form-group">
 										<input
@@ -75,14 +84,23 @@ export const RegisterPage = () => {
 											{...register('address')}
 										/>
 									</div>
-									<div class="form-group">
-										<input
-											type="text"
-											class="form-control rounded-pill"
-											placeholder="Phone number"
-											{...register('phone', rules.phone)}
-										/>
-										<div id="error-phone" class="text-warning"></div>
+									<div class="form-group row">
+										<div class="col-md-6">
+											<select {...register('gender')} class="form-control rounded-pill gender">
+												<option value="male">Male</option>
+												<option value="female">Female</option>
+												<option value="other">Other</option>
+											</select>
+										</div>
+										<div class="col-md-6">
+											<input
+												type="text"
+												class="form-control rounded-pill"
+												placeholder="Phone number"
+												{...register('phone', rules.phone)}
+											/>
+											<div id="error-phone" class="text-warning"></div>
+										</div>
 									</div>
 									<div class="form-group">
 										<input
@@ -95,24 +113,10 @@ export const RegisterPage = () => {
 									</div>
 									<div class="form-group">
 										<input
-											type="date"
-											class="form-control rounded-pill"
-											{...register('dob')}
-										/>
-									</div>
-									<div class="form-group">
-										<select {...register('gender')} class="form-control rounded-pill">
-											<option value="male">Male</option>
-											<option value="female">Female</option>
-											<option value="other">Other</option>
-										</select>
-									</div>
-									<div class="form-group">
-										<input
 											id="password-field"
 											type="password"
 											class="form-control rounded-pill"
-											placeholder=' Your Password'
+											placeholder="Your Password"
 											{...register('password', rules.password)}
 										/>
 										<span
@@ -120,20 +124,20 @@ export const RegisterPage = () => {
 											class="fa fa-fw fa-eye field-icon toggle-password"
 										></span>
 									</div>
-									<div class="form-group " >
-										<button style={{fontWeight:"bold"}}
+									<div class="form-group">
+										<button style={{ fontWeight: "bold" }}
 											type="submit"
-											class="form-control rounded-pill btn btn-primary submit px-3"
+											class="rounded-pill submit px-3 register-button"
 										>
 											Sign Up
 										</button>
 									</div>
 									<div class="form-group d-md-flex">
-										<div class="w-50" style={{fontWeight:"bold"}} >
-											<Link to={'/login'}>Log in</Link>
+										<div class="w-50 loginLink" style={{ fontWeight: "bold"}}>
+											<Link to={'/login'} style={{ color: '#000000', fontSize:"16px"}}>Log in</Link>
 										</div>
-										<div class="w-50 text-md-right">
-											<Link to={'/forgot-password'} style={{ color: '#fff' }}>
+										<div class="w-50 text-md-right fogotPass">
+											<Link to={'/forgot-password'} style={{ color: '#000000', fontWeight:'bold' }}>
 												Forgot Password
 											</Link>
 										</div>
@@ -142,8 +146,9 @@ export const RegisterPage = () => {
 							</div>
 						</div>
 					</div>
+
 				</div>
-			</section>
-		</div>
+			</section >
+		</div >
 	);
 };
