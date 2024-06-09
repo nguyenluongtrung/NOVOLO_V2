@@ -2058,7 +2058,7 @@ a.video-play-btn {
 }
 
 .abt-bg {
-  background-image: url(../img/abt1.jpg);
+  background-image: url('https://imageio.forbes.com/specials-images/imageserve/65072bc1a50c29d7592250c0/Healthy-food--Healthy-eating-background--Fruit--vegetable--berry---Vegetarian-eating-/960x0.jpg?format=jpg&width=960');
   height: 100%;
   width: 100%;
   background-size: cover;

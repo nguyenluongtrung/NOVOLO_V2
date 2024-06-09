@@ -171,19 +171,19 @@ export const AdminDashboard = () => {
 
 			<div id="page-content-wrapper" style={{paddingTop: '80px'}}>
 				<div className="container-fluid px-4">
-					<div className="row my-5 col-md-10 dash-revenue" >
+					{/* <div className="row my-5 col-md-10 dash-revenue" >
 						<div className="charts-card">
 							<h3 className="fs-4 mb-3 dash-text revenue-text">
 							Revenue
 							</h3>
 							<Chart
-								options={state.options}
-								series={state.series}
+								options={state?.options}
+								series={state?.series}
 								type="bar"
 								width="750"
 							/>
 						</div>
-					</div>
+					</div> */}
 
 					<div className="row my-5">
 						<div className="col-sm-6">
@@ -199,8 +199,8 @@ export const AdminDashboard = () => {
 									{highestRatingProducts.map((product) => {
 										return (
 											<tr class="active-row">
-												<td>{product.name}</td>
-												<td>{product.rating}</td>
+												<td>{product?.name}</td>
+												<td>{product?.rating}</td>
 											</tr>
 										);
 									})}
@@ -220,8 +220,8 @@ export const AdminDashboard = () => {
 									{lowestRatingProducts.map((product) => {
 										return (
 											<tr class="active-row">
-												<td>{product.name}</td>
-												<td>{product.rating}</td>
+												<td>{product?.name}</td>
+												<td>{product?.rating}</td>
 											</tr>
 										);
 									})}
@@ -230,19 +230,19 @@ export const AdminDashboard = () => {
 						</div>
 					</div>
 
-					<div className="row my-5 col-md-6 dash-top-5">
+					{/* <div className="row my-5 col-md-6 dash-top-5">
 						<div className="charts-card" style={{ width: 700 }}>
 						<h3 className="fs-4 mb-3 dash-text">Top 5 hot products</h3>
 							<div className="donut">
 								<Chart
-									options={pieState.options}
-									series={pieState.series}
+									options={pieState?.options}
+									series={pieState?.series}
 									type="pie"
 									width={500}
 								/>
 							</div>
 						</div>
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</div>

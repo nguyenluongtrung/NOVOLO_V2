@@ -4,17 +4,17 @@ import { Link } from 'react-router-dom';
 
 const slideImage =[
     {
-    url:'https://r4.wallpaperflare.com/wallpaper/374/404/846/brown-bird-perching-during-daytime-wren-wren-wallpaper-69580721080624d50a29d9ba7e5022f4.jpg',
+    url:'https://cdn.aarp.net/content/dam/aarp/health/caregiving/2018/03/1140-nutrients-food-loved-ones-caregiving.jpg',
     title:"Mega Sale Going On!",
     ads:"Get December Discount",
 },
 {
-    url:'https://r4.wallpaperflare.com/wallpaper/794/306/483/sausage-fast-food-buns-fast-food-wallpaper-08d8abd425ed5206b15a8d8c83b78450.jpg',
+    url:'https://439623b66ef2e32ac2ca-878d8b04b2333a4ce60ced655a975a22.ssl.cf3.rackcdn.com/Plate_Split.jpg',
     title:"Are you hungry",
     ads:"Let Us Help You",
 },
 {
-    url:'https://r4.wallpaperflare.com/wallpaper/850/627/639/fried-chicken-french-fries-ketchup-food-wallpaper-5886bdf880100c08708c41cea842e48a.jpg',
+    url:'https://cleverads.vn/blog/wp-content/uploads/2023/10/thi-truong-healthy-food-3.jpg',
     title:"Click And Eat",
     ads:"Discover the Flavorful World",
 }
