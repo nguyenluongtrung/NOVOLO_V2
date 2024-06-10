@@ -346,7 +346,7 @@ export const CartPage = () => {
 															: '',
 													}}
 												>
-													{totalPrice}$
+													{Math.round(totalPrice)}$
 												</span>
 												&nbsp;
 												<span>
@@ -357,7 +357,7 @@ export const CartPage = () => {
 														: ''} */}
 
 													{Number(promotionValue)
-														? `${calculateTotalAfterPromotion()}$`
+														? `${Math.round(calculateTotalAfterPromotion())}$`
 														: ''}
 												</span>
 											</td>

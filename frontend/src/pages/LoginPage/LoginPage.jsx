@@ -51,14 +51,14 @@ export const LoginPage = () => {
 	return (
 		<div
 			class="img js-fullheight"
-			style={{ backgroundImage: 'url(/img/product/bglogin.jpg)' }}
+			style={{ backgroundImage: 'url(/img/product/login_bg.jpg)' }}
 		>
 			<section class="ftco-section">
 				<div class="container p-5">
 					<div class="row justify-content-center">
 						<div class="col-md-6 col-lg-4">
 							<div class="login-wrap p-0">
-								<h3 class="mb-4 text-center">Have an account?</h3>
+							<h1 class="mb-4 text-center" style={{color:"#000000"}}>Have an account?</h1>
 								<form class="signin-form" onSubmit={onSubmit}>
 									<div class="form-group">
 										<input
@@ -88,21 +88,21 @@ export const LoginPage = () => {
 									<div class="form-group">
 										<button
 											type="submit"
-											class="rounded-pill form-control btn btn-primary submit px-3"
+											class="rounded-pill signIn-button"
 										>
 											Sign In
 										</button>
 									</div>
 									<div class="form-group d-md-flex">
 										<div class="w-50">
-											<label class="checkbox-wrap checkbox-primary">
+										<label class="checkbox-wrap rememberMe">
 												Remember Me
 												<input type="checkbox" checked name="remember" />
 												<span class="checkmark"></span>
 											</label>
 										</div>
-										<div class="w-50 text-md-right">
-											<a href="forgotPassword.jsp" style={{ color: '#fff' }}>
+										<div class="w-50 text-md-right fogotPass">
+											<a href="forgotPassword.jsp" style={{ color: '#000000' }}>
 												Forgot Password
 											</a>
 										</div>

@@ -8,16 +8,17 @@ import { FaPenSquare } from 'react-icons/fa';
 
 export const AdminOrder = () => {
 	const [ status, setStatus ] = useState('');
-	const { orders, isLoading } = useSelector((state) => state.orders);
+	const [ orders, setOrders ] = useState([]);
 	const dispatch = useDispatch();
 
-	const handleUpdateStatus = () => {
-		
+	const handleUpdateStatus = async () => {
+		const output = await dispatch(getOrders());
+		setOrders(output.payload);
 	}
 
 	useEffect(() => {
-		dispatch(getOrders());
-	}, [dispatch]);
+		handleUpdateStatus();
+	}, []);
 	
 	return (
 		<div className="d-flex" id="wrapper">
